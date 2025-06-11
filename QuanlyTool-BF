@@ -1,0 +1,204 @@
+local PremiumKeys = {  
+    "qczkdb012fd7pjfgt71jnobo9",  
+}  
+  
+local BlacklistKeys = {  
+    ["abc123"] = "Hành vi gian lận bị phát hiện",  
+    ["badkey456"] = "Vi phạm điều khoản sử dụng",  
+    ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
+}  
+  
+local function isPremiumKey(key)  
+    for _, v in ipairs(PremiumKeys) do  
+        if v == key then  
+            return true  
+        end  
+    end  
+    return false  
+end  
+  
+local function getBlacklistReason(key)  
+    return BlacklistKeys[key]  
+end  
+  
+if not script_key or getBlacklistReason(script_key) then  
+    local reason = getBlacklistReason(script_key) or "Key bị chặn"  
+    game:GetService("Players").LocalPlayer:Kick(reason)  
+    return  
+end  
+  
+if isPremiumKey(script_key) then  
+    getgenv().Settings = {
+      WebhookLink = nil,
+      ModelPanel = nil,
+      StartNotify = nil,
+      AntiDelay = nil,
+      TagInput = nil,
+}
+
+
+local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
+local BaseFolder = "ToolHub"
+local SubFolder = "Database"
+
+function SaveSetting() 
+    local json
+    local HttpService = game:GetService("HttpService")
+    
+    if writefile then
+        json = HttpService:JSONEncode(getgenv().Settings)
+
+        if not isfolder(BaseFolder) then
+            makefolder(BaseFolder)
+        end
+        if not isfolder(BaseFolder.."/"..SubFolder) then
+            makefolder(BaseFolder.."/"..SubFolder)
+        end
+        
+        writefile(BaseFolder.."/"..SubFolder.."/"..FileName, json)
+    else
+        error("ERROR: Can't save your settings")
+    end
+end
+
+function LoadSetting()
+    local HttpService = game:GetService("HttpService")
+    if readfile and isfile and isfile(BaseFolder.."/"..SubFolder.."/"..FileName) then
+        getgenv().Settings = HttpService:JSONDecode(readfile(BaseFolder.."/"..SubFolder.."/"..FileName))
+    end
+end
+
+LoadSetting()
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Tool Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat task.wait() until game:IsLoaded()
+
+getgenv().Image = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420"
+getgenv().ToggleUI = "LeftControl"
+
+task.spawn(function()
+    if not getgenv().LoadedMobileUI then
+        getgenv().LoadedMobileUI = true
+        local OpenUI = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        local UICorner = Instance.new("UICorner")
+        OpenUI.Name = "OpenUI"
+        OpenUI.Parent = game:GetService("CoreGui")
+        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        ImageButton.Parent = OpenUI
+        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
+        ImageButton.BackgroundTransparency = 0.8
+        ImageButton.Position = UDim2.new(0, 5, 0, 5)
+        ImageButton.Size = UDim2.new(0, 55, 0, 55)
+        ImageButton.Image = getgenv().Image
+        ImageButton.Draggable = false
+        ImageButton.Transparency = 1
+        UICorner.CornerRadius = UDim.new(100)
+        UICorner.Parent = ImageButton
+        ImageButton.MouseButton1Click:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
+        end)
+    end
+end)
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Tool Hub [ Premium ]",
+    SubTitle = "By Ziugpro",
+    TabWidth = 130,
+    Size = UDim2.fromOffset(535, 340),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Tab Webhook", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Tab Setting Ui", Icon = "" }),
+}
+
+local Input = Tabs.Main:AddInput("WebhookLink", {
+        Title = "ของเว็บฮุก Url - Webhook Url",
+        Default = getgenv().Settings.WebhookLink or false,
+        Numeric = false,
+        Finished = false,
+        Placeholder = "",
+        Callback = function(Value)
+    getgenv().Settings.WebhookLink = Value
+    SaveSetting()
+    end,
+   ChangedCallback = function(Value)
+    getgenv().Settings.WebhookLink = Value
+    SaveSetting()
+    end
+    })
+local Input = Tabs.Main:AddInput("TagInput", {
+        Title = "ชื่อหรือรหัสสำหรับแท็ก - Name Or Id For Tag",
+        Default = getgenv().Settings.TagInput or false,
+        Numeric = false,
+        Finished = false,
+        Placeholder = "",
+        Callback = function(Value)
+    getgenv().Settings.TagInput = Value
+    SaveSetting()
+    end,
+   ChangedCallback = function(Value)
+    getgenv().Settings.TagInput = Value
+    SaveSetting()
+    end
+    })
+local MultiDropdown = Tabs.Main:AddDropdown("ModelPanel", {
+        Title = "เลือกโหมด - Select Model",
+        Values = {"Mirge Island", "Mirage Kisune", "Rip_Indra"},
+        Multi = true,
+        Default = {"seven"},
+        Callback = function(Value)
+        getgenv().Settings.ModelPanel = Value
+        SaveSetting()
+        end
+    })
+Tabs.Main:AddToggle("AntiDelay", {
+    Title = "ป้องกันความล่าช้า - Anti Delay",
+    Default = getgenv().Settings.AntiDelay or false,
+    Callback = function(Value)
+        getgenv().Settings.AntiDelay = Value
+        SaveSetting()
+    end
+})
+Tabs.Main:AddToggle("TagMember", {
+    Title = "แท็กสมาชิก - Tag Member",
+    Default = getgenv().Settings.TagMember or false,
+    Callback = function(Value)
+        getgenv().Settings.TagMember = Value
+        SaveSetting()
+    end
+})
+Tabs.Main:AddToggle("StartNotify", {
+    Title = "เริ่มการแจ้งเตือน - Start Notify",
+    Default = getgenv().Settings.StartNotify or false,
+    Callback = function(Value)
+        getgenv().Settings.StartNotify = Value
+        SaveSetting()
+    end
+})
+
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+SaveManager:SetIgnoreIndexes({})
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("ToolHub")
+SaveManager:SetFolder("Database")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+else  
+    game:GetService("Players").LocalPlayer:Kick("Invalid Key")  
+end
