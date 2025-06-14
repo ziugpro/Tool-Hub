@@ -1,0 +1,184 @@
+getgenv().Settings = {
+       ModelGame = nil, WebhookLink = nil, VersionCT = nil,
+       Memtag = nil, TogglePro = nil, TagMember = nil,
+}
+local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
+local BaseFolder = "ToolHub"
+local SubFolder = "Database"
+
+function SaveSetting() 
+    local json
+    local HttpService = game:GetService("HttpService")
+    
+    if writefile then
+        json = HttpService:JSONEncode(getgenv().Settings)
+
+        if not isfolder(BaseFolder) then
+            makefolder(BaseFolder)
+        end
+        if not isfolder(BaseFolder.."/"..SubFolder) then
+            makefolder(BaseFolder.."/"..SubFolder)
+        end
+        
+        writefile(BaseFolder.."/"..SubFolder.."/"..FileName, json)
+    else
+        error("ERROR: Can't save your settings")
+    end
+end
+
+function LoadSetting()
+    local HttpService = game:GetService("HttpService")
+    if readfile and isfile and isfile(BaseFolder.."/"..SubFolder.."/"..FileName) then
+        getgenv().Settings = HttpService:JSONDecode(readfile(BaseFolder.."/"..SubFolder.."/"..FileName))
+    end
+end
+
+LoadSetting()
+
+
+
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Tool Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat task.wait() until game:IsLoaded()
+
+getgenv().Image = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420"
+getgenv().ToggleUI = "LeftControl"
+
+task.spawn(function()
+    if not getgenv().LoadedMobileUI then
+        getgenv().LoadedMobileUI = true
+        local OpenUI = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        local UICorner = Instance.new("UICorner")
+        OpenUI.Name = "OpenUI"
+        OpenUI.Parent = game:GetService("CoreGui")
+        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        ImageButton.Parent = OpenUI
+        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
+        ImageButton.BackgroundTransparency = 0.8
+        ImageButton.Position = UDim2.new(0, 5, 0, 5)
+        ImageButton.Size = UDim2.new(0, 55, 0, 55)
+        ImageButton.Image = getgenv().Image
+        ImageButton.Draggable = false
+        ImageButton.Transparency = 1
+        UICorner.CornerRadius = UDim.new(100)
+        UICorner.Parent = ImageButton
+        ImageButton.MouseButton1Click:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
+        end)
+    end
+end)
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Tool Hub [ Premium ]",
+    SubTitle = "By Ziugpro",
+    TabWidth = 130,
+    Size = UDim2.fromOffset(535, 345),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Tab Webhook", Icon = "" }),
+    
+}
+local Input = Tabs.Main:AddInput("WebhookLink", {
+        Title = "ลิงค์เว็บฮุก",
+        Default = "",
+        Numeric = false,
+        Finished = false,
+        Placeholder = "เข้า",
+        Callback = function(Value)
+        getgenv().Settings.WebhookLink = Value
+        SaveSetting()
+        end,
+        ChangedCallback = function(Value)
+        getgenv().Settings.WebhookLink = Value
+        SaveSetting()   
+        end
+    })
+local Input = Tabs.Main:AddInput("Memtag", {
+        Title = "กรอกรหัสสมาชิกหรือชื่อ",
+        Default = "",
+        Numeric = false,
+        Finished = false,
+        Placeholder = "เข้า",
+        Callback = function(Value)
+        getgenv().Settings.Memtag = Value
+        SaveSetting()
+        end,
+        ChangedCallback = function(Value)
+        getgenv().Settings.Memtag = Value
+        SaveSetting()   
+        end
+    })
+    local Slider = Tabs.Main:AddSlider("Delay", {
+        Title = "ล่าช้า",
+        Description = "",
+        Default = 2,
+        Min = 1,
+        Max = 50,
+        Rounding = 1,
+        Callback = function(Value)
+        getgenv().Settings.Delay = Value
+        SaveSetting()
+        end
+    })
+local ModelGame = Tabs.Main:AddDropdown("ModelGame", {
+        Title = "เลือกเกม",
+        Description = ".",
+        Values = {"Blox Fruit", "King Legacy", "Arise Crossover", "Grow A Garden"},
+        Multi = false,
+        Default = 1,
+        Callback = function(Value)
+        getgenv().Settings.ModelGame = Value
+        SaveSetting()
+        end
+    })
+local VersionCT = Tabs.Main:AddDropdown("VersionCT", {
+        Title = "เวอร์ชัน",
+        Description = ".",
+        Values = {"v11.99 Blox Fruit", "v19.23 King Legacy", "v23.01.245 Arise Crossover", "v1.982.02 - Grow A Garden"},
+        Multi = false,
+        Default = 1,
+        Callback = function(Value)
+        getgenv().Settings.VersionCT = Value
+        SaveSetting()
+        end
+    })
+Tabs.Main:AddToggle("TagMember", {
+    Title = "แท็กสมาชิก",
+    Default = getgenv().Settings.TagMember or false,
+    Callback = function(Value)
+        getgenv().Settings.TagMember = Value
+        SaveSetting()
+    end
+})
+Tabs.Main:AddToggle("TogglePro", {
+    Title = "เริ่ม Webhook",
+    Default = getgenv().Settings.TogglePro or false,
+    Callback = function(Value)
+        getgenv().Settings.TogglePro = Value
+        SaveSetting()
+    end
+})
+
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("ToolHub")
+SaveManager:SetFolder("Database")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
