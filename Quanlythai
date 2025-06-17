@@ -1,6 +1,6 @@
 getgenv().Settings = {
        ModelGame = nil, WebhookLink = nil, VersionCT = nil,
-       Memtag = nil, TogglePro = nil, TagMember = nil,
+       Memtag = nil, TogglePro = nil, TagMember = nil, FixBug = nil,
 }
 local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
 local BaseFolder = "ToolHub"
@@ -138,7 +138,7 @@ local Input = Tabs.Main:AddInput("Memtag", {
 local ModelGame = Tabs.Main:AddDropdown("ModelGame", {
         Title = "เลือกเกม",
         Description = ".",
-        Values = {"Blox Fruit", "King Legacy", "Arise Crossover", "Grow A Garden"},
+        Values = {"Blox Fruit", "King Legacy", "Arise Crossover", "Grow A Garden", "Blade Ball", "Toilet Twor Defense"},
         Multi = false,
         Default = 1,
         Callback = function(Value)
@@ -149,7 +149,7 @@ local ModelGame = Tabs.Main:AddDropdown("ModelGame", {
 local VersionCT = Tabs.Main:AddDropdown("VersionCT", {
         Title = "เวอร์ชัน",
         Description = ".",
-        Values = {"v11.99 Blox Fruit", "v19.23 King Legacy", "v23.01.245 Arise Crossover", "v1.982.02 - Grow A Garden"},
+        Values = {"v11.99 Blox Fruit", "v19.23 King Legacy", "v23.01.245 Arise Crossover", "v1.982.02 - Grow A Garden", "v30.4.1975 - All Game"},
         Multi = false,
         Default = 1,
         Callback = function(Value)
@@ -162,6 +162,14 @@ Tabs.Main:AddToggle("TagMember", {
     Default = getgenv().Settings.TagMember or false,
     Callback = function(Value)
         getgenv().Settings.TagMember = Value
+        SaveSetting()
+    end
+})
+Tabs.Main:AddToggle("FixBug", {
+    Title = "ดีบัก",
+    Default = getgenv().Settings.FixBug or true,
+    Callback = function(Value)
+        getgenv().Settings.FixBug = Value
         SaveSetting()
     end
 })
