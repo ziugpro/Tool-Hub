@@ -1,0 +1,328 @@
+getgenv().Settings = {
+       TogglePro = nil, TogglePrompt = nil, ToggleSpeed = nil,
+       ToggleJump = nil, WebhookLink = nil, StartWebhook = nil,
+       Everyone = nil,
+}
+local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
+local BaseFolder = "ToolHub"
+local SubFolder = "Database"
+
+function SaveSetting() 
+    local json
+    local HttpService = game:GetService("HttpService")
+    
+    if writefile then
+        json = HttpService:JSONEncode(getgenv().Settings)
+
+        if not isfolder(BaseFolder) then
+            makefolder(BaseFolder)
+        end
+        if not isfolder(BaseFolder.."/"..SubFolder) then
+            makefolder(BaseFolder.."/"..SubFolder)
+        end
+        
+        writefile(BaseFolder.."/"..SubFolder.."/"..FileName, json)
+    else
+        error("ERROR: Can't save your settings")
+    end
+end
+
+function LoadSetting()
+    local HttpService = game:GetService("HttpService")
+    if readfile and isfile and isfile(BaseFolder.."/"..SubFolder.."/"..FileName) then
+        getgenv().Settings = HttpService:JSONDecode(readfile(BaseFolder.."/"..SubFolder.."/"..FileName))
+    end
+end
+
+LoadSetting()
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Tool Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat task.wait() until game:IsLoaded()
+
+getgenv().Image = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420"
+getgenv().ToggleUI = "LeftControl"
+
+task.spawn(function()
+    if not getgenv().LoadedMobileUI then
+        getgenv().LoadedMobileUI = true
+        local OpenUI = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        local UICorner = Instance.new("UICorner")
+        OpenUI.Name = "OpenUI"
+        OpenUI.Parent = game:GetService("CoreGui")
+        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        ImageButton.Parent = OpenUI
+        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
+        ImageButton.BackgroundTransparency = 0.8
+        ImageButton.Position = UDim2.new(0, 5, 0, 5)
+        ImageButton.Size = UDim2.new(0, 55, 0, 55)
+        ImageButton.Image = getgenv().Image
+        ImageButton.Draggable = false
+        ImageButton.Transparency = 1
+        UICorner.CornerRadius = UDim.new(100)
+        UICorner.Parent = ImageButton
+        ImageButton.MouseButton1Click:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
+        end)
+    end
+end)
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Tool Hub - Steal a Bralnrot",
+    SubTitle = "By Ziugpro",
+    TabWidth = 140,
+    Size = UDim2.fromOffset(505, 345),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Tab Farming", Icon = "" }),
+    Misc = Window:AddTab({ Title = "Tab Misc - Webhook", Icon = "" }),
+    
+}
+local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot ",  getgenv().Settings.TogglePro or false})
+TogglePro:OnChanged(function(Value)
+    _G.TogglePro = Value
+end)
+
+local PathfindingService = game:GetService("PathfindingService")
+local player = game.Players.LocalPlayer
+
+spawn(function()
+    while wait() do
+        if _G.TogglePro then
+            getgenv().Settings.TogglePro = Value
+            SaveSetting()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+
+            if humanoid and rootPart then
+                local destination = Vector3.new(-411.5451354980469, -6.275163173675537, -128.6896209716797)
+                local path = PathfindingService:CreatePath()
+                path:ComputeAsync(rootPart.Position, destination)
+
+                if path.Status == Enum.PathStatus.Success then
+                    for _, waypoint in pairs(path:GetWaypoints()) do
+                        if not _G.TogglePro then break end
+                        humanoid:MoveTo(waypoint.Position)
+                        humanoid.MoveToFinished:Wait()
+                    end
+                end
+            end
+            _G.TogglePro = false
+        end
+    end
+end)
+local TogglePrompt = Tabs.Main:AddToggle("TogglePrompt", {Title = "Auto Buy ( On To Not Error )",  getgenv().Settings.TogglePrompt or false})
+TogglePrompt:OnChanged(function(Value)
+    _G.TogglePrompt = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.TogglePrompt then
+           getgenv().Settings.TogglePrompt = Value
+           SaveSetting()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+
+            if rootPart then
+                local closestPrompt, shortestDistance
+
+                for _, v in ipairs(workspace:GetDescendants()) do
+                    if v:IsA("ProximityPrompt") and v.Enabled then
+                        local dist = (rootPart.Position - v.Parent.Position).Magnitude
+                        if not shortestDistance or dist < shortestDistance then
+                            shortestDistance = dist
+                            closestPrompt = v
+                        end
+                    end
+                end
+
+                if closestPrompt then
+                    fireproximityprompt(closestPrompt, 1, true)
+                    wait(1)
+                    fireproximityprompt(closestPrompt, 1, false)
+                end
+            end
+        end
+    end
+end)
+local Main = Tabs.Main:AddSection("Player")
+local ToggleSpeed = Tabs.Main:AddToggle("ToggleSpeed", {Title = "Super Speed", getgenv().Settings.ToggleSpeed or false})
+ToggleSpeed:OnChanged(function(Value)
+    _G.ToggleSpeed = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleSpeed then
+            getgenv().Settings.ToggleSpeed = Value
+            SaveSetting()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+            if humanoid then
+                humanoid.WalkSpeed = 45
+            end
+        else
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            if character then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.WalkSpeed = 16
+                end
+            end
+        end
+    end
+end)
+local ToggleJump = Tabs.Main:AddToggle("ToggleJump", {Title = "Super Jump", getgenv().Settings.ToggleJump or false})
+ToggleJump:OnChanged(function(Value)
+    _G.ToggleJump = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleJump then
+            getgenv().Settings.ToggleJump = Value
+            SaveSetting()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+            if humanoid then
+                humanoid.JumpPower = 120
+            end
+        else
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            if character then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.JumpPower = 50
+                end
+            end
+        end
+    end
+end)
+local Main = Tabs.Main:AddSection("Lock Base")
+local Input = Tabs.Main:AddInput("WebhookLink", {
+        Title = "Time Lock",
+        Default = "10",
+        Numeric = false,
+        Finished = false,
+        Placeholder = "",
+        Callback = function(Value)
+        end
+    })
+local LockBase = Tabs.Main:AddToggle("LockBase", {Title = "Auto Lock Basle ( Coming Soon )", Default = false })
+
+local ToggleSpamRemote = Tabs.Misc:AddToggle("ToggleSpamRemote", {Title = "Spam All Remote", Description = "It can get money or Brainrot if the game has errors in RemoteEvent and RemoteFunction", Default = false})
+ToggleSpamRemote:OnChanged(function(Value)
+    _G.ToggleSpamRemote = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleSpamRemote then
+            for _, v in ipairs(game:GetDescendants()) do
+                if v:IsA("RemoteEvent") then
+                    pcall(function()
+                        v:FireServer()
+                    end)
+                elseif v:IsA("RemoteFunction") then
+                    pcall(function()
+                        v:InvokeServer()
+                    end)
+                end
+            end
+        end
+    end
+end)
+local ToggleInvisReal = Tabs.Misc:AddToggle("ToggleInvisReal", {Title = "Real Invisibility", Default = false})
+ToggleInvisReal:OnChanged(function(Value)
+    _G.ToggleInvisReal = Value
+end)
+
+local storedParts = {}
+
+spawn(function()
+    while wait() do
+        if _G.ToggleInvisReal then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                    storedParts[#storedParts+1] = part
+                    part.Parent = nil
+                end
+            end
+            repeat wait() until not _G.ToggleInvisReal
+            local character = player.Character
+            if character then
+                for _, part in ipairs(storedParts) do
+                    if part and part.Parent == nil then
+                        part.Parent = character
+                    end
+                end
+                storedParts = {}
+            end
+        end
+    end
+end)
+local Main = Tabs.Misc:AddSection("Webhook")
+local Input = Tabs.Misc:AddInput("WebhookLink", {
+        Title = "Webhook Url",
+        Default = getgenv().Settings.WebhookLink or false,
+        Numeric = false,
+        Finished = false,
+        Placeholder = "",
+        Callback = function(Value)
+        getgenv().Settings.WebhookLink = Value
+        SaveSetting()
+        end,
+        ChangedCallback = function(Value)
+        getgenv().Settings.WebhookLink = Value
+        SaveSetting()
+    end
+    })
+Tabs.Misc:AddToggle("Everyone", {
+    Title = "Tag Everyone",
+    Default = getgenv().Settings.Everyone or false,
+    Callback = function(Value)
+    getgenv().Settings.Everyone = Value
+    SaveSetting()
+    end
+})
+Tabs.Misc:AddToggle("StartWebhook", {
+    Title = "Start Webhook",
+    Default = getgenv().Settings.StartWebhook or false,
+    Callback = function(Value)
+        getgenv().Settings.StartWebhook = Value
+        SaveSetting()
+    end
+})
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("ToolHub")
+SaveManager:SetFolder("Database")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
