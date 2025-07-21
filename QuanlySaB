@@ -311,7 +311,7 @@ Tabs.Misc:AddButton({
                 end
             end
             
-            hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -10)
+            hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -50)
             wait(0.5)
 
             for _, part in ipairs(character:GetChildren()) do
@@ -445,7 +445,7 @@ spawn(function()
                     local Label = Instance.new("TextLabel", Background)
                     Label.Size = UDim2.new(1, 0, 1, 0)
                     Label.BackgroundTransparency = 1
-                    Label.Text = "📦 Model: "..v.Name
+                    Label.Text = "📦 Brainrot: "..v.Name
                     Label.TextColor3 = Color3.fromRGB(255, 255, 0)
                     Label.TextStrokeTransparency = 0
                     Label.Font = Enum.Font.GothamBold
