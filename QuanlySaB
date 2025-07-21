@@ -290,6 +290,45 @@ spawn(function()
         end
     end
 end)
+Tabs.Misc:AddButton({
+    Title = "Vanish Teleport Forward",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                    part.Transparency = 1
+                    if part:FindFirstChildOfClass("Decal") then
+                        for _, decal in ipairs(part:GetChildren()) do
+                            if decal:IsA("Decal") then
+                                decal.Transparency = 1
+                            end
+                        end
+                    end
+                end
+            end
+            
+            hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -10)
+            wait(0.5)
+
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                    part.Transparency = 0
+                    if part:FindFirstChildOfClass("Decal") then
+                        for _, decal in ipairs(part:GetChildren()) do
+                            if decal:IsA("Decal") then
+                                decal.Transparency = 0
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+})
 local Main = Tabs.Misc:AddSection("Webhook")
 local Input = Tabs.Misc:AddInput("WebhookLink", {
         Title = "Webhook Url",
