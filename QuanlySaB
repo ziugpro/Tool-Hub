@@ -92,7 +92,8 @@ local Tabs = {
     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
     Server = Window:AddTab({ Title = "Tab Server", Icon = "" }),
     Misc = Window:AddTab({ Title = "Tab Misc - Webhook", Icon = "" }),
-    
+    Settings = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
+
 }
 local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot ",  getgenv().Settings.TogglePro or false})
 TogglePro:OnChanged(function(Value)
@@ -472,28 +473,29 @@ spawn(function()
         end
     end
 end)
-local ToggleTimeESP = Tabs.Esp:AddToggle("ToggleTimeESP", {Title = "Time ESP", getgenv().Settings.ToggleTimeESP or false})
+local ToggleTimeESP = Tabs.Esp:AddToggle("ToggleTimeESP", {Title = "Time ESP", Default = getgenv().Settings.ToggleTimeESP or false})
 ToggleTimeESP:OnChanged(function(Value)
     _G.ToggleTimeESP = Value
+    getgenv().Settings.ToggleTimeESP = Value
+    SaveSetting()
 end)
 
-spawn(function()
-    while wait(1) do
+task.spawn(function()
+    while task.wait(1) do
         if _G.ToggleTimeESP then
-        getgenv().Settings.ToggleTimeESP = Value
-        SaveSetting()
             if not workspace:FindFirstChild("TimeESP") then
                 local Billboard = Instance.new("BillboardGui", workspace)
                 Billboard.Name = "TimeESP"
                 Billboard.Size = UDim2.new(0, 200, 0, 50)
                 Billboard.AlwaysOnTop = true
-                Billboard.StudsOffsetWorldSpace = Vector3.new(0, 50, 0) -- Cao lên trời
+                Billboard.StudsOffsetWorldSpace = Vector3.new(0, 50, 0)
 
                 local Background = Instance.new("Frame", Billboard)
                 Background.Size = UDim2.new(1, 0, 1, 0)
                 Background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
                 Background.BackgroundTransparency = 0.3
                 Background.BorderSizePixel = 0
+                Background.Name = "Background"
 
                 local UIStroke = Instance.new("UIStroke", Background)
                 UIStroke.Color = Color3.fromRGB(0, 255, 127)
@@ -511,9 +513,13 @@ spawn(function()
                 Label.Name = "TimeLabel"
             end
 
-            local Label = workspace.TimeESP:FindFirstChild("Background"):FindFirstChild("TimeLabel")
-            if Label then
-                Label.Text = "🕒 Time: "..os.date("%H:%M:%S")
+            local ESP = workspace:FindFirstChild("TimeESP")
+            if ESP then
+                local Background = ESP:FindFirstChild("Background")
+                local Label = Background and Background:FindFirstChild("TimeLabel")
+                if Label then
+                    Label.Text = "🕒 Time: "..os.date("%H:%M:%S")
+                end
             end
         else
             if workspace:FindFirstChild("TimeESP") then
@@ -522,6 +528,7 @@ spawn(function()
         end
     end
 end)
+
 local JobId = ""
 
 local Input = Tabs.Server:AddInput("JobIdInput", {
@@ -541,11 +548,10 @@ Tabs.Server:AddButton({
     Callback = function()
         if JobId ~= "" then
             game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobId, game.Players.LocalPlayer)
-        else
-            print("Please enter a Job ID first.")
         end
     end
 })
+
 Tabs.Server:AddButton({
     Title = "Copy Job-ID",
     Description = "Copy the Job ID of the current server to clipboard",
@@ -553,6 +559,7 @@ Tabs.Server:AddButton({
         setclipboard(game.JobId)
     end
 })
+
 Tabs.Server:AddButton({
     Title = "Join Random Server",
     Description = "Teleport to a random server of this game",
@@ -561,29 +568,33 @@ Tabs.Server:AddButton({
         local TeleportService = game:GetService("TeleportService")
         local Player = game.Players.LocalPlayer
 
-        local Servers = HttpService:JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+        local success, response = pcall(function()
+            return HttpService:JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+        end)
 
-        local AvailableServers = {}
+        if success and response then
+            local AvailableServers = {}
 
-        for _, server in pairs(Servers.data) do
-            if server.playing < server.maxPlayers and server.id ~= game.JobId then
-                table.insert(AvailableServers, server.id)
+            for _, server in pairs(response.data) do
+                if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                    table.insert(AvailableServers, server.id)
+                end
             end
-        end
 
-        if #AvailableServers > 0 then
-            local RandomServerId = AvailableServers[math.random(1, #AvailableServers)]
-            TeleportService:TeleportToPlaceInstance(game.PlaceId, RandomServerId, Player)
-        else
-            warn("No available servers found!")
+            if #AvailableServers > 0 then
+                local RandomServerId = AvailableServers[math.random(1, #AvailableServers)]
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, RandomServerId, Player)
+            end
         end
     end
 })
+
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 InterfaceManager:SetFolder("ToolHub")
 SaveManager:SetFolder("Database")
+
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
