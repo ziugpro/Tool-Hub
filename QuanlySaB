@@ -420,6 +420,56 @@ spawn(function()
         end
     end
 end)
+local ToggleESPPart = Tabs.Esp:AddToggle("ToggleESPPart", {Title = "Lock Base ESP", getgenv().Settings.ToggleESPPart or false})
+ToggleESPPart:OnChanged(function(Value)
+    _G.ToggleESPPart = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleESPPart then
+        getgenv().Settings.ToggleESPPart = Value
+        SaveSetting()
+            for _,v in pairs(workspace:GetDescendants()) do
+                if v:IsA("BasePart") and v.Name == "Hitbox" and not v:FindFirstChild("ESPPart") then
+                    local Billboard = Instance.new("BillboardGui", v)
+                    Billboard.Name = "ESPPart"
+                    Billboard.Size = UDim2.new(0, 120, 0, 40)
+                    Billboard.Adornee = v
+                    Billboard.AlwaysOnTop = true
+                    Billboard.StudsOffset = Vector3.new(0, 1.5, 0)
+
+                    local Frame = Instance.new("Frame", Billboard)
+                    Frame.Size = UDim2.new(1,0,1,0)
+                    Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+                    Frame.BackgroundTransparency = 0.3
+                    Frame.BorderSizePixel = 0
+
+                    local UIStroke = Instance.new("UIStroke", Frame)
+                    UIStroke.Color = Color3.fromRGB(255, 0, 0)
+                    UIStroke.Thickness = 2
+                    UIStroke.Transparency = 0.1
+
+                    local Label = Instance.new("TextLabel", Frame)
+                    Label.Size = UDim2.new(1,0,1,0)
+                    Label.BackgroundTransparency = 1
+                    Label.Text = "🎯 Hitbox"
+                    Label.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    Label.TextStrokeTransparency = 0
+                    Label.Font = Enum.Font.GothamBold
+                    Label.TextSize = 14
+                    Label.TextWrapped = true
+                end
+            end
+        else
+            for _,v in pairs(workspace:GetDescendants()) do
+                if v:IsA("BasePart") and v.Name == "Hitbox" and v:FindFirstChild("ESPPart") then
+                    v.ESPPart:Destroy()
+                end
+            end
+        end
+    end
+end)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
