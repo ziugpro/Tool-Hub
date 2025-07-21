@@ -2,6 +2,7 @@ getgenv().Settings = {
        TogglePro = nil, TogglePrompt = nil, ToggleSpeed = nil,
        ToggleJump = nil, WebhookLink = nil, StartWebhook = nil,
        Everyone = nil, ToggleESPPlayer = nil, ToggleESPModel = nil,
+       ToggleTimeESP = nil,
 }
 local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
 local BaseFolder = "ToolHub"
@@ -89,6 +90,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Main = Window:AddTab({ Title = "Tab Farming", Icon = "" }),
     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
+    Server = Window:AddTab({ Title = "Tab Server", Icon = "" }),
     Misc = Window:AddTab({ Title = "Tab Misc - Webhook", Icon = "" }),
     
 }
@@ -470,6 +472,113 @@ spawn(function()
         end
     end
 end)
+local ToggleTimeESP = Tabs.Esp:AddToggle("ToggleTimeESP", {Title = "Time ESP", getgenv().Settings.ToggleTimeESP or false})
+ToggleTimeESP:OnChanged(function(Value)
+    _G.ToggleTimeESP = Value
+end)
+
+spawn(function()
+    while wait(1) do
+        if _G.ToggleTimeESP then
+        getgenv().Settings.ToggleTimeESP = Value
+        SaveSetting()
+            if not workspace:FindFirstChild("TimeESP") then
+                local Billboard = Instance.new("BillboardGui", workspace)
+                Billboard.Name = "TimeESP"
+                Billboard.Size = UDim2.new(0, 200, 0, 50)
+                Billboard.AlwaysOnTop = true
+                Billboard.StudsOffsetWorldSpace = Vector3.new(0, 50, 0) -- Cao lên trời
+
+                local Background = Instance.new("Frame", Billboard)
+                Background.Size = UDim2.new(1, 0, 1, 0)
+                Background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                Background.BackgroundTransparency = 0.3
+                Background.BorderSizePixel = 0
+
+                local UIStroke = Instance.new("UIStroke", Background)
+                UIStroke.Color = Color3.fromRGB(0, 255, 127)
+                UIStroke.Thickness = 2
+                UIStroke.Transparency = 0.2
+
+                local Label = Instance.new("TextLabel", Background)
+                Label.Size = UDim2.new(1, 0, 1, 0)
+                Label.BackgroundTransparency = 1
+                Label.TextColor3 = Color3.fromRGB(0, 255, 0)
+                Label.TextStrokeTransparency = 0
+                Label.Font = Enum.Font.FredokaOne
+                Label.TextSize = 16
+                Label.TextWrapped = true
+                Label.Name = "TimeLabel"
+            end
+
+            local Label = workspace.TimeESP:FindFirstChild("Background"):FindFirstChild("TimeLabel")
+            if Label then
+                Label.Text = "🕒 Time: "..os.date("%H:%M:%S")
+            end
+        else
+            if workspace:FindFirstChild("TimeESP") then
+                workspace.TimeESP:Destroy()
+            end
+        end
+    end
+end)
+local JobId = ""
+
+local Input = Tabs.Server:AddInput("JobIdInput", {
+    Title = "Job-ID",
+    Default = "",
+    Numeric = false,
+    Finished = true,
+    Placeholder = "",
+    Callback = function(Value)
+        JobId = Value
+    end
+})
+
+Tabs.Server:AddButton({
+    Title = "Join Server",
+    Description = "Teleport to the server with this Job ID",
+    Callback = function()
+        if JobId ~= "" then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobId, game.Players.LocalPlayer)
+        else
+            print("Please enter a Job ID first.")
+        end
+    end
+})
+Tabs.Server:AddButton({
+    Title = "Copy Job-ID",
+    Description = "Copy the Job ID of the current server to clipboard",
+    Callback = function()
+        setclipboard(game.JobId
+    end
+})
+Tabs.Server:AddButton({
+    Title = "Join Random Server",
+    Description = "Teleport to a random server of this game",
+    Callback = function()
+        local HttpService = game:GetService("HttpService")
+        local TeleportService = game:GetService("TeleportService")
+        local Player = game.Players.LocalPlayer
+
+        local Servers = HttpService:JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+
+        local AvailableServers = {}
+
+        for _, server in pairs(Servers.data) do
+            if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                table.insert(AvailableServers, server.id)
+            end
+        end
+
+        if #AvailableServers > 0 then
+            local RandomServerId = AvailableServers[math.random(1, #AvailableServers)]
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, RandomServerId, Player)
+        else
+            warn("No available servers found!")
+        end
+    end
+})
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
