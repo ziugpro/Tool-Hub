@@ -550,7 +550,7 @@ Tabs.Server:AddButton({
     Title = "Copy Job-ID",
     Description = "Copy the Job ID of the current server to clipboard",
     Callback = function()
-        setclipboard(game.JobId
+        setclipboard(game.JobId)
     end
 })
 Tabs.Server:AddButton({
