@@ -95,7 +95,7 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
 
 }
-local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot ",  getgenv().Settings.TogglePro or false})
+local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot",  Description = "This feature is being fixed and redeveloped so it is temporarily disabled", getgenv().Settings.TogglePro or false})
 TogglePro:OnChanged(function(Value)
     _G.TogglePro = Value
 end)
