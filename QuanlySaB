@@ -92,6 +92,7 @@ local Tabs = {
     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
     Server = Window:AddTab({ Title = "Tab Server", Icon = "" }),
     Misc = Window:AddTab({ Title = "Tab Misc - Webhook", Icon = "" }),
+    Player = Window:AddTab({ Title = "Tab Player Farm", Icon = "" }),
     Settings = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
 
 }
@@ -627,7 +628,7 @@ Tabs.Server:AddButton({
         end
     end
 })
-
+local Main = Tabs.Player:AddSection("Update Please Wait....")
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
