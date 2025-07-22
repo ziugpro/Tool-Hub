@@ -211,7 +211,7 @@ spawn(function()
             local humanoid = character:FindFirstChildOfClass("Humanoid")
 
             if humanoid then
-                humanoid.JumpPower = 120
+                humanoid.JumpPower = 300
             end
         else
             local player = game.Players.LocalPlayer
