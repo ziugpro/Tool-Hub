@@ -178,9 +178,6 @@ local Slider = Tabs.Main:AddSlider("WalkSpeed", {
         SaveSetting()
     end
 })
-
-local Main = Tabs.Main:AddSection("Player")
-
 local ToggleSpeed = Tabs.Main:AddToggle("ToggleSpeed", {Title = "Super Speed", getgenv().Settings.ToggleSpeed or false})
 ToggleSpeed:OnChanged(function(Value)
     getgenv().Settings.ToggleSpeed = Value
