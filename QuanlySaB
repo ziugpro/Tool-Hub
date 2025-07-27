@@ -132,14 +132,17 @@ spawn(function()
 end)
 local TogglePrompt = Tabs.Main:AddToggle("TogglePrompt", {Title = "Auto Buy ( On To Not Error )",  getgenv().Settings.TogglePrompt or false})
 TogglePrompt:OnChanged(function(Value)
+   getgenv().Settings.TogglePrompt = Value
+   SaveSetting()
+    _G.TogglePrompt = Value
+   getgenv().Settings.TogglePrompt = Value
+   SaveSetting()
     _G.TogglePrompt = Value
 end)
 
 spawn(function()
     while wait() do
         if _G.TogglePrompt then
-           getgenv().Settings.TogglePrompt = Value
-           SaveSetting()
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
             local rootPart = character:FindFirstChild("HumanoidRootPart")
@@ -180,6 +183,9 @@ local Slider = Tabs.Main:AddSlider("WalkSpeed", {
 })
 local ToggleSpeed = Tabs.Main:AddToggle("ToggleSpeed", {Title = "Super Speed", getgenv().Settings.ToggleSpeed or false})
 ToggleSpeed:OnChanged(function(Value)
+    getgenv().Settings.ToggleSpeed = Value
+    SaveSetting()
+    _G.ToggleSpeed = Value
     getgenv().Settings.ToggleSpeed = Value
     SaveSetting()
     _G.ToggleSpeed = Value
