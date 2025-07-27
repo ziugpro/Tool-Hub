@@ -696,7 +696,7 @@ Tabs.Teleport:AddButton({
         Title = "Teleport To Down",
         Description = "",
         Callback = function()
-ForceTeleport(Cframe.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 15)
+ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 15)
         end
     })
 
