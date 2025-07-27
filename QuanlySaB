@@ -686,19 +686,19 @@ ForceTeleport(CFrame.new(-389.8197937011719, -7.000003337860107, 61.175354003906
         end
     })
 Tabs.Teleport:AddButton({
-        Title = "Teleport To Sky",
-        Description = "",
-        Callback = function()
-ForceTeleport(Cframe.new(-412.1122741699219, 293.4999957084656, 120.07735443115234), 15)
-        end
-    })
+    Title = "Teleport To Sky",
+    Description = "",
+    Callback = function()
+ForceTeleport(CFrame.new(-412.1122741699219, 293.4999957084656, 120.07735443115234), 15)
+    end
+})
 Tabs.Teleport:AddButton({
-        Title = "Teleport To Down",
-        Description = "",
-        Callback = function()
+    Title = "Teleport To Down",
+    Description = "",
+    Callback = function()
 ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 15)
-        end
-    })
+    end
+})
 
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
