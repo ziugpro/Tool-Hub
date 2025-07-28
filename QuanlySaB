@@ -92,7 +92,8 @@ local Tabs = {
     Main = Window:AddTab({ Title = "Tab Farming", Icon = "" }),
     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
     Server = Window:AddTab({ Title = "Tab Server", Icon = "" }),
-    Misc = Window:AddTab({ Title = "Tab Misc - Webhook", Icon = "" }),
+    Misc = Window:AddTab({ Title = "Tab Misc", Icon = "" }),
+    Web = Window:AddTab({ Title = "Tab Webhook", Icon = "" }),
     Player = Window:AddTab({ Title = "Tab Player Farm", Icon = "" }),
     Settings = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
 
@@ -432,8 +433,7 @@ Tabs.Misc:AddButton({
         end)
     end
 })
-local Main = Tabs.Misc:AddSection("Webhook")
-local Input = Tabs.Misc:AddInput("WebhookLink", {
+local Input = Tabs.Web:AddInput("WebhookLink", {
         Title = "Webhook Url",
         Default = getgenv().Settings.WebhookLink or false,
         Numeric = false,
@@ -448,16 +448,18 @@ local Input = Tabs.Misc:AddInput("WebhookLink", {
         SaveSetting()
     end
     })
-Tabs.Misc:AddToggle("Everyone", {
+Tabs.Web:AddToggle("Everyone", {
     Title = "Tag Everyone",
+    Description = "Tag Member",
     Default = getgenv().Settings.Everyone or false,
     Callback = function(Value)
     getgenv().Settings.Everyone = Value
     SaveSetting()
     end
 })
-Tabs.Misc:AddToggle("StartWebhook", {
+Tabs.Web:AddToggle("StartWebhook", {
     Title = "Start Webhook",
+    Description = "it will send messages to the webhook when you loot Bralnrot when you use the Player Farm feature and when you hang up and buy Brainrot",
     Default = getgenv().Settings.StartWebhook or false,
     Callback = function(Value)
         getgenv().Settings.StartWebhook = Value
