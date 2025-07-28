@@ -361,6 +361,77 @@ Tabs.Misc:AddButton({
         end
     end
 })
+Tabs.Misc:AddButton({
+    Title = "Godmode",
+    Description = "it will make you invulnerable no one can do anything to you all other people's actions will be disabled if you enable this feature",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+
+        local function NukePart(part)
+            if part:IsA("BasePart") then
+                part.Anchored = false
+                part.CanCollide = false
+                part.Massless = true
+                part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+                if part:FindFirstChild("Touched") then
+                    part.Touched:Connect(function() return nil end)
+                end
+            end
+        end
+
+        for _,v in pairs(char:GetDescendants()) do
+            NukePart(v)
+            if v:IsA("Decal") or v:IsA("Texture") then
+                v.Transparency = 1
+            elseif v:IsA("Sound") then
+                v:Destroy()
+            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                v.Enabled = false
+            end
+        end
+
+        if char:FindFirstChildOfClass("Humanoid") then
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            hum.Health = math.huge
+            hum.MaxHealth = math.huge
+            hum.WalkSpeed = 0
+            hum.JumpPower = 0
+            hum.PlatformStand = false
+            hum.Sit = false
+            if hum:FindFirstChild("Animator") then
+                hum.Animator:Destroy()
+            end
+        end
+
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if root then
+            root.Anchored = false
+            root.CanCollide = false
+            root.Velocity = Vector3.zero
+            root.AssemblyLinearVelocity = Vector3.zero
+        end
+
+        local function DisableRemoteEvents()
+            for _,desc in pairs(char:GetDescendants()) do
+                if desc:IsA("RemoteEvent") or desc:IsA("RemoteFunction") then
+                    desc:Destroy()
+                end
+            end
+        end
+
+        DisableRemoteEvents()
+
+        task.spawn(function()
+            while task.wait(0.5) do
+                if not player.Character then break end
+                if player.Character:FindFirstChildOfClass("Humanoid") then
+                    player.Character:FindFirstChildOfClass("Humanoid").Health = math.huge
+                end
+            end
+        end)
+    end
+})
 local Main = Tabs.Misc:AddSection("Webhook")
 local Input = Tabs.Misc:AddInput("WebhookLink", {
         Title = "Webhook Url",
