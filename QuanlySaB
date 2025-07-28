@@ -675,28 +675,28 @@ Tabs.Teleport:AddButton({
         Title = "Teleport To Center",
         Description = "",
         Callback = function()
-ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 0.75)
+ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
         end
     })
 Tabs.Teleport:AddButton({
         Title = "Teleport To Shop",
         Description = "",
         Callback = function()
-ForceTeleport(CFrame.new(-389.8197937011719, -7.000003337860107, 61.17535400390625), 0.75)
+ForceTeleport(CFrame.new(-389.8197937011719, -7.000003337860107, 61.17535400390625), 2)
         end
     })
 Tabs.Teleport:AddButton({
     Title = "Teleport To Sky",
     Description = "",
     Callback = function()
-ForceTeleport(CFrame.new(-412.1122741699219, 293.4999957084656, 120.07735443115234), 15)
+ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
     end
 })
 Tabs.Teleport:AddButton({
     Title = "Teleport To Down",
     Description = "",
     Callback = function()
-ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 15)
+ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 1)
     end
 })
 
