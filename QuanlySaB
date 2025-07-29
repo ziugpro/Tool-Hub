@@ -296,29 +296,114 @@ ToggleInvisReal:OnChanged(function(Value)
     _G.ToggleInvisReal = Value
 end)
 
-local storedParts = {}
+local storedProps = {}
+local storedGui = {}
+local storedHumanoidState = {}
+
+local function IsValidPart(part)
+    return part:IsA("BasePart")
+        and part.Name ~= "HumanoidRootPart"
+        and part.Name ~= "Head"
+        and part.Transparency ~= 1
+        and part.Parent ~= nil
+end
+
+local function IsGuiInstance(obj)
+    return obj:IsA("BillboardGui")
+        or obj:IsA("SelectionBox")
+        or obj:IsA("SurfaceGui")
+        or obj:IsA("Highlight")
+end
 
 spawn(function()
     while wait() do
         if _G.ToggleInvisReal then
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
-
-            for _, part in ipairs(character:GetChildren()) do
-                if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-                    storedParts[#storedParts+1] = part
-                    part.Parent = nil
-                end
-            end
-            repeat wait() until not _G.ToggleInvisReal
-            local character = player.Character
-            if character then
-                for _, part in ipairs(storedParts) do
-                    if part and part.Parent == nil then
-                        part.Parent = character
+            
+            for _, part in ipairs(character:GetDescendants()) do
+                if IsValidPart(part) then
+                    if not storedProps[part] then
+                        storedProps[part] = {
+                            Transparency = part.Transparency,
+                            CanCollide = part.CanCollide,
+                            Massless = part.Massless,
+                            Material = part.Material
+                        }
+                        part.Transparency = 1
+                        part.CanCollide = false
+                        part.Massless = true
+                        part.Material = Enum.Material.SmoothPlastic
                     end
                 end
-                storedParts = {}
+            end
+
+            for _, gui in ipairs(character:GetDescendants()) do
+                if IsGuiInstance(gui) then
+                    if gui:IsA("Highlight") then
+                        gui.Enabled = false
+                    else
+                        if not storedGui[gui] then
+                            storedGui[gui] = true
+                            gui.Parent = nil
+                        end
+                    end
+                end
+            end
+
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid and not storedHumanoidState[humanoid] then
+                storedHumanoidState[humanoid] = {
+                    NameDisplayDistance = humanoid.NameDisplayDistance,
+                    HealthDisplayDistance = humanoid.HealthDisplayDistance,
+                    DisplayName = humanoid.DisplayName
+                }
+                humanoid.NameDisplayDistance = 0
+                humanoid.HealthDisplayDistance = 0
+                humanoid.DisplayName = ""
+            end
+
+            local root = character:FindFirstChild("HumanoidRootPart")
+            if root then
+                root.CanCollide = false
+                root.Transparency = 1
+            end
+
+            repeat wait() until not _G.ToggleInvisReal
+
+            local character = player.Character
+            if character then
+                for part, props in pairs(storedProps) do
+                    if part and part.Parent then
+                        part.Transparency = props.Transparency
+                        part.CanCollide = props.CanCollide
+                        part.Massless = props.Massless
+                        part.Material = props.Material
+                    end
+                end
+
+                for gui, _ in pairs(storedGui) do
+                    if gui and gui.Parent == nil then
+                        gui.Parent = character
+                    end
+                end
+
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid and storedHumanoidState[humanoid] then
+                    humanoid.NameDisplayDistance = storedHumanoidState[humanoid].NameDisplayDistance
+                    humanoid.HealthDisplayDistance = storedHumanoidState[humanoid].HealthDisplayDistance
+                    humanoid.DisplayName = storedHumanoidState[humanoid].DisplayName
+                end
+
+                local root = character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    root.CanCollide = true
+                    root.Transparency = 0
+                end
+
+                storedProps = {}
+                storedGui = {}
+                storedHumanoidState = {}
             end
         end
     end
