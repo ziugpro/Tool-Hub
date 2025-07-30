@@ -111,7 +111,7 @@ function ForceTeleport(cf, holdTime)
         task.wait()
     end
 end
-local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot",  Description = "This feature is being fixed and redeveloped so it is temporarily disabled", getgenv().Settings.TogglePro or false})
+local TogglePro = Tabs.Main:AddToggle("TogglePro", {Title = "Auto Buy All Brainrot",  Description = "This feature is being fixed and redeveloped so it is temporarily disabled", Default = getgenv().Settings.TogglePro or false})
 TogglePro:OnChanged(function(Value)
     _G.TogglePro = Value
 end)
@@ -196,7 +196,7 @@ local Slider = Tabs.Main:AddSlider("WalkSpeed", {
         SaveSetting()
     end
 })
-local ToggleSpeed = Tabs.Main:AddToggle("ToggleSpeed", {Title = "Super Speed", getgenv().Settings.ToggleSpeed or false})
+local ToggleSpeed = Tabs.Main:AddToggle("ToggleSpeed", {Title = "Super Speed", Default = getgenv().Settings.ToggleSpeed or false})
 ToggleSpeed:OnChanged(function(Value)
     getgenv().Settings.ToggleSpeed = Value
     SaveSetting()
@@ -228,7 +228,7 @@ spawn(function()
         end
     end
 end)
-local ToggleJump = Tabs.Main:AddToggle("ToggleJump", {Title = "Super Jump", getgenv().Settings.ToggleJump or false})
+local ToggleJump = Tabs.Main:AddToggle("ToggleJump", {Title = "Super Jump", Default = getgenv().Settings.ToggleJump or false})
 ToggleJump:OnChanged(function(Value)
     _G.ToggleJump = Value
 end)
@@ -551,7 +551,7 @@ Tabs.Web:AddToggle("StartWebhook", {
         SaveSetting()
     end
 })
-ToggleESPPlayer = Tabs.Esp:AddToggle("ToggleESPPlayer", {Title = "Player ESP", getgenv().Settings.ToggleESPPlayer or false})
+ToggleESPPlayer = Tabs.Esp:AddToggle("ToggleESPPlayer", {Title = "Player ESP", Default = getgenv().Settings.ToggleESPPlayer or false})
 ToggleESPPlayer:OnChanged(function(Value)
     getgenv().Settings.ToggleESPPlayer = Value
     SaveSetting()
@@ -613,7 +613,7 @@ spawn(function()
         end
     end
 end)
-local ToggleESPModel = Tabs.Esp:AddToggle("ToggleESPModel", {Title = "Brainrot ESP", getgenv().Settings.ToggleESPModel or false})
+local ToggleESPModel = Tabs.Esp:AddToggle("ToggleESPModel", {Title = "Brainrot ESP", Default = getgenv().Settings.ToggleESPModel or false})
 ToggleESPModel:OnChanged(function(Value)
     _G.ToggleESPModel = Value
 end)
@@ -663,7 +663,7 @@ spawn(function()
         end
     end
 end)
-local ToggleESPPart = Tabs.Esp:AddToggle("ToggleESPPart", {Title = "Lock Base ESP", getgenv().Settings.ToggleESPPart or false})
+local ToggleESPPart = Tabs.Esp:AddToggle("ToggleESPPart", {Title = "Lock Base ESP", Default = getgenv().Settings.ToggleESPPart or false})
 ToggleESPPart:OnChanged(function(Value)
     _G.ToggleESPPart = Value
 end)
