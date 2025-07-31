@@ -328,6 +328,54 @@ spawn(function()
         end
     end
 end)
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local StepSlider = Tabs.Main:AddSlider("ClickStep", {
+    Title = "Click Step",
+    Min = 5,
+    Max = 50,
+    Default = 20,
+    Callback = function(value)
+        _G.ClickStep = math.floor(value)
+    end
+})
+
+local ToggleClickAllPositions = Tabs.Main:AddToggle("ToggleClickAllPositions", {
+    Title = "Auto Click (v2)",
+    Default = false
+})
+
+_G.ClickStep = 20
+_G.ToggleClickAllPositions = false
+
+ToggleClickAllPositions:OnChanged(function(state)
+    _G.ToggleClickAllPositions = state
+end)
+
+spawn(function()
+    while true do
+        wait(2)
+        if _G.ToggleClickAllPositions then
+            local viewportSize = workspace.CurrentCamera.ViewportSize
+            local step = _G.ClickStep or 20
+            local clicks = {}
+
+            for x = 0, viewportSize.X, step do
+                for y = 0, viewportSize.Y, step do
+                    table.insert(clicks, {x = x, y = y})
+                end
+            end
+
+            for _, pos in ipairs(clicks) do
+                task.spawn(function()
+                    VirtualInputManager:SendMouseButtonEvent(pos.x, pos.y, 0, true, game, 0)
+                    VirtualInputManager:SendMouseButtonEvent(pos.x, pos.y, 0, false, game, 0)
+                end)
+            end
+        else
+            wait(0.1)
+        end
+    end
+end)
 local Main = Tabs.Main:AddSection("Esp")
 local ToggleESPPlayerRealXtremeV2 = Tabs.Main:AddToggle("ToggleESPPlayerRealXtremeV2", {
     Title = "⚡ Ultimate Player ESP",
