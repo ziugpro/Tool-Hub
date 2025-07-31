@@ -88,6 +88,7 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl
 })
 local Tabs = {
+     Sv = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
      Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
 }
 Tabs.Main:AddButton({
