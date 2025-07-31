@@ -88,9 +88,7 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl
 })
 local Tabs = {
-        Sv = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
-        Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
-        bug = Window:AddTab({ Title = "Tab Bug Game", Icon = "" }),
+     Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
 }
 Tabs.Main:AddButton({
     Title = "Teleport To Emote Shop",
@@ -513,138 +511,8 @@ spawn(function()
         end
     end
 end)
-local HttpService = game:GetService("HttpService")
-
-local PlayersService = game:GetService("Players")
-
-local LocalPlayer = PlayersService.LocalPlayer
-
-local Input = Tabs.Wh:AddInput("Webhook-Url", {
-    Title = "Webhook Url",
-    Default = getgenv().Settings and getgenv().Settings.TagInput or "",
-    Numeric = false,
-    Finished = false,
-    Placeholder = "",
-    Callback = function(InputValue)
-        if getgenv().Settings == nil then
-            getgenv().Settings = {}
-        end
-        getgenv().Settings.TagInput = InputValue
-        SaveSetting()
-    end,
-    ChangedCallback = function(ChangedValue)
-        if getgenv().Settings == nil then
-            getgenv().Settings = {}
-        end
-        getgenv().Settings.TagInput = ChangedValue
-        SaveSetting()
-    end
-})
-local HttpService = game:GetService("HttpService")
-
-local ToggleTagEveryone = Tabs.Wh:AddToggle("ToggleTagEveryoneWebhook", {
-    Title = "Tag @everyone",
-    Default = getgenv().Settings.ToggleTagEveryoneWebhook or false
-})
-
-ToggleTagEveryone:OnChanged(function(Value)
-    getgenv().Settings.ToggleTagEveryoneWebhook = Value
-    SaveSetting()
-
-    if Value then
-        local webhookUrl = getgenv().Settings.TagInput or ""
-        if webhookUrl ~= "" then
-            local payload = {
-                content = "@everyone"
-            }
-            local body = HttpService:JSONEncode(payload)
-
-            pcall(function()
-                httprequest({
-                    Url = webhookUrl,
-                    Method = "POST",
-                    Headers = { ["Content-Type"] = "application/json" },
-                    Body = body
-                })
-            end)
-        end
-    end
-end)
-local Toggle = Tabs.Wh:AddToggle("ToggleWebhookPlaytime", {
-    Title = "Start Webhook",
-    Default = getgenv().Settings and getgenv().Settings.ToggleWebhookPlaytime or false
-})
-
-Toggle:OnChanged(function(ToggleValue)
-    if getgenv().Settings == nil then
-        getgenv().Settings = {}
-    end
-    getgenv().Settings.ToggleWebhookPlaytime = ToggleValue
-    SaveSetting()
-
-    if ToggleValue == true then
-        spawn(function()
-            local TotalSeconds = 0
-            local SecondsCounter = 0
-            local MinutesCounter = 0
-            local HoursCounter = 0
-            local TickCounter = 0
-            local ShouldSendWebhook = false
-
-            while getgenv().Settings.ToggleWebhookPlaytime == true do
-                task.wait(1)
-                TotalSeconds = TotalSeconds + 1
-                SecondsCounter = SecondsCounter + 1
-                TickCounter = TickCounter + 1
-
-                if SecondsCounter >= 60 then
-                    SecondsCounter = 0
-                    MinutesCounter = MinutesCounter + 1
-                end
-
-                if MinutesCounter >= 60 then
-                    MinutesCounter = 0
-                    HoursCounter = HoursCounter + 1
-                end
-
-                if TickCounter >= 60 then
-                    TickCounter = 0
-                    ShouldSendWebhook = true
-                else
-                    ShouldSendWebhook = false
-                end
-
-                if ShouldSendWebhook == true then
-                    local CurrentWebhookUrl = getgenv().Settings.TagInput
-                    if CurrentWebhookUrl ~= nil and CurrentWebhookUrl ~= "" then
-                        local FormattedTimeString = string.format("%02d:%02d:%02d", HoursCounter, MinutesCounter, SecondsCounter)
-                        local EmbedTable = {
-                            embeds = {
-                                {
-                                    title = "Tool Hub",
-                                    description = "Playtime: " .. FormattedTimeString,
-                                    color = 11184810
-                                }
-                            }
-                        }
-                        local EncodedBody = HttpService:JSONEncode(EmbedTable)
-                        local Success, Response = pcall(function()
-                            return httprequest({
-                                Url = CurrentWebhookUrl,
-                                Method = "POST",
-                                Headers = {
-                                    ["Content-Type"] = "application/json"
-                                },
-                                Body = EncodedBody
-                            })
-                        end)
-                    end
-                end
-            end
-        end)
-    end
-end)
-local SpamAllRemote = Tabs.Bug:AddToggle("SpamAllRemote", {
+local Main = Tabs.Main:AddSection("Bug Game")
+local SpamAllRemote = Tabs.Main:AddToggle("SpamAllRemote", {
     Title = "Spam All Remote",
     Description = "if the game has an error about RemoteEvent or RemoteFunction then with this feature you can get money or get items in the game if the game has an error or doesn't have good anticheat",
     Default = false
