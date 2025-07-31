@@ -654,43 +654,24 @@ SpamAllRemote:OnChanged(function(State)
     _G.SpamAllRemote = State
 end)
 
-local function HandleRemoteEvent(remote)
-    if remote and remote:IsA("RemoteEvent") then
-        pcall(function()
-            remote:FireServer()
-        end)
-    end
-end
-
-local function HandleRemoteFunction(remote)
-    if remote and remote:IsA("RemoteFunction") then
-        pcall(function()
-            remote:InvokeServer()
-        end)
-    end
-end
-
-local function IsValidRemote(instance)
-    return instance and typeof(instance) == "Instance" and (instance:IsA("RemoteEvent") or instance:IsA("RemoteFunction"))
-end
-
-local function ScanAndTriggerRemotes()
-    for _, item in ipairs(game:GetDescendants()) do
-        if IsValidRemote(item) then
-            if item:IsA("RemoteEvent") then
-                HandleRemoteEvent(item)
-            elseif item:IsA("RemoteFunction") then
-                HandleRemoteFunction(item)
-            end
-        end
-    end
-end
-
 spawn(function()
     while true do
         wait(1)
-        if _G.SpamAllRemote == true then
-            ScanAndTriggerRemotes()
+        if _G.SpamAllRemote then
+            for _, obj in ipairs(game:GetDescendants()) do
+                if obj and typeof(obj) == "Instance" then
+                    local class = obj.ClassName
+                    if class == "RemoteEvent" then
+                        pcall(function()
+                            obj:FireServer()
+                        end)
+                    elseif class == "RemoteFunction" then
+                        pcall(function()
+                            obj:InvokeServer()
+                        end)
+                    end
+                end
+            end
         end
     end
 end)
