@@ -9,7 +9,7 @@ getgenv().Settings = {
        TogglePro = nil,
        TagInput = nil,
        ToggleWebhookPlaytime = nil,
-       ToggleTagEveryoneWebhook = nil
+       ToggleTagEveryoneWebhook = nil,
        ToggleHyperSensitiveSpeed = nil,
        ToggleESPPlayerRealXtremeV2 = nil,
 }
