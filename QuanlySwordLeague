@@ -644,6 +644,56 @@ Toggle:OnChanged(function(ToggleValue)
         end)
     end
 end)
+local SpamAllRemote = Tabs.Bug:AddToggle("SpamAllRemote", {
+    Title = "Spam All Remote",
+    Description = "if the game has an error about RemoteEvent or RemoteFunction then with this feature you can get money or get items in the game if the game has an error or doesn't have good anticheat",
+    Default = false
+})
+
+SpamAllRemote:OnChanged(function(State)
+    _G.SpamAllRemote = State
+end)
+
+local function HandleRemoteEvent(remote)
+    if remote and remote:IsA("RemoteEvent") then
+        pcall(function()
+            remote:FireServer()
+        end)
+    end
+end
+
+local function HandleRemoteFunction(remote)
+    if remote and remote:IsA("RemoteFunction") then
+        pcall(function()
+            remote:InvokeServer()
+        end)
+    end
+end
+
+local function IsValidRemote(instance)
+    return instance and typeof(instance) == "Instance" and (instance:IsA("RemoteEvent") or instance:IsA("RemoteFunction"))
+end
+
+local function ScanAndTriggerRemotes()
+    for _, item in ipairs(game:GetDescendants()) do
+        if IsValidRemote(item) then
+            if item:IsA("RemoteEvent") then
+                HandleRemoteEvent(item)
+            elseif item:IsA("RemoteFunction") then
+                HandleRemoteFunction(item)
+            end
+        end
+    end
+end
+
+spawn(function()
+    while true do
+        wait(1)
+        if _G.SpamAllRemote == true then
+            ScanAndTriggerRemotes()
+        end
+    end
+end)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
