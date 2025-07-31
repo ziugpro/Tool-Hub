@@ -90,7 +90,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
         Sv = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
         Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
-        Wh = Window:AddTab({ Title = "Tab Webhook", Icon = "" }),
+        bug = Window:AddTab({ Title = "Tab Bug Game", Icon = "" }),
 }
 Tabs.Main:AddButton({
     Title = "Teleport To Emote Shop",
