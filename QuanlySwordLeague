@@ -543,6 +543,59 @@ spawn(function()
         end
     end
 end)
+local ToggleInstanceCheck = Tabs.Main:AddToggle("ToggleInstanceCheck", {
+    Title = "Check Bug Game - Check Console",
+    Default = false
+})
+
+ToggleInstanceCheck:OnChanged(function(state)
+    _G.ToggleInstanceCheck = state
+end)
+
+spawn(function()
+    while true do
+        wait(3)
+        if _G.ToggleInstanceCheck then
+            for _, obj in ipairs(game:GetDescendants()) do
+                pcall(function()
+                    if typeof(obj) ~= "Instance" then
+                        warn("❌ Not an Instance:", typeof(obj))
+                        return
+                    end
+
+                    if not obj:IsDescendantOf(game) then
+                        warn("❌ Not in game hierarchy:", obj:GetFullName())
+                    end
+
+                    if obj.ClassName == nil or obj.ClassName == "" then
+                        warn("❌ Missing ClassName:", obj)
+                    end
+
+                    if obj.Name == nil or obj.Name == "" then
+                        warn("❌ Missing Name:", obj.ClassName)
+                    end
+
+                    if obj.Archivable ~= true and obj.Archivable ~= false then
+                        warn("❌ Invalid Archivable value:", obj:GetFullName())
+                    end
+
+                    if obj:IsA("Script") or obj:IsA("LocalScript") then
+                        if obj.Disabled then
+                            warn("⚠️ Script is disabled:", obj:GetFullName())
+                        end
+                    end
+
+                    local success, err = pcall(function()
+                        return obj.Parent
+                    end)
+                    if not success then
+                        warn("❌ Error accessing parent:", obj, err)
+                    end
+                end)
+            end
+        end
+    end
+end)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
