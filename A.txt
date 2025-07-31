@@ -1,0 +1,520 @@
+getgenv().Settings = {
+       Toggle_ClickAutoClick = nil, 
+       Button_ResetClickPosition = nil,
+       ToggleESPNPCRealXtremeV2 = nil,
+       ToggleGodESP = nil,
+       ToggleUltraSpeed = nil,
+       ToggleAntiESP = nil,
+       Dropdown = nil,
+       TogglePro = nil,
+       ToggleHyperSensitiveSpeed = nil,
+       ToggleESPPlayerRealXtremeV2 = nil,
+}
+local FileName = tostring(game.Players.LocalPlayer.UserId).."_Settings.json"
+local BaseFolder = "ToolHub"
+local SubFolder = "Database"
+
+function SaveSetting() 
+    local json
+    local HttpService = game:GetService("HttpService")    
+    if writefile then
+        json = HttpService:JSONEncode(getgenv().Settings)
+        if not isfolder(BaseFolder) then
+            makefolder(BaseFolder)
+        end
+        if not isfolder(BaseFolder.."/"..SubFolder) then
+            makefolder(BaseFolder.."/"..SubFolder)
+        end        
+        writefile(BaseFolder.."/"..SubFolder.."/"..FileName, json)
+    else
+        error("ERROR: Can't save your settings")
+    end
+end
+function LoadSetting()
+    local HttpService = game:GetService("HttpService")
+    if readfile and isfile and isfile(BaseFolder.."/"..SubFolder.."/"..FileName) then
+        getgenv().Settings = HttpService:JSONDecode(readfile(BaseFolder.."/"..SubFolder.."/"..FileName))
+    end
+end
+LoadSetting()
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Tool Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat task.wait() until game:IsLoaded()
+getgenv().Image = "rbxthumb://type=Asset&id=76608011467652&w=420&h=420"
+getgenv().ToggleUI = "LeftControl"
+task.spawn(function()
+    if not getgenv().LoadedMobileUI then
+        getgenv().LoadedMobileUI = true
+        local OpenUI = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        local UICorner = Instance.new("UICorner")
+        OpenUI.Name = "OpenUI"
+        OpenUI.Parent = game:GetService("CoreGui")
+        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        ImageButton.Parent = OpenUI
+        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
+        ImageButton.BackgroundTransparency = 0.8
+        ImageButton.Position = UDim2.new(0, 5, 0, 5)
+        ImageButton.Size = UDim2.new(0, 55, 0, 55)
+        ImageButton.Image = getgenv().Image
+        ImageButton.Draggable = false
+        ImageButton.Transparency = 1
+        UICorner.CornerRadius = UDim.new(100)
+        UICorner.Parent = ImageButton
+        ImageButton.MouseButton1Click:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
+        end)
+    end
+end)
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Tool Hub - Sword League",
+    SubTitle = "By Ziugpro",
+    TabWidth = 130,
+    Size = UDim2.fromOffset(545, 365),
+    Acrylic = true,
+    Theme = "Aqua",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+local Tabs = {
+        Sv = Window:AddTab({ Title = "Setting", Icon = "settings" }),
+        Main = Window:AddTab({ Title = "General", Icon = "house" }),
+    
+}
+Tabs.Main:AddButton({
+    Title = "Teleport To Emote Shop",
+    Description = "",
+    Callback = function()
+
+        local player = game.Players.LocalPlayer
+        if player ~= nil then
+
+            local character = player.Character
+            if character == nil then
+                character = player.CharacterAdded:Wait()
+            end
+
+            if character ~= nil then
+
+                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                if rootPart ~= nil then
+
+                    local positionX = -152.0920867919922
+                    local positionY = -13.902108192443848
+                    local positionZ = 1393.734619140625
+
+                    local vectorA = Vector3.new(positionX, positionY, positionZ)
+                    local vectorB = Vector3.new(positionX, positionY, positionZ)
+
+                    local sumVector = vectorA + vectorB
+
+                    local targetCFrame = CFrame.new(sumVector)
+
+                    rootPart.CFrame = targetCFrame
+
+                end
+            end
+        end
+
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "Teleport To Ship Shop",
+    Description = "",
+    Callback = function()
+
+        local player = game.Players.LocalPlayer
+        if player ~= nil then
+
+            local character = player.Character
+            if character == nil then
+                character = player.CharacterAdded:Wait()
+            end
+
+            if character ~= nil then
+
+                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                if rootPart ~= nil then
+
+                    local positionX = -200.2934112548828
+                    local positionY = -14.833053588867188
+                    local positionZ = 1446.2545166015625
+
+                    local vectorA = Vector3.new(positionX, positionY, positionZ)
+                    local vectorB = Vector3.new(positionX, positionY, positionZ)
+
+                    local sumVector = vectorA + vectorB
+
+                    local targetCFrame = CFrame.new(sumVector)
+
+                    rootPart.CFrame = targetCFrame
+
+                end
+            end
+        end
+
+    end
+})
+
+Tabs.Main:AddButton({
+    Title = "Teleport To Sword Shop",
+    Description = "",
+    Callback = function()
+
+        local player = game.Players.LocalPlayer
+        if player ~= nil then
+
+            local character = player.Character
+            if character == nil then
+                character = player.CharacterAdded:Wait()
+            end
+
+            if character ~= nil then
+
+                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                if rootPart ~= nil then
+
+                    local positionX = -10.246593475341797
+                    local positionY = 2.942673683166504
+                    local positionZ = 1409.27880859375
+
+                    local vectorA = Vector3.new(positionX, positionY, positionZ)
+                    local vectorB = Vector3.new(positionX, positionY, positionZ)
+
+                    local sumVector = vectorA + vectorB
+
+                    local targetCFrame = CFrame.new(sumVector)
+
+                    rootPart.CFrame = targetCFrame
+
+                end
+            end
+        end
+
+    end
+})
+local Main = Tabs.Main:AddSection("Faming")
+Tabs.Main:AddDropdown("Dropdown", {
+        Title = "Select Regime",
+        Values = {"nil"},
+        Multi = false,
+        Default = 1,  
+        Callback = function()
+        getgenv().Settings.Dropdown = Value
+        SaveSetting()
+        end
+    })
+Tabs.Main:AddToggle("TogglePro", {
+    Title = "Start Farm - In Dev",
+    Default = getgenv().Settings.TogglePro or false,
+    Callback = function(Value)
+        getgenv().Settings.TogglePro = Value
+        SaveSetting()
+    end
+})
+local Button_ResetClickPosition = Tabs.Main:AddButton({
+    Title = "Reset Click Setting",
+    Description = "",
+    Callback = function()
+        _G.ClickPosition_X = nil
+        _G.ClickPosition_Y = nil
+        _G.ClickVector2 = nil
+        _G.ClickCaptured = false
+        _G.ClickStarted = false
+        _G.ClickDone = false
+        getgenv().Settings.ClickPosition_X = nil
+        getgenv().Settings.ClickPosition_Y = nil
+        getgenv().Settings.ClickVector2 = nil
+        SaveSetting()
+    end
+})
+
+local Toggle_ClickAutoClick = Tabs.Main:AddToggle("Toggle_ClickAutoClick", {
+    Title = "Auto Click - Feature Development",
+    Default = getgenv().Settings.Toggle_ClickAutoClick or false
+})
+
+Toggle_ClickAutoClick:OnChanged(function(Value)
+    _G.Toggle_ClickAutoClick = Value
+end)
+
+_G.ClickPosition_X = nil
+_G.ClickPosition_Y = nil
+_G.ClickVector2 = nil
+_G.ClickCaptured = false
+_G.ClickStarted = false
+_G.ClickDone = false
+
+spawn(function()
+    while wait() do
+        if _G.Toggle_ClickAutoClick then
+            getgenv().Settings.Toggle_ClickAutoClick = true
+            SaveSetting()
+
+            if not _G.ClickCaptured and not _G.ClickStarted and not _G.ClickVector2 then
+                _G.ClickStarted = true
+
+                local UserInputService = game:GetService("UserInputService")
+                local MouseLocation = nil
+                local CaptureConnection = nil
+
+                CaptureConnection = UserInputService.InputBegan:Connect(function(input, isProcessed)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        if not isProcessed then
+                            MouseLocation = UserInputService:GetMouseLocation()
+                            if MouseLocation then
+                                _G.ClickPosition_X = MouseLocation.X
+                                _G.ClickPosition_Y = MouseLocation.Y
+                                _G.ClickVector2 = Vector2.new(_G.ClickPosition_X, _G.ClickPosition_Y)
+                                getgenv().Settings.ClickPosition_X = _G.ClickPosition_X
+                                getgenv().Settings.ClickPosition_Y = _G.ClickPosition_Y
+                                getgenv().Settings.ClickVector2 = _G.ClickVector2
+                                SaveSetting()
+                                _G.ClickCaptured = true
+                                if CaptureConnection then
+                                    CaptureConnection:Disconnect()
+                                end
+                            end
+                        end
+                    end
+                end)
+            end
+
+            if _G.ClickVector2 and not _G.ClickDone and _G.ClickCaptured then
+                wait(2)
+
+                local VirtualInputManager = game:GetService("VirtualInputManager")
+
+                if VirtualInputManager and _G.ClickVector2 then
+                    VirtualInputManager:SendMouseButtonEvent(
+                        _G.ClickVector2.X,
+                        _G.ClickVector2.Y,
+                        0,
+                        true,
+                        game,
+                        0
+                    )
+                    VirtualInputManager:SendMouseButtonEvent(
+                        _G.ClickVector2.X,
+                        _G.ClickVector2.Y,
+                        0,
+                        false,
+                        game,
+                        0
+                    )
+                    _G.ClickDone = true
+                end
+            end
+        else
+            getgenv().Settings.Toggle_ClickAutoClick = false
+            SaveSetting()
+            _G.ClickPosition_X = nil
+            _G.ClickPosition_Y = nil
+            _G.ClickVector2 = nil
+            _G.ClickCaptured = false
+            _G.ClickStarted = false
+            _G.ClickDone = false
+        end
+    end
+end)
+local Main = Tabs.Main:AddSection("Esp")
+local ToggleESPPlayerRealXtremeV2 = Tabs.Main:AddToggle("ToggleESPPlayerRealXtremeV2", {
+    Title = "⚡ Ultimate Player ESP",
+    getgenv().Settings.ToggleESPPlayerRealXtremeV2 or false
+})
+
+ToggleESPPlayerRealXtremeV2:OnChanged(function(Value)
+    _G.ToggleESPPlayerRealXtremeV2 = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleESPPlayerRealXtremeV2 then
+            getgenv().Settings.ToggleESPPlayerRealXtremeV2 = true
+            SaveSetting()
+
+            for _, Player in pairs(game.Players:GetPlayers()) do
+                if Player ~= game.Players.LocalPlayer then
+                    local Character = Player.Character
+                    if Character and Character:FindFirstChild("HumanoidRootPart") and not Character:FindFirstChild("SUPER_ESP_GUI") then
+
+                        local ESPGui = Instance.new("BillboardGui")
+                        ESPGui.Name = "SUPER_ESP_GUI"
+                        ESPGui.Adornee = Character:FindFirstChild("HumanoidRootPart")
+                        ESPGui.Size = UDim2.new(0, 250, 0, 65)
+                        ESPGui.StudsOffset = Vector3.new(0, 3, 0)
+                        ESPGui.AlwaysOnTop = true
+                        ESPGui.ResetOnSpawn = false
+                        ESPGui.Parent = Character
+
+                        local BackgroundFrame = Instance.new("Frame")
+                        BackgroundFrame.Name = "BackgroundFrame"
+                        BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                        BackgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+                        BackgroundFrame.BackgroundTransparency = 0.4
+                        BackgroundFrame.BorderSizePixel = 0
+                        BackgroundFrame.Parent = ESPGui
+
+                        local StrokeFrame = Instance.new("UIStroke")
+                        StrokeFrame.Name = "StrokeFrame"
+                        StrokeFrame.Color = Color3.fromRGB(0, 255, 255)
+                        StrokeFrame.Thickness = 2
+                        StrokeFrame.Transparency = 0.1
+                        StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                        StrokeFrame.Parent = BackgroundFrame
+
+                        local PlayerName = Instance.new("TextLabel")
+                        PlayerName.Name = "PlayerName"
+                        PlayerName.Size = UDim2.new(1, 0, 0.33, 0)
+                        PlayerName.Position = UDim2.new(0, 0, 0, 0)
+                        PlayerName.BackgroundTransparency = 1
+                        PlayerName.Text = "👤 " .. Player.DisplayName .. " (" .. Player.Name .. ")"
+                        PlayerName.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        PlayerName.TextStrokeTransparency = 0
+                        PlayerName.TextScaled = true
+                        PlayerName.Font = Enum.Font.GothamBlack
+                        PlayerName.Parent = BackgroundFrame
+
+                        local TeamInfo = Instance.new("TextLabel")
+                        TeamInfo.Name = "TeamInfo"
+                        TeamInfo.Size = UDim2.new(1, 0, 0.33, 0)
+                        TeamInfo.Position = UDim2.new(0, 0, 0.33, 0)
+                        TeamInfo.BackgroundTransparency = 1
+                        TeamInfo.Text = "🏳️ Team: " .. tostring(Player.Team)
+                        TeamInfo.TextColor3 = Color3.fromRGB(255, 215, 0)
+                        TeamInfo.TextStrokeTransparency = 0
+                        TeamInfo.TextScaled = true
+                        TeamInfo.Font = Enum.Font.GothamBold
+                        TeamInfo.Parent = BackgroundFrame
+
+                        local DistanceLabel = Instance.new("TextLabel")
+                        DistanceLabel.Name = "DistanceLabel"
+                        DistanceLabel.Size = UDim2.new(1, 0, 0.33, 0)
+                        DistanceLabel.Position = UDim2.new(0, 0, 0.66, 0)
+                        DistanceLabel.BackgroundTransparency = 1
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude)
+                        DistanceLabel.Text = "📏 "..distance.." studs"
+                        DistanceLabel.TextColor3 = Color3.fromRGB(144, 238, 144)
+                        DistanceLabel.TextStrokeTransparency = 0
+                        DistanceLabel.TextScaled = true
+                        DistanceLabel.Font = Enum.Font.GothamMedium
+                        DistanceLabel.Parent = BackgroundFrame
+                    end
+                end
+            end
+
+        else
+            getgenv().Settings.ToggleESPPlayerRealXtremeV2 = false
+            SaveSetting()
+
+            for _, Player in pairs(game.Players:GetPlayers()) do
+                local Character = Player.Character
+                if Character and Character:FindFirstChild("SUPER_ESP_GUI") then
+                    Character:FindFirstChild("SUPER_ESP_GUI"):Destroy()
+                end
+            end
+        end
+    end
+end)
+local ToggleESPNPCRealXtremeV2 = Tabs.Main:AddToggle("ToggleESPNPCRealXtremeV2", {
+    Title = "⚡ Ultimate NPC ESP",
+    Default = getgenv().Settings.ToggleESPNPCRealXtremeV2 or false
+})
+
+ToggleESPNPCRealXtremeV2:OnChanged(function(Value)
+    _G.ToggleESPNPCRealXtremeV2 = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleESPNPCRealXtremeV2 then
+            getgenv().Settings.ToggleESPNPCRealXtremeV2 = true
+            SaveSetting()
+
+            for _, Model in pairs(workspace:GetDescendants()) do
+                if Model:IsA("Model") and Model ~= game.Players.LocalPlayer.Character and not game.Players:GetPlayerFromCharacter(Model) then
+                    local HRP = Model:FindFirstChild("HumanoidRootPart")
+                    if HRP and not Model:FindFirstChild("SUPER_ESP_GUI") then
+
+                        local ESPGui = Instance.new("BillboardGui")
+                        ESPGui.Name = "SUPER_ESP_GUI"
+                        ESPGui.Adornee = HRP
+                        ESPGui.Size = UDim2.new(0, 250, 0, 65)
+                        ESPGui.StudsOffset = Vector3.new(0, 3, 0)
+                        ESPGui.AlwaysOnTop = true
+                        ESPGui.ResetOnSpawn = false
+                        ESPGui.Parent = Model
+
+                        local BackgroundFrame = Instance.new("Frame")
+                        BackgroundFrame.Name = "BackgroundFrame"
+                        BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                        BackgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+                        BackgroundFrame.BackgroundTransparency = 0.4
+                        BackgroundFrame.BorderSizePixel = 0
+                        BackgroundFrame.Parent = ESPGui
+
+                        local StrokeFrame = Instance.new("UIStroke")
+                        StrokeFrame.Name = "StrokeFrame"
+                        StrokeFrame.Color = Color3.fromRGB(255, 85, 0)
+                        StrokeFrame.Thickness = 2
+                        StrokeFrame.Transparency = 0.1
+                        StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                        StrokeFrame.Parent = BackgroundFrame
+
+                        local NPCName = Instance.new("TextLabel")
+                        NPCName.Name = "NPCName"
+                        NPCName.Size = UDim2.new(1, 0, 0.5, 0)
+                        NPCName.Position = UDim2.new(0, 0, 0, 0)
+                        NPCName.BackgroundTransparency = 1
+                        NPCName.Text = "🤖 NPC: " .. (Model.Name or "Unknown")
+                        NPCName.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        NPCName.TextStrokeTransparency = 0
+                        NPCName.TextScaled = true
+                        NPCName.Font = Enum.Font.GothamBold
+                        NPCName.Parent = BackgroundFrame
+
+                        local DistanceLabel = Instance.new("TextLabel")
+                        DistanceLabel.Name = "DistanceLabel"
+                        DistanceLabel.Size = UDim2.new(1, 0, 0.5, 0)
+                        DistanceLabel.Position = UDim2.new(0, 0, 0.5, 0)
+                        DistanceLabel.BackgroundTransparency = 1
+                        local distance = math.floor((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - HRP.Position).Magnitude)
+                        DistanceLabel.Text = "📏 "..distance.." studs"
+                        DistanceLabel.TextColor3 = Color3.fromRGB(173, 255, 47)
+                        DistanceLabel.TextStrokeTransparency = 0
+                        DistanceLabel.TextScaled = true
+                        DistanceLabel.Font = Enum.Font.Gotham
+                        DistanceLabel.Parent = BackgroundFrame
+                    end
+                end
+            end
+
+        else
+            getgenv().Settings.ToggleESPNPCRealXtremeV2 = false
+            SaveSetting()
+
+            for _, Model in pairs(workspace:GetDescendants()) do
+                if Model:IsA("Model") and Model:FindFirstChild("SUPER_ESP_GUI") then
+                    Model:FindFirstChild("SUPER_ESP_GUI"):Destroy()
+                end
+            end
+        end
+    end
+end)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("ToolHub")
+SaveManager:SetFolder("Database")
+InterfaceManager:BuildInterfaceSection(Tabs.Sv)
+SaveManager:BuildConfigSection(Tabs.Sv)
