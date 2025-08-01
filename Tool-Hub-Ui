@@ -187,16 +187,14 @@ function tab:AddDropdown(side, text, list, callback)
         Parent = Container
     })
 
-    local OptionsHolder = Create("ScrollingFrame", {
+    local OptionsHolder = Create("Frame", {
         Position = UDim2.new(0, 0, 1, 0),
-        Size = UDim2.new(1, 0, 0, 140),
-        CanvasSize = UDim2.new(0, 0, 0, #list * 30),
-        ScrollBarThickness = 3,
+        Size = UDim2.new(1, 0, 0, 0),
         BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-        BorderSizePixel = 0,
         Visible = false,
         Parent = Container
     })
+    OptionsHolder.ClipsDescendants = false
 
     local UIList = Instance.new("UIListLayout", OptionsHolder)
     UIList.Padding = UDim.new(0, 2)
@@ -205,8 +203,10 @@ function tab:AddDropdown(side, text, list, callback)
     Button.MouseButton1Click:Connect(function()
         Open = not Open
         OptionsHolder.Visible = Open
-        Button.Text = Open and (text .. " ▲") or (text .. " ▼")
-        Container.Size = Open and UDim2.new(1, -10, 0, 174) or UDim2.new(1, -10, 0, 30)
+        Button.TextTransparency = Open and 1 or 0
+        local optCount = #list
+        OptionsHolder.Size = Open and UDim2.new(1, 0, 0, optCount * 28 + 2) or UDim2.new(1, 0, 0, 0)
+        Container.Size = Open and UDim2.new(1, -10, 0, 30 + (optCount * 28 + 4)) or UDim2.new(1, -10, 0, 30)
     end)
 
     for _, item in ipairs(list) do
@@ -215,21 +215,30 @@ function tab:AddDropdown(side, text, list, callback)
             BackgroundColor3 = Color3.fromRGB(70, 70, 70),
             Text = item,
             Font = Enum.Font.Gotham,
-            TextSize = 13,
+            TextSize = 14,
             TextColor3 = Color3.fromRGB(255, 255, 255),
             Parent = OptionsHolder
         })
-
         Opt.MouseButton1Click:Connect(function()
-            Button.Text = text .. ": " .. item
-            OptionsHolder.Visible = false
             Open = false
+            OptionsHolder.Visible = false
+            Button.Text = item .. " ▼"
+            Button.TextTransparency = 0
+            OptionsHolder.Size = UDim2.new(1, 0, 0, 0)
             Container.Size = UDim2.new(1, -10, 0, 30)
-            callback(item)
+            if callback then
+                callback(item)
+            end
         end)
     end
 
-    AddElement(side, Container)
+    if side == "Left" then
+        Container.Parent = LeftColumn
+    else
+        Container.Parent = RightColumn
+    end
+
+    return Container
 end
 function tab:AddTextLabel(side, text)
             local parent = (side == "Left") and LeftScroll or RightScroll
