@@ -430,19 +430,18 @@ Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
         if conn then conn:Disconnect() end
     end
 end)
-Tab:AddToggle("Right", "Auto Attack Mob", false, function(state)
-    local virt = game:GetService("VirtualInputManager")
-    local runService = game:GetService("RunService")
+Tab:AddToggle("Right", "Auto Attack", false, function(v)
+    _G.AutoClick = v
 
-    local conn
-    if state then
-        conn = runService.RenderStepped:Connect(function()
-            if tick() % 1 < 0.03 then
-                virt:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-                virt:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+    if _G.AutoClick and not _G._AutoClickConnection then
+        _G._AutoClickConnection = game:GetService("RunService").RenderStepped:Connect(function()
+            if _G.AutoClick then
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
             end
         end)
-    else
-        if conn then conn:Disconnect() end
+    elseif not _G.AutoClick and _G._AutoClickConnection then
+        _G._AutoClickConnection:Disconnect()
+        _G._AutoClickConnection = nil
     end
 end)
