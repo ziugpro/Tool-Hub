@@ -173,7 +173,7 @@ function tab:AddDropdown(side, text, list, callback)
     local Container = Create("Frame", {
         Size = UDim2.new(1, -10, 0, 30),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
-        ClipsDescendants = true
+        ClipsDescendants = false
     })
     Roundify(Container, 6)
 
@@ -190,7 +190,7 @@ function tab:AddDropdown(side, text, list, callback)
     local OptionsHolder = Create("ScrollingFrame", {
         Position = UDim2.new(0, 0, 1, 0),
         Size = UDim2.new(1, 0, 0, 140),
-        CanvasSize = UDim2.new(0, 0, 0, #list * 28),
+        CanvasSize = UDim2.new(0, 0, 0, #list * 30),
         ScrollBarThickness = 3,
         BackgroundColor3 = Color3.fromRGB(60, 60, 60),
         BorderSizePixel = 0,
@@ -206,7 +206,7 @@ function tab:AddDropdown(side, text, list, callback)
         Open = not Open
         OptionsHolder.Visible = Open
         Button.Text = Open and (text .. " ▲") or (text .. " ▼")
-        Container.Size = Open and UDim2.new(1, -10, 0, 30 + 140 + 4) or UDim2.new(1, -10, 0, 30)
+        Container.Size = Open and UDim2.new(1, -10, 0, 174) or UDim2.new(1, -10, 0, 30)
     end)
 
     for _, item in ipairs(list) do
@@ -231,7 +231,7 @@ function tab:AddDropdown(side, text, list, callback)
 
     AddElement(side, Container)
 end
-        function tab:AddTextLabel(side, text)
+function tab:AddTextLabel(side, text)
             local parent = (side == "Left") and LeftScroll or RightScroll
             local Label = Instance.new("TextLabel")
             Label.Size = UDim2.new(0, 200, 0, 30)
