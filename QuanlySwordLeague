@@ -520,6 +520,31 @@ spawn(function()
         end
     end
 end)
+local Main = Tabs.Esp:AddSection("Shop")
+local SwordShop = {
+"Raver",
+"Maximus Blade",
+"Tung Tung Stick",
+"Double Cappuccino",
+"Nightshade",
+"Aurora Edge",
+"Weathered Blade",
+"Dull Fang"
+}
+Tabs.Esp:AddDropdown("SwordShop", {
+        Title = "Select Sword",
+        Values = SwordShop,
+        Multi = false,
+        Default = 1,  
+        Callback = function()
+        end
+    })
+Tabs.Esp:AddButton({
+        Title = "Buy Sword",
+        Description = "",
+        Callback = function()
+        end
+    })
 local SpamAllRemote = Tabs.Bug:AddToggle("SpamAllRemote", {
     Title = "Spam All Remote",
     Description = "if the game has an error about RemoteEvent or RemoteFunction then with this feature you can get money or get items in the game if the game has an error or doesn't have good anticheat",
@@ -604,6 +629,21 @@ spawn(function()
         end
     end
 end)
+Tabs.Bug:AddButton({
+        Title = "Copy Cframe",
+        Description = "",
+        Callback = function()
+setclipboard(tostring(game.Players.LocalPlayer.Character:GetPivot().Position))
+        end
+    })
+Tabs.Bug:AddButton({
+        Title = "Copy Id Game",
+        Description = "",
+        Callback = function()
+setclipboard(tostring(game.GameId))
+        end
+    })
+
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 SaveManager:SetLibrary(Fluent)
