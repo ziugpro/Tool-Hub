@@ -169,7 +169,66 @@ function SkUI:CreateWindow(title)
             Button.MouseButton1Click:Connect(callback)
             AddElement(side, Button)
         end
+function tab:AddDropdown(side, text, list, callback)
+    local Open = false
+    local Container = Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        Size = UDim2.new(1, -10, 0, 30),
+        ClipsDescendants = true
+    })
+    Roundify(Container, 6)
 
+    local Button = Create("TextButton", {
+        Size = UDim2.new(1, 0, 0, 30),
+        BackgroundTransparency = 1,
+        Text = text .. " ▼",
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Parent = Container
+    })
+
+    local OptionsHolder = Create("Frame", {
+        Position = UDim2.new(0, 0, 0, 30),
+        Size = UDim2.new(1, 0, 0, #list * 28),
+        BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+        Visible = false,
+        Parent = Container
+    })
+    Roundify(OptionsHolder, 6)
+
+    local UIList = Instance.new("UIListLayout", OptionsHolder)
+    UIList.Padding = UDim.new(0, 2)
+
+    Button.MouseButton1Click:Connect(function()
+        Open = not Open
+        OptionsHolder.Visible = Open
+        Button.Text = Open and (text .. " ▲") or (text .. " ▼")
+        Container.Size = Open and UDim2.new(1, -10, 0, 30 + (#list * 28 + 4)) or UDim2.new(1, -10, 0, 30)
+    end)
+
+    for _, item in ipairs(list) do
+        local Opt = Create("TextButton", {
+            Size = UDim2.new(1, 0, 0, 28),
+            BackgroundColor3 = Color3.fromRGB(70, 70, 70),
+            Text = item,
+            Font = Enum.Font.Gotham,
+            TextSize = 13,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            Parent = OptionsHolder
+        })
+
+        Opt.MouseButton1Click:Connect(function()
+            Button.Text = text .. ": " .. item
+            OptionsHolder.Visible = false
+            Container.Size = UDim2.new(1, -10, 0, 30)
+            Open = false
+            callback(item)
+        end)
+    end
+
+    AddElement(side, Container)
+end
         function tab:AddTextLabel(side, text)
             local parent = (side == "Left") and LeftScroll or RightScroll
             local Label = Instance.new("TextLabel")
@@ -184,66 +243,6 @@ function SkUI:CreateWindow(title)
             Label.AnchorPoint = Vector2.new(0.5, 0)
             Label.Position = UDim2.new(0.5, 0, 0, 0)
             Label.Parent = parent
-        end
-
-        function tab:AddDropdown(side, text, list, callback)
-            local Container = Create("Frame", {
-                Size = UDim2.new(1, -10, 0, 30),
-                BackgroundColor3 = Color3.fromRGB(50, 50, 50),
-                ClipsDescendants = true
-            })
-            Roundify(Container, 6)
-
-            local Button = Create("TextButton", {
-                Size = UDim2.new(1, 0, 1, 0),
-                BackgroundTransparency = 1,
-                Text = text .. " ▼",
-                Font = Enum.Font.Gotham,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                Parent = Container
-            })
-
-            local OptionsHolder = Create("Frame", {
-                Position = UDim2.new(0, 0, 1, 0),
-                Size = UDim2.new(1, 0, 0, #list * 28),
-                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-                Visible = false,
-                Parent = Container
-            })
-
-            local UIList = Instance.new("UIListLayout", OptionsHolder)
-            UIList.Padding = UDim.new(0, 2)
-
-            local Open = false
-            Button.MouseButton1Click:Connect(function()
-                Open = not Open
-                OptionsHolder.Visible = Open
-                Button.Text = Open and (text .. " ▲") or (text .. " ▼")
-                Container.Size = Open and UDim2.new(1, -10, 0, 30 + (#list * 28 + 4)) or UDim2.new(1, -10, 0, 30)
-            end)
-
-            for _, item in ipairs(list) do
-                local Opt = Create("TextButton", {
-                    Size = UDim2.new(1, 0, 0, 28),
-                    BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-                    Text = item,
-                    Font = Enum.Font.Gotham,
-                    TextSize = 13,
-                    TextColor3 = Color3.fromRGB(255, 255, 255),
-                    Parent = OptionsHolder
-                })
-
-                Opt.MouseButton1Click:Connect(function()
-                    Button.Text = text .. ": " .. item
-                    OptionsHolder.Visible = false
-                    Open = false
-                    Container.Size = UDim2.new(1, -10, 0, 30)
-                    callback(item)
-                end)
-            end
-
-            AddElement(side, Container)
         end
 
         function tab:AddSlider(side, text, min, max, default, callback)
