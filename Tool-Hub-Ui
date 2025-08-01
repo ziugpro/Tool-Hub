@@ -160,7 +160,7 @@ function SkUI:CreateWindow(title)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.Gotham
-    Label.TextSize = 15
+    Label.TextSize = 16
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
