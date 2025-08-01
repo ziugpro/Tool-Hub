@@ -89,122 +89,10 @@ local Window = Fluent:CreateWindow({
 })
 local Tabs = {
      Sv = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
-     Main = Window:AddTab({ Title = "Tab General", Icon = "" }),
+     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
+     Main = Window:AddTab({ Title = "Tab Farming", Icon = "" }),
+     Bug = Window:AddTab({ Title = "Tab Bug Game", Icon = "" }),
 }
-Tabs.Main:AddButton({
-    Title = "Teleport To Emote Shop",
-    Description = "",
-    Callback = function()
-
-        local player = game.Players.LocalPlayer
-        if player ~= nil then
-
-            local character = player.Character
-            if character == nil then
-                character = player.CharacterAdded:Wait()
-            end
-
-            if character ~= nil then
-
-                local rootPart = character:FindFirstChild("HumanoidRootPart")
-                if rootPart ~= nil then
-
-                    local positionX = -152.0920867919922
-                    local positionY = -13.902108192443848
-                    local positionZ = 1393.734619140625
-
-                    local vectorA = Vector3.new(positionX, positionY, positionZ)
-                    local vectorB = Vector3.new(positionX, positionY, positionZ)
-
-                    local sumVector = vectorA + vectorB
-
-                    local targetCFrame = CFrame.new(sumVector)
-
-                    rootPart.CFrame = targetCFrame
-
-                end
-            end
-        end
-
-    end
-})
-
-Tabs.Main:AddButton({
-    Title = "Teleport To Ship Shop",
-    Description = "",
-    Callback = function()
-
-        local player = game.Players.LocalPlayer
-        if player ~= nil then
-
-            local character = player.Character
-            if character == nil then
-                character = player.CharacterAdded:Wait()
-            end
-
-            if character ~= nil then
-
-                local rootPart = character:FindFirstChild("HumanoidRootPart")
-                if rootPart ~= nil then
-
-                    local positionX = -200.2934112548828
-                    local positionY = -14.833053588867188
-                    local positionZ = 1446.2545166015625
-
-                    local vectorA = Vector3.new(positionX, positionY, positionZ)
-                    local vectorB = Vector3.new(positionX, positionY, positionZ)
-
-                    local sumVector = vectorA + vectorB
-
-                    local targetCFrame = CFrame.new(sumVector)
-
-                    rootPart.CFrame = targetCFrame
-
-                end
-            end
-        end
-
-    end
-})
-
-Tabs.Main:AddButton({
-    Title = "Teleport To Sword Shop",
-    Description = "",
-    Callback = function()
-
-        local player = game.Players.LocalPlayer
-        if player ~= nil then
-
-            local character = player.Character
-            if character == nil then
-                character = player.CharacterAdded:Wait()
-            end
-
-            if character ~= nil then
-
-                local rootPart = character:FindFirstChild("HumanoidRootPart")
-                if rootPart ~= nil then
-
-                    local positionX = -10.246593475341797
-                    local positionY = 2.942673683166504
-                    local positionZ = 1409.27880859375
-
-                    local vectorA = Vector3.new(positionX, positionY, positionZ)
-                    local vectorB = Vector3.new(positionX, positionY, positionZ)
-
-                    local sumVector = vectorA + vectorB
-
-                    local targetCFrame = CFrame.new(sumVector)
-
-                    rootPart.CFrame = targetCFrame
-
-                end
-            end
-        end
-
-    end
-})
-local Main = Tabs.Main:AddSection("Faming")
 Tabs.Main:AddDropdown("Dropdown", {
         Title = "Select Regime",
         Values = {"nil"},
@@ -377,8 +265,7 @@ spawn(function()
         end
     end
 end)
-local Main = Tabs.Main:AddSection("Esp")
-local ToggleESPPlayerRealXtremeV2 = Tabs.Main:AddToggle("ToggleESPPlayerRealXtremeV2", {
+local ToggleESPPlayerRealXtremeV2 = Tabs.Esp:AddToggle("ToggleESPPlayerRealXtremeV2", {
     Title = "⚡ Ultimate Player ESP",
     getgenv().Settings.ToggleESPPlayerRealXtremeV2 or false
 })
@@ -476,7 +363,7 @@ spawn(function()
         end
     end
 end)
-local ToggleESPNPCRealXtremeV2 = Tabs.Main:AddToggle("ToggleESPNPCRealXtremeV2", {
+local ToggleESPNPCRealXtremeV2 = Tabs.Esp:AddToggle("ToggleESPNPCRealXtremeV2", {
     Title = "⚡ Ultimate NPC ESP",
     Default = getgenv().Settings.ToggleESPNPCRealXtremeV2 or false
 })
@@ -561,8 +448,7 @@ spawn(function()
         end
     end
 end)
-local Main = Tabs.Main:AddSection("Bug Game")
-local SpamAllRemote = Tabs.Main:AddToggle("SpamAllRemote", {
+local SpamAllRemote = Tabs.Bug:AddToggle("SpamAllRemote", {
     Title = "Spam All Remote",
     Description = "if the game has an error about RemoteEvent or RemoteFunction then with this feature you can get money or get items in the game if the game has an error or doesn't have good anticheat",
     Default = false
@@ -593,7 +479,7 @@ spawn(function()
         end
     end
 end)
-local ToggleInstanceCheck = Tabs.Main:AddToggle("ToggleInstanceCheck", {
+local ToggleInstanceCheck = Tabs.Bug:AddToggle("ToggleInstanceCheck", {
     Title = "Check Bug Game - Check Console",
     Default = false
 })
