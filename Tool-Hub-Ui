@@ -14,9 +14,11 @@ local Screen = Create("ScreenGui", {
     Parent = CoreGui
 })
 
+local HolderHeight = 430
+
 local Holder = Create("Frame", {
-    Size = UDim2.new(0, 550, 0, 380),
-    Position = UDim2.new(0.5, -275, 0.5, -190),
+    Size = UDim2.new(0, 550, 0, HolderHeight),
+    Position = UDim2.new(0.5, -275, 0.5, -HolderHeight / 2),
     BackgroundColor3 = Color3.fromRGB(22, 22, 22),
     BorderSizePixel = 0,
     Visible = true,
@@ -149,16 +151,23 @@ function ui:Create(tabname)
     end
 
     function tab:AddTextLabel(side, text)
-        local Label = Create("TextLabel", {
-            BackgroundTransparency = 1,
-            Text = text,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(200, 200, 200),
-            TextXAlignment = Enum.TextXAlignment.Left
-        })
-        AddElement(side, Label)
-    end
+    local parent = (side == "Left") and LeftScroll or RightScroll
+    
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(0, 200, 0, 30)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 16
+    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Label.TextXAlignment = Enum.TextXAlignment.Center
+    Label.TextYAlignment = Enum.TextYAlignment.Center
+    
+    Label.AnchorPoint = Vector2.new(0.5, 0)
+    Label.Position = UDim2.new(0.5, 0, 0, 0)
+    
+    Label.Parent = parent
+end
 
     function tab:AddDropdown(side, text, list, callback)
         local Box = Create("TextButton", {
