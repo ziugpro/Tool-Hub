@@ -139,7 +139,7 @@ function SkUI:CreateWindow(title)
         function tab:AddToggle(side, text, default, callback)
             local Toggle = Create("TextButton", {
                 BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-                Text = "☠︎︎ " .. text,
+                Text = "[✓] " .. text,
                 Font = Enum.Font.Gotham,
                 TextSize = 14,
                 TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -156,7 +156,7 @@ function SkUI:CreateWindow(title)
 function tab:AddTextLabel(side, text)
             local parent = (side == "Left") and LeftScroll or RightScroll
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(0, 300, 0, 30)
+            Label.Size = UDim2.new(0, 280, 0, 30)
             Label.BackgroundTransparency = 1
             Label.Text = text
             Label.Font = Enum.Font.Gotham
