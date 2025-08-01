@@ -41,6 +41,7 @@ local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create("General")
 local Setting = UI:Create("Setting Player")
+local Steal = UI:Create("Steal Brainrot")
 local Web = UI:Create("Webhook")
 
 function ForceTeleport(cf, holdTime)
@@ -595,4 +596,4 @@ end)
 Setting:AddTextLabel("Left", "_____")
 Setting:AddTextLabel("Right", "_____")
 
-
+Steal:AddTextLabel("Left", "Update Please Wait")
