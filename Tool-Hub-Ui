@@ -28,7 +28,7 @@ function SkUI:CreateWindow(title)
     })
 
     local Holder = Create("Frame", {
-        Size = UDim2.new(0, 541, 0, 363),
+        Size = UDim2.new(0, 550, 0, 367),
         Position = UDim2.new(0.5, -275, 0, -60),
         BackgroundColor3 = Color3.fromRGB(22, 22, 22),
         BorderSizePixel = 0,
@@ -127,7 +127,7 @@ function SkUI:CreateWindow(title)
             return scroll
         end
 
-        local LeftScroll = makeScroll(UDim2.new(0, 0, 0, 0))
+        local LeftScroll = makeScroll(UDim2.new(0, 5, 0, 0))
         local RightScroll = makeScroll(UDim2.new(0.5, 5, 0, 0))
 
         local function AddElement(side, obj)
