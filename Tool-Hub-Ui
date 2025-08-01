@@ -1,254 +1,241 @@
-local UserInputService = game:GetService("UserInputService") local TweenService = game:GetService("TweenService") local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
-local SkUI = {} SkUI.__index = SkUI
+local SkUI = {}
+SkUI.__index = SkUI
 
-local function Create(class, props) local obj = Instance.new(class) for i, v in pairs(props) do obj[i] = v end return obj end
+local function Create(class, props)
+    local obj = Instance.new(class)
+    for i, v in pairs(props) do
+        obj[i] = v
+    end
+    return obj
+end
 
-local function Roundify(obj, rad) local corner = Instance.new("UICorner") corner.CornerRadius = UDim.new(0, rad) corner.Parent = obj end
+local function Roundify(obj, rad)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, rad)
+    corner.Parent = obj
+end
 
-function SkUI:CreateWindow(title) local ui = setmetatable({}, SkUI)
-
-local Screen = Create("ScreenGui", {
-    Name = "SkUI_Library",
-    ResetOnSpawn = false,
-    Parent = CoreGui
-})
-
-local Holder = Create("Frame", {
-    Size = UDim2.new(0, 550, 0, 360),
-    Position = UDim2.new(0.5, -275, 0.5, -180),
-    BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-    BorderSizePixel = 0,
-    Visible = true,
-    Parent = Screen
-})
-Roundify(Holder, 8)
-
-local Header = Create("Frame", {
-    Size = UDim2.new(1, 0, 0, 35),
-    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-    BorderSizePixel = 0,
-    Parent = Holder
-})
-
-local Title = Create("TextLabel", {
-    Size = UDim2.new(1, 0, 1, 0),
-    BackgroundTransparency = 1,
-    Text = title or "SkUI",
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    Font = Enum.Font.GothamBold,
-    TextSize = 16,
-    Parent = Header
-})
-
-local TabsScroll = Create("ScrollingFrame", {
-    Size = UDim2.new(1, 0, 0, 35),
-    Position = UDim2.new(0, 0, 0, 35),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ScrollBarThickness = 3,
-    CanvasSize = UDim2.new(0, 0, 0, 0),
-    AutomaticCanvasSize = Enum.AutomaticSize.X,
-    ScrollingDirection = Enum.ScrollingDirection.X,
-    Parent = Holder
-})
-
-local TabsFolder = Create("Folder", {Parent = TabsScroll})
-
-local Pages = {}
-function ui:Create(tabname)
-    local tab = {}
-
-    local Button = Create("TextButton", {
-        Size = UDim2.new(0, 100, 1, 0),
-        BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-        Text = tabname,
-        Font = Enum.Font.GothamBold,
-        TextSize = 14,
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        Parent = TabsScroll
+function SkUI:CreateWindow(title)
+    local ui = setmetatable({}, SkUI)
+    local Screen = Create("ScreenGui", {
+        Name = "SkUI_Library",
+        ResetOnSpawn = false,
+        Parent = CoreGui
     })
-    Roundify(Button, 6)
 
-    local Page = Create("Frame", {
-        Size = UDim2.new(1, 0, 1, -70),
-        Position = UDim2.new(0, 0, 0, 70),
-        BackgroundTransparency = 1,
-        Visible = false,
+    local Holder = Create("Frame", {
+        Size = UDim2.new(0, 550, 0, 380),
+        Position = UDim2.new(0.5, -275, 0.5, -190),
+        BackgroundColor3 = Color3.fromRGB(22, 22, 22),
+        BorderSizePixel = 0,
+        Visible = true,
+        Parent = Screen
+    })
+    Roundify(Holder, 8)
+
+    local Header = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 35),
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        BorderSizePixel = 0,
         Parent = Holder
     })
 
-    local LeftScroll = Create("ScrollingFrame", {
-        Size = UDim2.new(0.5, -5, 1, 0),
-        Position = UDim2.new(0, 0, 0, 0),
+    local Title = Create("TextLabel", {
+        Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        ScrollBarThickness = 3,
-        AutomaticCanvasSize = Enum.AutomaticSize.Y,
-        ScrollingDirection = Enum.ScrollingDirection.Y,
-        CanvasSize = UDim2.new(0, 0, 0, 0),
-        Parent = Page
+        Text = title or "SkUI",
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Font = Enum.Font.GothamBold,
+        TextSize = 16,
+        Parent = Header
     })
 
-    local RightScroll = Create("ScrollingFrame", {
-        Size = UDim2.new(0.5, -5, 1, 0),
-        Position = UDim2.new(0.5, 5, 0, 0),
-        BackgroundTransparency = 1,
+    local TabsScroll = Create("ScrollingFrame", {
+        Size = UDim2.new(1, 0, 0, 35),
+        Position = UDim2.new(0, 0, 0, 35),
+        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
         ScrollBarThickness = 3,
-        AutomaticCanvasSize = Enum.AutomaticSize.Y,
-        ScrollingDirection = Enum.ScrollingDirection.Y,
         CanvasSize = UDim2.new(0, 0, 0, 0),
-        Parent = Page
+        AutomaticCanvasSize = Enum.AutomaticSize.X,
+        ScrollingDirection = Enum.ScrollingDirection.X,
+        Parent = Holder
     })
 
-    local function AddElement(side, obj)
-        local parent = (side == "Left") and LeftScroll or RightScroll
-        obj.Parent = parent
-    end
-
-    function tab:AddToggle(side, text, default, callback)
-        local Toggle = Create("TextButton", {
-            Size = UDim2.new(1, -10, 0, 30),
-            BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-            Text = "✔️  " .. text,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Toggle, 6)
-
-        local state = default or false
-        Toggle.MouseButton1Click:Connect(function()
-            state = not state
-            Toggle.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(45, 45, 45)
-            callback(state)
-        end)
-        AddElement(side, Toggle)
-    end
-
-    function tab:AddButton(side, text, callback)
+    local Pages = {}
+    function ui:Create(tabname)
+        local tab = {}
         local Button = Create("TextButton", {
-            Size = UDim2.new(1, -10, 0, 30),
-            BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-            Text = text,
+            Size = UDim2.new(0, 100, 1, 0),
+            BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+            Text = tabname,
             Font = Enum.Font.GothamBold,
             TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            Parent = TabsScroll
         })
         Roundify(Button, 6)
-        Button.MouseButton1Click:Connect(callback)
-        AddElement(side, Button)
-    end
 
-    function tab:AddTextLabel(side, text)
-        local Label = Create("TextLabel", {
-            Size = UDim2.new(1, -10, 0, 30),
+        local Page = Create("Frame", {
+            Size = UDim2.new(1, 0, 1, -70),
+            Position = UDim2.new(0, 0, 0, 70),
             BackgroundTransparency = 1,
-            Text = text,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(200, 200, 200),
-            TextXAlignment = Enum.TextXAlignment.Left
-        })
-        AddElement(side, Label)
-    end
-
-    function tab:AddDropdown(side, text, list, callback)
-        local Box = Create("TextButton", {
-            Size = UDim2.new(1, -10, 0, 30),
-            BackgroundColor3 = Color3.fromRGB(50, 50, 50),
-            Text = text .. " ▼",
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Box, 6)
-        Box.MouseButton1Click:Connect(function()
-            local selected = list[math.random(1, #list)]
-            Box.Text = text .. ": " .. selected
-            callback(selected)
-        end)
-        AddElement(side, Box)
-    end
-
-    function tab:AddSlider(side, text, min, max, default, callback)
-        local val = default or min
-        local Slider = Create("TextButton", {
-            Size = UDim2.new(1, -10, 0, 30),
-            BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-            Text = text .. ": " .. val,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Slider, 6)
-        Slider.MouseButton1Click:Connect(function()
-            val = math.random(min, max)
-            Slider.Text = text .. ": " .. val
-            callback(val)
-        end)
-        AddElement(side, Slider)
-    end
-
-    function tab:AddTextbox(side, text, default, callback)
-        local Container = Create("Frame", {
-            Size = UDim2.new(1, -10, 0, 50),
-            BackgroundTransparency = 1
+            Visible = false,
+            Parent = Holder
         })
 
-        local Label = Create("TextLabel", {
-            Size = UDim2.new(1, 0, 0, 15),
+        local LeftScroll = Create("ScrollingFrame", {
+            Size = UDim2.new(0.5, -5, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
             BackgroundTransparency = 1,
-            Text = text,
-            Font = Enum.Font.Gotham,
-            TextSize = 13,
-            TextColor3 = Color3.fromRGB(200, 200, 200),
-            TextXAlignment = Enum.TextXAlignment.Left,
-            Parent = Container
+            BorderSizePixel = 0,
+            ScrollBarThickness = 3,
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            ScrollingDirection = Enum.ScrollingDirection.Y,
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            Parent = Page
         })
 
-        local Box = Create("TextBox", {
-            Size = UDim2.new(1, 0, 0, 30),
-            Position = UDim2.new(0, 0, 0, 20),
-            BackgroundColor3 = Color3.fromRGB(55, 55, 55),
-            Text = default or "",
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            ClearTextOnFocus = false,
-            Parent = Container
+        local RightScroll = Create("ScrollingFrame", {
+            Size = UDim2.new(0.5, -5, 1, 0),
+            Position = UDim2.new(0.5, 5, 0, 0),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            ScrollBarThickness = 3,
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            ScrollingDirection = Enum.ScrollingDirection.Y,
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            Parent = Page
         })
-        Roundify(Box, 6)
 
-        Box.FocusLost:Connect(function(enterPressed)
-            if enterPressed then
+        local function AddElement(side, obj)
+            local parent = (side == "Left") and LeftScroll or RightScroll
+            obj.Parent = parent
+        end
+
+        function tab:AddToggle(side, text, default, callback)
+            local Toggle = Create("TextButton", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+                Text = (default and "✔️ " or "❌ ") .. text,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Toggle, 6)
+            local state = default or false
+            Toggle.MouseButton1Click:Connect(function()
+                state = not state
+                Toggle.Text = (state and "✔️ " or "❌ ") .. text
+                callback(state)
+            end)
+            AddElement(side, Toggle)
+        end
+
+        function tab:AddButton(side, text, callback)
+            local Button = Create("TextButton", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+                Text = text,
+                Font = Enum.Font.GothamBold,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Button, 6)
+            Button.MouseButton1Click:Connect(callback)
+            AddElement(side, Button)
+        end
+
+        function tab:AddTextLabel(side, text)
+            local Label = Create("TextLabel", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundTransparency = 1,
+                Text = text,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(200, 200, 200),
+                TextXAlignment = Enum.TextXAlignment.Left
+            })
+            AddElement(side, Label)
+        end
+
+        function tab:AddTextbox(side, text, callback)
+            local Box = Create("TextBox", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+                Text = "",
+                PlaceholderText = text,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Box, 6)
+            Box.FocusLost:Connect(function()
                 callback(Box.Text)
+            end)
+            AddElement(side, Box)
+        end
+
+        function tab:AddDropdown(side, text, list, callback)
+            local Box = Create("TextButton", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+                Text = text .. " ▼",
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Box, 6)
+            Box.MouseButton1Click:Connect(function()
+                local selected = list[math.random(1, #list)]
+                Box.Text = text .. ": " .. selected
+                callback(selected)
+            end)
+            AddElement(side, Box)
+        end
+
+        function tab:AddSlider(side, text, min, max, default, callback)
+            local val = default or min
+            local Slider = Create("TextButton", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(70, 70, 70),
+                Text = text .. ": " .. val,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Slider, 6)
+            Slider.MouseButton1Click:Connect(function()
+                val = math.random(min, max)
+                Slider.Text = text .. ": " .. val
+                callback(val)
+            end)
+            AddElement(side, Slider)
+        end
+
+        Button.MouseButton1Click:Connect(function()
+            for _, p in pairs(Pages) do
+                p.Visible = false
             end
+            Page.Visible = true
         end)
 
-        AddElement(side, Container)
+        Page.Visible = #Pages == 0
+        table.insert(Pages, Page)
+        return tab
     end
 
-    Button.MouseButton1Click:Connect(function()
-        for _, p in pairs(Pages) do p.Visible = false end
-        Page.Visible = true
+    UserInputService.InputBegan:Connect(function(input, gp)
+        if input.KeyCode == Enum.KeyCode.LeftControl and not gp then
+            Holder.Visible = not Holder.Visible
+        end
     end)
 
-    Page.Visible = #Pages == 0
-    table.insert(Pages, Page)
-    return tab
-end
-
-UserInputService.InputBegan:Connect(function(input, gp)
-    if input.KeyCode == Enum.KeyCode.LeftControl and not gp then
-        Holder.Visible = not Holder.Visible
-    end
-end)
-
-return ui
-
+    return ui
 end
 
 return setmetatable({}, SkUI)
-
