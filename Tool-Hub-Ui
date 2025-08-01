@@ -169,7 +169,6 @@ function SkUI:CreateWindow(title)
             Button.MouseButton1Click:Connect(callback)
             AddElement(side, Button)
         end
-
     function tab:AddDropdown(side, text, list, callback)
     local Container = Create("Frame", {
         Size = UDim2.new(1, -10, 0, 30),
@@ -192,7 +191,7 @@ function SkUI:CreateWindow(title)
         Position = UDim2.new(0, 0, 1, 0),
         Size = UDim2.new(1, 0, 0, #list * 28 + 4),
         BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-        Visible = false,
+        BackgroundTransparency = 1,
         Parent = Container
     })
 
@@ -219,6 +218,9 @@ function SkUI:CreateWindow(title)
             callback(item)
         end)
     end
+
+    OptionsHolder.Visible = false
+    OptionsHolder.BackgroundTransparency = 0
 
     local Open = false
     Button.MouseButton1Click:Connect(function()
