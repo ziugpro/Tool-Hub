@@ -8,6 +8,7 @@ getgenv().Settings = {
        Dropdown = nil,
        TogglePro = nil,
        TagInput = nil,
+       ToggleESPIslandModels = nil,
        ToggleWebhookPlaytime = nil,
        ToggleTagEveryoneWebhook = nil,
        ToggleHyperSensitiveSpeed = nil,
@@ -265,6 +266,76 @@ spawn(function()
         end
     end
 end)
+local ToggleESPIslandModels = Tabs.Esp:AddToggle("ToggleESPIslandModels", {
+    Title = "🏝️ Island ESP",
+    Default = getgenv().Settings.ToggleESPIslandModels or false
+})
+
+ToggleESPIslandModels:OnChanged(function(Value)
+    _G.ToggleESPIslandModels = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ToggleESPIslandModels then
+            getgenv().Settings.ToggleESPIslandModels = true
+            SaveSetting()
+
+            for _, model in pairs(workspace:GetDescendants()) do
+                if model:IsA("Model") and model.Name:lower():find("island") and not model:FindFirstChild("SUPER_ESP_GUI") then
+                    local primary = model:FindFirstChild("HumanoidRootPart") or model:FindFirstChildWhichIsA("BasePart")
+                    if primary then
+                        local ESPGui = Instance.new("BillboardGui")
+                        ESPGui.Name = "SUPER_ESP_GUI"
+                        ESPGui.Adornee = primary
+                        ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                        ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                        ESPGui.AlwaysOnTop = true
+                        ESPGui.ResetOnSpawn = false
+                        ESPGui.Parent = model
+
+                        local BackgroundFrame = Instance.new("Frame")
+                        BackgroundFrame.Name = "BackgroundFrame"
+                        BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                        BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                        BackgroundFrame.BackgroundTransparency = 0.5
+                        BackgroundFrame.BorderSizePixel = 0
+                        BackgroundFrame.Parent = ESPGui
+
+                        local StrokeFrame = Instance.new("UIStroke")
+                        StrokeFrame.Color = Color3.fromRGB(0, 255, 127)
+                        StrokeFrame.Thickness = 2
+                        StrokeFrame.Transparency = 0.1
+                        StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                        StrokeFrame.Parent = BackgroundFrame
+
+                        local Label = Instance.new("TextLabel")
+                        Label.Name = "IslandName"
+                        Label.Size = UDim2.new(1, 0, 1, 0)
+                        Label.Position = UDim2.new(0, 0, 0, 0)
+                        Label.BackgroundTransparency = 1
+                        Label.Text = "🏝️ " .. model.Name
+                        Label.TextColor3 = Color3.fromRGB(135, 206, 235)
+                        Label.TextStrokeTransparency = 0
+                        Label.TextScaled = true
+                        Label.Font = Enum.Font.GothamBold
+                        Label.Parent = BackgroundFrame
+                    end
+                end
+            end
+
+        else
+            getgenv().Settings.ToggleESPIslandModels = false
+            SaveSetting()
+
+            for _, model in pairs(workspace:GetDescendants()) do
+                if model:IsA("Model") and model:FindFirstChild("SUPER_ESP_GUI") then
+                    model:FindFirstChild("SUPER_ESP_GUI"):Destroy()
+                end
+            end
+        end
+    end
+end)
 local ToggleESPPlayerRealXtremeV2 = Tabs.Esp:AddToggle("ToggleESPPlayerRealXtremeV2", {
     Title = "⚡ Ultimate Player ESP",
     getgenv().Settings.ToggleESPPlayerRealXtremeV2 or false
@@ -363,6 +434,7 @@ spawn(function()
         end
     end
 end)
+
 local ToggleESPNPCRealXtremeV2 = Tabs.Esp:AddToggle("ToggleESPNPCRealXtremeV2", {
     Title = "⚡ Ultimate NPC ESP",
     Default = getgenv().Settings.ToggleESPNPCRealXtremeV2 or false
