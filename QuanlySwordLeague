@@ -90,7 +90,7 @@ local Window = Fluent:CreateWindow({
 })
 local Tabs = {
      Sv = Window:AddTab({ Title = "Tab Setting", Icon = "" }),
-     Esp = Window:AddTab({ Title = "Tab Esp", Icon = "" }),
+     Esp = Window:AddTab({ Title = "Tab Esp - Shop", Icon = "" }),
      Main = Window:AddTab({ Title = "Tab Farming", Icon = "" }),
      Bug = Window:AddTab({ Title = "Tab Bug Game", Icon = "" }),
 }
