@@ -392,3 +392,57 @@ Tab:AddButton("Right", "Unlock All Power", function()
 
     workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 end)
+Tab:AddTextLabel("Right", "Farming")
+Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
+    local rs = game:GetService("RunService")
+    local cam = workspace.CurrentCamera
+    local circle = Drawing.new("Circle")
+    circle.Radius = 40
+    circle.Thickness = 2
+    circle.Filled = false
+    circle.Transparency = 1
+    circle.Color = Color3.fromRGB(255, 0, 0)
+    circle.Visible = state
+
+    local conn
+    if state then
+        conn = rs.RenderStepped:Connect(function()
+            circle.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
+            local closest, dist = nil, math.huge
+            for _, v in pairs(workspace:GetDescendants()) do
+                if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+                    if not game.Players:GetPlayerFromCharacter(v) then
+                        local pos, vis = cam:WorldToViewportPoint(v.HumanoidRootPart.Position)
+                        local mag = (Vector2.new(pos.X, pos.Y) - circle.Position).Magnitude
+                        if vis and mag < dist and mag <= circle.Radius then
+                            closest = v
+                            dist = mag
+                        end
+                    end
+                end
+            end
+            if closest then
+                cam.CFrame = CFrame.new(cam.CFrame.Position, closest.HumanoidRootPart.Position)
+            end
+        end)
+    else
+        circle:Remove()
+        if conn then conn:Disconnect() end
+    end
+end)
+Tab:AddToggle("Right", "Auto Attack Mob", false, function(state)
+    local virt = game:GetService("VirtualInputManager")
+    local runService = game:GetService("RunService")
+
+    local conn
+    if state then
+        conn = runService.RenderStepped:Connect(function()
+            if tick() % 1 < 0.03 then
+                virt:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                virt:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+            end
+        end)
+    else
+        if conn then conn:Disconnect() end
+    end
+end)
