@@ -156,6 +156,7 @@ function SkUI:CreateWindow(title)
        function tab:AddTextLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(0, 250, 0, 30)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.Gotham
@@ -165,7 +166,7 @@ function SkUI:CreateWindow(title)
     Label.TextYAlignment = Enum.TextYAlignment.Center
     Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
-    self:AddElement(side, Label)
+    Label.Parent = parent
 end
         function tab:AddButton(side, text, callback)
             local Button = Create("TextButton", {
