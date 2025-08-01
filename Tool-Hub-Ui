@@ -1,40 +1,273 @@
-local SkUI = {} SkUI.__index = SkUI
+local SkUI = {}
+SkUI.__index = SkUI
 
 local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+local UIS = game:GetService("UserInputService")
 
-function SkUI:CreateWindow(title) local self = setmetatable({}, SkUI)
+function SkUI:CreateWindow(title)
+    local self = setmetatable({}, SkUI)
 
-local UI = Instance.new("ScreenGui")
-UI.Name = "SkUI"
-UI.ResetOnSpawn = false
-UI.IgnoreGuiInset = true
-UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-UI.Parent = PlayerGui
+    local UI = Instance.new("ScreenGui")
+    UI.Name = "SkUI"
+    UI.ResetOnSpawn = false
+    UI.IgnoreGuiInset = true
+    UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    UI.Parent = PlayerGui
 
-local Main = Instance.new("Frame")
-Main.Name = "Main"
-Main.Size = UDim2.new(0, 550, 0, 370)
-Main.Position = UDim2.new(0.5, -275, 0.5, -185)
-Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Main.BorderSizePixel = 0
-Main.Parent = UI
+    UIS.InputBegan:Connect(function(input, gpe)
+        if not gpe and input.KeyCode == Enum.KeyCode.LeftControl then
+            UI.Enabled = not UI.Enabled
+        end
+    end)
 
-local TabsHolder = Instance.new("ScrollingFrame")
-TabsHolder.Name = "TabsHolder"
-TabsHolder.Size = UDim2.new(1, 0, 0, 40)
-TabsHolder.BackgroundTransparency = 1
-TabsHolder.BorderSizePixel = 0
-TabsHolder.CanvasSize = UDim2.new(0, 0, 0, 40)
-TabsHolder.ScrollBarThickness = 2
-TabsHolder.ScrollingDirection = Enum.ScrollingDirection.X
-TabsHolder.Parent = Main
+    local Main = Instance.new("Frame")
+    Main.Name = "Main"
+    Main.Size = UDim2.new(0, 550, 0, 360)
+    Main.Position = UDim2.new(0.5, -275, 0.5, -180)
+    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    Main.BorderSizePixel = 0
+    Main.Parent = UI
 
-local Pages = Instance.new("Frame")
-Pages.Name = "Pages"
-Pages.Size = UDim2.new(1, 0, 1, -40)
-Pages.Position = UDim2.new(0, 0, 0, 40)
-Pages.BackgroundTransparency = 1
-Pages.Parent = Main
+    local TabHolder = Instance.new("ScrollingFrame")
+    TabHolder.Name = "TabHolder"
+    TabHolder.Size = UDim2.new(1, 0, 0, 30)
+    TabHolder.Position = UDim2.new(0, 0, 0, 0)
+    TabHolder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    TabHolder.BorderSizePixel = 0
+    TabHolder.ScrollBarThickness = 3
+    TabHolder.ScrollingDirection = Enum.ScrollingDirection.X
+    TabHolder.CanvasSize = UDim2.new(0, 0, 0, 30)
+    TabHolder.Parent = Main
+
+    local PageContainer = Instance.new("Frame")
+    PageContainer.Name = "PageContainer"
+    PageContainer.Size = UDim2.new(1, 0, 1, -30)
+    PageContainer.Position = UDim2.new(0, 0, 0, 30)
+    PageContainer.BackgroundTransparency = 1
+    PageContainer.Parent = Main
+
+    self.Main = Main
+    self.TabHolder = TabHolder
+    self.PageContainer = PageContainer
+    self.Tabs = {}
+
+    return self
+end
+
+function SkUI:Create(tabname)
+    local Page = Instance.new("Frame")
+    Page.Name = tabname
+    Page.Size = UDim2.new(1, 0, 1, 0)
+    Page.BackgroundTransparency = 1
+    Page.Visible = false
+    Page.Parent = self.PageContainer
+
+    local LeftScroll = Instance.new("ScrollingFrame")
+    LeftScroll.Name = "Left"
+    LeftScroll.Size = UDim2.new(0.5, -5, 1, 0)
+    LeftScroll.Position = UDim2.new(0, 0, 0, 0)
+    LeftScroll.BackgroundTransparency = 1
+    LeftScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    LeftScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    LeftScroll.ScrollBarThickness = 4
+    LeftScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+    LeftScroll.Parent = Page
+
+    local RightScroll = Instance.new("ScrollingFrame")
+    RightScroll.Name = "Right"
+    RightScroll.Size = UDim2.new(0.5, -5, 1, 0)
+    RightScroll.Position = UDim2.new(0.5, 5, 0, 0)
+    RightScroll.BackgroundTransparency = 1
+    RightScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    RightScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    RightScroll.ScrollBarThickness = 4
+    RightScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+    RightScroll.Parent = Page
+
+    local TabBtn = Instance.new("TextButton")
+    TabBtn.Name = "TabButton"
+    TabBtn.Size = UDim2.new(0, 100, 1, 0)
+    TabBtn.Text = tabname
+    TabBtn.Font = Enum.Font.GothamBold
+    TabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TabBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    TabBtn.BorderSizePixel = 0
+    TabBtn.Parent = self.TabHolder
+
+    TabBtn.MouseButton1Click:Connect(function()
+        for _, p in pairs(self.PageContainer:GetChildren()) do
+            if p:IsA("Frame") then
+                p.Visible = false
+            end
+        end
+        Page.Visible = true
+    end)
+
+    local function addElement(side, element)
+        element.Parent = Page:FindFirstChild(side)
+        local siblings = element.Parent:GetChildren()
+        table.sort(siblings, function(a,b) return a.LayoutOrder < b.LayoutOrder end)
+        for i, v in ipairs(siblings) do
+            v.LayoutOrder = i
+            v.Position = UDim2.new(0, 5, 0, (i-1)*40 + 5)
+        end
+        local last = siblings[#siblings]
+        local height = (#siblings)*40 + 10
+        element.Parent.CanvasSize = UDim2.new(0, 0, 0, height)
+    end
+
+    local TabAPI = {}
+
+    function TabAPI:AddTextLabel(side, text)
+        local lbl = Instance.new("TextLabel")
+        lbl.Size = UDim2.new(1, -10, 0, 30)
+        lbl.BackgroundTransparency = 1
+        lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.Text = text
+        lbl.Font = Enum.Font.GothamSemibold
+        lbl.TextSize = 14
+        lbl.LayoutOrder = #Page:FindFirstChild(side):GetChildren() + 1
+        addElement(side, lbl)
+    end
+
+    function TabAPI:AddButton(side, text, callback)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.Text = text
+        btn.Font = Enum.Font.GothamBold
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+        btn.BorderSizePixel = 0
+        btn.LayoutOrder = #Page:FindFirstChild(side):GetChildren() + 1
+        btn.MouseButton1Click:Connect(callback)
+        addElement(side, btn)
+    end
+
+    function TabAPI:AddToggle(side, text, default, callback)
+        local toggle = Instance.new("TextButton")
+        toggle.Size = UDim2.new(1, -10, 0, 30)
+        toggle.Text = text
+        toggle.Font = Enum.Font.GothamBold
+        toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+        toggle.BackgroundColor3 = default and Color3.fromRGB(0, 122, 255) or Color3.fromRGB(40, 40, 40)
+        toggle.BorderSizePixel = 0
+        toggle.LayoutOrder = #Page:FindFirstChild(side):GetChildren() + 1
+        local state = default
+        toggle.MouseButton1Click:Connect(function()
+            state = not state
+            toggle.BackgroundColor3 = state and Color3.fromRGB(0, 122, 255) or Color3.fromRGB(40, 40, 40)
+            callback(state)
+        end)
+        addElement(side, toggle)
+    end
+
+    function TabAPI:AddDropdown(side, text, list, callback)
+        local drop = Instance.new("TextButton")
+        drop.Size = UDim2.new(1, -10, 0, 30)
+        drop.Text = text
+        drop.Font = Enum.Font.Gotham
+        drop.TextColor3 = Color3.fromRGB(255, 255, 255)
+        drop.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        drop.BorderSizePixel = 0
+        drop.LayoutOrder = #Page:FindFirstChild(side):GetChildren() + 1
+        addElement(side, drop)
+
+        drop.MouseButton1Click:Connect(function()
+            if drop:FindFirstChild("Menu") then
+                drop.Menu:Destroy()
+                return
+            end
+            local menu = Instance.new("Frame")
+            menu.Name = "Menu"
+            menu.Size = UDim2.new(1, -10, 0, #list * 25)
+            menu.Position = UDim2.new(0, 5, 0, 35)
+            menu.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            menu.BorderSizePixel = 0
+            menu.Parent = drop.Parent
+
+            for _, item in ipairs(list) do
+                local opt = Instance.new("TextButton")
+                opt.Size = UDim2.new(1, 0, 0, 25)
+                opt.Text = item
+                opt.Font = Enum.Font.Gotham
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                opt.BorderSizePixel = 0
+                opt.Parent = menu
+
+                opt.MouseButton1Click:Connect(function()
+                    callback(item)
+                    menu:Destroy()
+                end)
+            end
+        end)
+    end
+
+    function TabAPI:AddSlider(side, text, min, max, default, callback)
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(1, -10, 0, 40)
+        frame.BackgroundTransparency = 1
+        frame.LayoutOrder = #Page:FindFirstChild(side):GetChildren() + 1
+        addElement(side, frame)
+
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, 0, 0, 20)
+        label.Position = UDim2.new(0, 0, 0, 0)
+        label.BackgroundTransparency = 1
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.Font = Enum.Font.Gotham
+        label.TextSize = 14
+        label.Text = text .. ": " .. tostring(default)
+        label.Parent = frame
+
+        local sliderBar = Instance.new("TextButton")
+        sliderBar.Size = UDim2.new(1, 0, 0, 10)
+        sliderBar.Position = UDim2.new(0, 0, 0, 25)
+        sliderBar.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        sliderBar.BorderSizePixel = 0
+        sliderBar.Text = ""
+        sliderBar.Parent = frame
+
+        local fill = Instance.new("Frame")
+        fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+        fill.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+        fill.BorderSizePixel = 0
+        fill.Parent = sliderBar
+
+        local dragging = false
+
+        local function update(input)
+            local pos = math.clamp((input.Position.X - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X, 0, 1)
+            fill.Size = UDim2.new(pos, 0, 1, 0)
+            local val = math.floor(min + (max - min) * pos)
+            label.Text = text .. ": " .. tostring(val)
+            callback(val)
+        end
+
+        sliderBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = true
+            end
+        end)
+
+        sliderBar.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = false
+            end
+        end)
+
+        game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                update(input)
+            end
+        end)
+    end
+
+    return TabAPI
+end
+
+return SkUIPages.Parent = Main
 
 self.UI = UI
 self.Main = Main
@@ -191,4 +424,3 @@ return Tab
 end
 
 return setmetatable({}, SkUI)
-
