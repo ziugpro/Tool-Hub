@@ -139,7 +139,7 @@ function SkUI:CreateWindow(title)
         function tab:AddToggle(side, text, default, callback)
             local Toggle = Create("TextButton", {
                 BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-                Text = "🔃  " .. text,
+                Text = "☠︎︎ " .. text,
                 Font = Enum.Font.Gotham,
                 TextSize = 14,
                 TextColor3 = Color3.fromRGB(255, 255, 255)
