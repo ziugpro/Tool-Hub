@@ -27,7 +27,7 @@ function SkUI:CreateWindow(title)
         Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     })
 
-    local HolderHeight = 430
+    local HolderHeight = 340
 
     local Holder = Create("Frame", {
         Size = UDim2.new(0, 550, 0, HolderHeight),
