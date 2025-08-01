@@ -1,288 +1,304 @@
-local UserInputService = game:GetService("UserInputService") local TweenService = game:GetService("TweenService") local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
-local SkUI = {} SkUI.__index = SkUI
+local SkUI = {}
+SkUI.__index = SkUI
 
-local function Create(class, props) local obj = Instance.new(class) for i, v in pairs(props) do obj[i] = v end return obj end
+local function Create(class, props)
+    local obj = Instance.new(class)
+    for i, v in pairs(props) do
+        obj[i] = v
+    end
+    return obj
+end
 
-local function Roundify(obj, rad) local corner = Instance.new("UICorner") corner.CornerRadius = UDim.new(0, rad) corner.Parent = obj end
+local function Roundify(obj, rad)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, rad)
+    corner.Parent = obj
+end
 
-function SkUI:CreateWindow(title) local ui = setmetatable({}, SkUI)
+function SkUI:CreateWindow(title)
+    local ui = setmetatable({}, SkUI)
 
-local Screen = Create("ScreenGui", {
-    Name = "SkUI_Library",
-    ResetOnSpawn = false,
-    Parent = CoreGui
-})
-
-local HolderHeight = 430
-
-local Holder = Create("Frame", {
-    Size = UDim2.new(0, 550, 0, HolderHeight),
-    Position = UDim2.new(0.5, -275, 0.5, -HolderHeight / 2),
-    BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-    BorderSizePixel = 0,
-    Visible = true,
-    Parent = Screen
-})
-Roundify(Holder, 8)
-
-local Header = Create("Frame", {
-    Size = UDim2.new(1, 0, 0, 35),
-    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-    BorderSizePixel = 0,
-    Parent = Holder
-})
-
-local Title = Create("TextLabel", {
-    Size = UDim2.new(1, 0, 1, 0),
-    BackgroundTransparency = 1,
-    Text = title or "SkUI",
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    Font = Enum.Font.GothamBold,
-    TextSize = 16,
-    Parent = Header
-})
-
-local TabsBackground = Create("Frame", {
-    Size = UDim2.new(1, 0, 0, 35),
-    Position = UDim2.new(0, 0, 0, 35),
-    BackgroundColor3 = Color3.fromRGB(25, 25, 25),
-    BorderSizePixel = 0,
-    Parent = Holder
-})
-
-local TabsScroll = Create("ScrollingFrame", {
-    Size = UDim2.new(1, 0, 0, 35),
-    Position = UDim2.new(0, 0, 0, 0),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ScrollBarThickness = 3,
-    CanvasSize = UDim2.new(0, 0, 0, 0),
-    AutomaticCanvasSize = Enum.AutomaticSize.X,
-    ScrollingDirection = Enum.ScrollingDirection.X,
-    Parent = TabsBackground
-})
-
-local TabsFolder = Create("Folder", {Parent = TabsScroll})
-
-local Pages = {}
-local TabButtons = {}
-
-function ui:Create(tabname)
-    local tab = {}
-
-    local Button = Create("TextButton", {
-        Size = UDim2.new(0, 100, 1, 0),
-        BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-        Text = tabname,
-        Font = Enum.Font.GothamBold,
-        TextSize = 14,
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        Parent = TabsScroll
+    local Screen = Create("ScreenGui", {
+        Name = "SkUI_Library",
+        ResetOnSpawn = false,
+        Parent = CoreGui
     })
-    Roundify(Button, 6)
 
-    local Page = Create("Frame", {
-        Size = UDim2.new(1, 0, 1, -70),
-        Position = UDim2.new(0, 0, 0, 70),
-        BackgroundTransparency = 1,
-        Visible = false,
+    local HolderHeight = 430
+
+    local Holder = Create("Frame", {
+        Size = UDim2.new(0, 550, 0, HolderHeight),
+        Position = UDim2.new(0.5, -275, 0.5, -HolderHeight / 2),
+        BackgroundColor3 = Color3.fromRGB(22, 22, 22),
+        BorderSizePixel = 0,
+        Visible = true,
+        Parent = Screen
+    })
+    Roundify(Holder, 8)
+
+    local Header = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 35),
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        BorderSizePixel = 0,
         Parent = Holder
     })
 
-    local function makeScroll(posX)
-        local scroll = Create("ScrollingFrame", {
-            Size = UDim2.new(0.5, -10, 1, 0),
-            Position = posX,
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            ScrollBarThickness = 3,
-            AutomaticCanvasSize = Enum.AutomaticSize.Y,
-            ScrollingDirection = Enum.ScrollingDirection.Y,
-            CanvasSize = UDim2.new(0, 0, 0, 0),
-            LayoutOrder = 1,
-            Parent = Page
-        })
-        local layout = Instance.new("UIListLayout")
-        layout.Padding = UDim.new(0, 6)
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-        layout.Parent = scroll
-        return scroll
-    end
-
-    local LeftScroll = makeScroll(UDim2.new(0, 0, 0, 0))
-    local RightScroll = makeScroll(UDim2.new(0.5, 5, 0, 0))
-
-    local function AddElement(side, obj)
-        obj.Size = UDim2.new(1, -10, 0, 30)
-        local parent = (side == "Left") and LeftScroll or RightScroll
-        obj.Parent = parent
-    end
-
-    function tab:AddToggle(side, text, default, callback)
-        local Toggle = Create("TextButton", {
-            BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-            Text = "✓  " .. text,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Toggle, 6)
-        local state = default or false
-        Toggle.MouseButton1Click:Connect(function()
-            state = not state
-            Toggle.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(45, 45, 45)
-            callback(state)
-        end)
-        AddElement(side, Toggle)
-    end
-
-    function tab:AddButton(side, text, callback)
-        local Button = Create("TextButton", {
-            BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-            Text = text,
-            Font = Enum.Font.GothamBold,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Button, 6)
-        Button.MouseButton1Click:Connect(callback)
-        AddElement(side, Button)
-    end
-
-    function tab:AddTextLabel(side, text)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-    
-    local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0, 200, 0, 30)
-    Label.BackgroundTransparency = 1
-    Label.Text = text
-    Label.Font = Enum.Font.Gotham
-    Label.TextSize = 16
-    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Label.TextXAlignment = Enum.TextXAlignment.Center
-    Label.TextYAlignment = Enum.TextYAlignment.Center
-    
-    Label.AnchorPoint = Vector2.new(0.5, 0)
-    Label.Position = UDim2.new(0.5, 0, 0, 0)
-    
-    Label.Parent = parent
-end
-function tab:AddDropdown(side, text, list, callback)
-    local Container = Create("Frame", {
-        Size = UDim2.new(1, -10, 0, 30),
-        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
-        ClipsDescendants = true
-    })
-    Roundify(Container, 6)
-
-    local Button = Create("TextButton", {
+    local Title = Create("TextLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
-        Text = text .. " ▼",
-        Font = Enum.Font.Gotham,
-        TextSize = 14,
+        Text = title or "SkUI",
         TextColor3 = Color3.fromRGB(255, 255, 255),
-        Parent = Container
+        Font = Enum.Font.GothamBold,
+        TextSize = 16,
+        Parent = Header
     })
 
-    local OptionsHolder = Create("Frame", {
-        Position = UDim2.new(0, 0, 1, 0),
-        Size = UDim2.new(1, 0, 0, #list * 28),
-        BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-        Visible = false,
-        Parent = Container
+    local TabsBackground = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 35),
+        Position = UDim2.new(0, 0, 0, 35),
+        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+        BorderSizePixel = 0,
+        Parent = Holder
     })
 
-    local UIList = Instance.new("UIListLayout", OptionsHolder)
-    UIList.Padding = UDim.new(0, 2)
+    local TabsScroll = Create("ScrollingFrame", {
+        Size = UDim2.new(1, 0, 0, 35),
+        Position = UDim2.new(0, 0, 0, 0),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ScrollBarThickness = 3,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        AutomaticCanvasSize = Enum.AutomaticSize.X,
+        ScrollingDirection = Enum.ScrollingDirection.X,
+        Parent = TabsBackground
+    })
 
-    local Open = false
-    Button.MouseButton1Click:Connect(function()
-        Open = not Open
-        OptionsHolder.Visible = Open
-        Button.Text = Open and (text .. " ▲") or (text .. " ▼")
-        Container.Size = Open and UDim2.new(1, -10, 0, 30 + (#list * 28 + 4)) or UDim2.new(1, -10, 0, 30)
-    end)
+    local TabsLayout = Instance.new("UIListLayout")
+    TabsLayout.FillDirection = Enum.FillDirection.Horizontal
+    TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    TabsLayout.Padding = UDim.new(0, 6)
+    TabsLayout.Parent = TabsScroll
 
-    for _, item in ipairs(list) do
-        local Opt = Create("TextButton", {
-            Size = UDim2.new(1, 0, 0, 28),
-            BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-            Text = item,
-            Font = Enum.Font.Gotham,
-            TextSize = 13,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            Parent = OptionsHolder
-        })
+    local TabsFolder = Create("Folder", { Parent = TabsScroll })
 
-        Opt.MouseButton1Click:Connect(function()
-            Button.Text = text .. ": " .. item
-            OptionsHolder.Visible = false
-            Open = false
-            Container.Size = UDim2.new(1, -10, 0, 30)
-            callback(item)
-        end)
-    end
+    local Pages = {}
+    local TabButtons = {}
 
-    AddElement(side, Container)
-end
+    function ui:Create(tabname)
+        local tab = {}
 
-    function tab:AddSlider(side, text, min, max, default, callback)
-        local val = default or min
-        local Slider = Create("TextButton", {
-            BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-            Text = text .. ": " .. val,
-            Font = Enum.Font.Gotham,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
-        })
-        Roundify(Slider, 6)
-        Slider.MouseButton1Click:Connect(function()
-            val = math.random(min, max)
-            Slider.Text = text .. ": " .. val
-            callback(val)
-        end)
-        AddElement(side, Slider)
-    end
-
-    function tab:AddTextbox(side, text, callback)
-        local Box = Create("TextBox", {
+        local Button = Create("TextButton", {
+            Size = UDim2.new(0, 100, 1, 0),
             BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-            Text = "",
-            PlaceholderText = text,
-            Font = Enum.Font.Gotham,
+            Text = tabname,
+            Font = Enum.Font.GothamBold,
             TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            Parent = TabsScroll
         })
-        Roundify(Box, 6)
-        Box.FocusLost:Connect(function()
-            callback(Box.Text)
+        Roundify(Button, 6)
+
+        local Page = Create("Frame", {
+            Size = UDim2.new(1, 0, 1, -70),
+            Position = UDim2.new(0, 0, 0, 70),
+            BackgroundTransparency = 1,
+            Visible = false,
+            Parent = Holder
+        })
+
+        local function makeScroll(posX)
+            local scroll = Create("ScrollingFrame", {
+                Size = UDim2.new(0.5, -10, 1, 0),
+                Position = posX,
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                ScrollBarThickness = 3,
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                ScrollingDirection = Enum.ScrollingDirection.Y,
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                LayoutOrder = 1,
+                Parent = Page
+            })
+            local layout = Instance.new("UIListLayout")
+            layout.Padding = UDim.new(0, 6)
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+            layout.Parent = scroll
+            return scroll
+        end
+
+        local LeftScroll = makeScroll(UDim2.new(0, 0, 0, 0))
+        local RightScroll = makeScroll(UDim2.new(0.5, 5, 0, 0))
+
+        local function AddElement(side, obj)
+            obj.Size = UDim2.new(1, -10, 0, 30)
+            local parent = (side == "Left") and LeftScroll or RightScroll
+            obj.Parent = parent
+        end
+
+        function tab:AddToggle(side, text, default, callback)
+            local Toggle = Create("TextButton", {
+                BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+                Text = "✓  " .. text,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Toggle, 6)
+            local state = default or false
+            Toggle.MouseButton1Click:Connect(function()
+                state = not state
+                Toggle.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(45, 45, 45)
+                callback(state)
+            end)
+            AddElement(side, Toggle)
+        end
+
+        function tab:AddButton(side, text, callback)
+            local Button = Create("TextButton", {
+                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+                Text = text,
+                Font = Enum.Font.GothamBold,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Button, 6)
+            Button.MouseButton1Click:Connect(callback)
+            AddElement(side, Button)
+        end
+
+        function tab:AddTextLabel(side, text)
+            local parent = (side == "Left") and LeftScroll or RightScroll
+            local Label = Instance.new("TextLabel")
+            Label.Size = UDim2.new(0, 200, 0, 30)
+            Label.BackgroundTransparency = 1
+            Label.Text = text
+            Label.Font = Enum.Font.Gotham
+            Label.TextSize = 16
+            Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+            Label.TextXAlignment = Enum.TextXAlignment.Center
+            Label.TextYAlignment = Enum.TextYAlignment.Center
+            Label.AnchorPoint = Vector2.new(0.5, 0)
+            Label.Position = UDim2.new(0.5, 0, 0, 0)
+            Label.Parent = parent
+        end
+
+        function tab:AddDropdown(side, text, list, callback)
+            local Container = Create("Frame", {
+                Size = UDim2.new(1, -10, 0, 30),
+                BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+                ClipsDescendants = true
+            })
+            Roundify(Container, 6)
+
+            local Button = Create("TextButton", {
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+                Text = text .. " ▼",
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                Parent = Container
+            })
+
+            local OptionsHolder = Create("Frame", {
+                Position = UDim2.new(0, 0, 1, 0),
+                Size = UDim2.new(1, 0, 0, #list * 28),
+                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+                Visible = false,
+                Parent = Container
+            })
+
+            local UIList = Instance.new("UIListLayout", OptionsHolder)
+            UIList.Padding = UDim.new(0, 2)
+
+            local Open = false
+            Button.MouseButton1Click:Connect(function()
+                Open = not Open
+                OptionsHolder.Visible = Open
+                Button.Text = Open and (text .. " ▲") or (text .. " ▼")
+                Container.Size = Open and UDim2.new(1, -10, 0, 30 + (#list * 28 + 4)) or UDim2.new(1, -10, 0, 30)
+            end)
+
+            for _, item in ipairs(list) do
+                local Opt = Create("TextButton", {
+                    Size = UDim2.new(1, 0, 0, 28),
+                    BackgroundColor3 = Color3.fromRGB(70, 70, 70),
+                    Text = item,
+                    Font = Enum.Font.Gotham,
+                    TextSize = 13,
+                    TextColor3 = Color3.fromRGB(255, 255, 255),
+                    Parent = OptionsHolder
+                })
+
+                Opt.MouseButton1Click:Connect(function()
+                    Button.Text = text .. ": " .. item
+                    OptionsHolder.Visible = false
+                    Open = false
+                    Container.Size = UDim2.new(1, -10, 0, 30)
+                    callback(item)
+                end)
+            end
+
+            AddElement(side, Container)
+        end
+
+        function tab:AddSlider(side, text, min, max, default, callback)
+            local val = default or min
+            local Slider = Create("TextButton", {
+                BackgroundColor3 = Color3.fromRGB(70, 70, 70),
+                Text = text .. ": " .. val,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Slider, 6)
+            Slider.MouseButton1Click:Connect(function()
+                val = math.random(min, max)
+                Slider.Text = text .. ": " .. val
+                callback(val)
+            end)
+            AddElement(side, Slider)
+        end
+
+        function tab:AddTextbox(side, text, callback)
+            local Box = Create("TextBox", {
+                BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+                Text = "",
+                PlaceholderText = text,
+                Font = Enum.Font.Gotham,
+                TextSize = 14,
+                TextColor3 = Color3.fromRGB(255, 255, 255)
+            })
+            Roundify(Box, 6)
+            Box.FocusLost:Connect(function()
+                callback(Box.Text)
+            end)
+            AddElement(side, Box)
+        end
+
+        Button.MouseButton1Click:Connect(function()
+            for _, p in pairs(Pages) do
+                p.Visible = false
+            end
+            Page.Visible = true
         end)
-        AddElement(side, Box)
+
+        Page.Visible = #Pages == 0
+        table.insert(Pages, Page)
+        return tab
     end
 
-    Button.MouseButton1Click:Connect(function()
-        for _, p in pairs(Pages) do
-            p.Visible = false
+    UserInputService.InputBegan:Connect(function(input, gp)
+        if input.KeyCode == Enum.KeyCode.LeftControl and not gp then
+            Holder.Visible = not Holder.Visible
         end
-        Page.Visible = true
     end)
 
-    Page.Visible = #Pages == 0
-    table.insert(Pages, Page)
-    return tab
-end
-
-UserInputService.InputBegan:Connect(function(input, gp)
-    if input.KeyCode == Enum.KeyCode.LeftControl and not gp then
-        Holder.Visible = not Holder.Visible
-    end
-end)
-
-return ui
-
+    return ui
 end
 
 return setmetatable({}, SkUI)
-
