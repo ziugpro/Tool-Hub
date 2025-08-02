@@ -58,7 +58,7 @@ function ForceTeleport(cf, holdTime)
         task.wait()
     end
 end
-
+Tab:AddTextLabel("Left", "Main")
 Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
     _G.AutoWalkToTargetActive = v
 
@@ -138,21 +138,26 @@ end)
 Tab:AddToggle("Left", "Lock Base (Coming Soon)", false, function(v)
 end)
 Tab:AddToggle("Left", "Anti Hit", false, function(v)
-    local char = game.Players.LocalPlayer.Character
-    if char == nil then return end
+    local player = game.Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:FindFirstChild("HumanoidRootPart")
 
-    local root = char:FindFirstChild("HumanoidRootPart")
-    if root then
-        if v then
-            root.Size = Vector3.new(0.1, 0.1, 0.1)
-            root.Transparency = 1
-            root.CanCollide = false
-            root.Massless = true
-        else
-            root.Size = Vector3.new(2, 2, 1)
-            root.Transparency = 1
-            root.CanCollide = true
-            root.Massless = false
+    if hrp == nil then return end
+
+    if v then
+        if not char:FindFirstChild("FakeRoot") then
+            local fake = hrp:Clone()
+            fake.Name = "FakeRoot"
+            fake.Parent = char
+            fake.Anchored = true
+            fake.CanCollide = false
+            fake.Transparency = 1
+        end
+        hrp.Position = Vector3.new(9999, 9999, 9999)
+    else
+        hrp.Position = char:FindFirstChild("FakeRoot") and char.FakeRoot.Position or char:GetPivot().Position
+        if char:FindFirstChild("FakeRoot") then
+            char.FakeRoot:Destroy()
         end
     end
 end)
