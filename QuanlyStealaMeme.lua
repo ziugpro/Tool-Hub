@@ -193,6 +193,35 @@ Tab:AddButton("Left", "Dash Through Wall", function()
 end)
 Tab:Line("Left")
 Tab:AddTextLabel("Left", "Trolling")
+Tab:AddToggle("Left", "Pose hand 70°", false, function(v)
+    local char = game.Players.LocalPlayer.Character
+    if not char then return end
+
+    local rArm = char:FindFirstChild("RightUpperArm")
+    local rShoulder = rArm and rArm:FindFirstChild("RightShoulder") or char:FindFirstChild("RightShoulder")
+    local motor = char:FindFirstChild("RightShoulder") or char:FindFirstChild("RightUpperArm"):FindFirstChildOfClass("Motor6D")
+    
+    if not motor then
+        for _,v in pairs(char:GetDescendants()) do
+            if v:IsA("Motor6D") and v.Name == "RightShoulder" then
+                motor = v
+                break
+            end
+        end
+    end
+
+    if not motor then return end
+
+    if v then
+        _G._OriginalC0 = motor.C0
+        motor.C0 = CFrame.new(1, 0.5, 0) * CFrame.Angles(math.rad(-70), 0, 0)
+    else
+        if _G._OriginalC0 then
+            motor.C0 = _G._OriginalC0
+            _G._OriginalC0 = nil
+        end
+    end
+end)
 Tab:AddToggle("Left", "Freeze Others", false, function(v)
     if v then
         _G._FreezeConnection = game:GetService("RunService").Stepped:Connect(function()
