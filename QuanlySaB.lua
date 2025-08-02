@@ -371,9 +371,7 @@ Tab:AddButton("Right", "Become While ", function()
     end
 end)
 Tab:AddTextLabel("Right", "_____")
-
-
-Web:AddTextbox("Left", "Webhook Url", function(text)
+Web:AddTextbox("Left", "Webhook Url", "", function(text)
 end)
 Web:AddToggle("Left", "Tag Everyone", false, function(v)
 end)
