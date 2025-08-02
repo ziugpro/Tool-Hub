@@ -40,7 +40,8 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Dead Rails")
 
 local Tab = UI:Create("General")
-
+Tab:Line("Left")
+Tab:Line("Right")
 Tab:AddTextLabel("Left", "Player")
 Tab:AddToggle("Left", "Full Bright", false, function(v)
     if v then
