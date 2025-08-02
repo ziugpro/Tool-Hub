@@ -202,18 +202,33 @@ end
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.Parent = parent
 end
-        function tab:AddButton(side, text, callback)
-            local Button = Create("TextButton", {
-                BackgroundColor3 = Color3.fromRGB(60, 60, 60),
-                Text = text,
-                Font = Enum.Font.GothamBold,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255)
-            })
-            Roundify(Button, 6)
-            Button.MouseButton1Click:Connect(callback)
-            AddElement(side, Button)
-        end
+function tab:AddButton(side, text, callback)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(1, -10, 0, 30)
+    Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    Button.Font = Enum.Font.Gotham
+    Button.TextSize = 14
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Text = text
+    Button.ClipsDescendants = true
+    Button.Parent = parent
+
+    Roundify(Button, 6)
+
+    local Emoji = Instance.new("TextLabel")
+    Emoji.Text = "👆🏻"
+    Emoji.Size = UDim2.new(0, 20, 0, 20)
+    Emoji.Position = UDim2.new(1, -24, 0.5, -10)
+    Emoji.BackgroundTransparency = 1
+    Emoji.TextSize = 18
+    Emoji.Font = Enum.Font.Gotham
+    Emoji.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Emoji.Parent = Button
+
+    Button.MouseButton1Click:Connect(callback)
+end        
 function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
@@ -276,6 +291,48 @@ function tab:AddDropdown(side, text, list, callback)
         DropdownFrame.Size = open and UDim2.new(1, 0, 0, math.min(#list * 30, 150)) or UDim2.new(1, 0, 0, 0)
         Button.Text = open and (text .. " ▲") or (text .. " ▼")
     end)
+end
+function tab:AddTextbox(side, text, placeholder, callback)
+    local Box = Instance.new("Frame")
+    Box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Box.Size = UDim2.new(1, -10, 0, 38)
+    Box.ClipsDescendants = true
+
+    local UICorner = Instance.new("UICorner", Box)
+    UICorner.CornerRadius = UDim.new(0, 6)
+
+    local Label = Instance.new("TextLabel", Box)
+    Label.Size = UDim2.new(1, -10, 0, 15)
+    Label.Position = UDim2.new(0, 10, 0, 2)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 12
+    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Input = Instance.new("TextBox", Box)
+    Input.Size = UDim2.new(1, -20, 0, 18)
+    Input.Position = UDim2.new(0, 10, 0, 18)
+    Input.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    Input.Text = ""
+    Input.PlaceholderText = placeholder or ""
+    Input.Font = Enum.Font.Gotham
+    Input.TextSize = 13
+    Input.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Input.ClearTextOnFocus = false
+    Input.TextXAlignment = Enum.TextXAlignment.Left
+
+    local corner2 = Instance.new("UICorner", Input)
+    corner2.CornerRadius = UDim.new(0, 4)
+
+    Input.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            callback(Input.Text)
+        end
+    end)
+
+    AddElement(side, Box)
 end
         function tab:AddSlider(side, text, min, max, default, callback)
             local val = default or min
