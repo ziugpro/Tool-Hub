@@ -69,12 +69,30 @@ Tab:AddToggle("Left", "Full Bright", false, function(v)
         game.Lighting.GlobalShadows = true
     end
 end)
-Tab:AddTextbox("Left", "Speed", function(text)
-    local speed = tonumber(text)
-    if speed and speed > 0 and speed <= 350 then
-        local char = game.Players.LocalPlayer.Character
-        if char and char:FindFirstChild("Humanoid") then
-            char.Humanoid.WalkSpeed = speed
+local currentSpeed = 50
+_G.SuperSpeed = false
+
+Tab:AddSlider("Left", "Speed", 1, 100, currentSpeed, function(val)
+    currentSpeed = val
+end)
+
+Tab:AddToggle("Left", "Super Speed", false, function(v)
+    _G.SuperSpeed = v
+
+    if _G.SuperSpeed and not _G._SuperSpeedConnection then
+        _G._SuperSpeedConnection = game:GetService("RunService").RenderStepped:Connect(function()
+            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if human and _G.SuperSpeed then
+                human.WalkSpeed = currentSpeed
+            end
+        end)
+    elseif not _G.SuperSpeed and _G._SuperSpeedConnection then
+        _G._SuperSpeedConnection:Disconnect()
+        _G._SuperSpeedConnection = nil
+
+        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if human then
+            human.WalkSpeed = 16
         end
     end
 end)
