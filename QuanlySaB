@@ -161,6 +161,33 @@ Tab:AddToggle("Left", "Anti Hit", false, function(v)
         end
     end
 end)
+Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
+    local player = game.Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    if v then
+        if not char:FindFirstChild("OriginalRootPosition") then
+            local value = Instance.new("Vector3Value")
+            value.Name = "OriginalRootPosition"
+            value.Value = hrp.Position
+            value.Parent = char
+        end
+        hrp.Anchored = true
+        hrp.Position = Vector3.new(99999, 99999, 99999)
+    else
+        local saved = char:FindFirstChild("OriginalRootPosition")
+        if saved then
+            hrp.Position = saved.Value
+            saved:Destroy()
+        else
+            hrp.Position = char:GetPivot().Position
+        end
+        task.wait(0.1)
+        hrp.Anchored = false
+    end
+end)
 Tab:AddToggle("Right", "Super Speed", false, function(v)
     _G.SuperSpeed = v
 
