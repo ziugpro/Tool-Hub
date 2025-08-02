@@ -136,23 +136,58 @@ function SkUI:CreateWindow(title)
             obj.Parent = parent
         end
 
-        function tab:AddToggle(side, text, default, callback)
-            local Toggle = Create("TextButton", {
-                BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-                Text = "[✓] " .. text,
-                Font = Enum.Font.Gotham,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255)
-            })
-            Roundify(Toggle, 6)
-            local state = default or false
-            Toggle.MouseButton1Click:Connect(function()
-                state = not state
-                Toggle.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(45, 45, 45)
-                callback(state)
-            end)
-            AddElement(side, Toggle)
-        end
+function tab:AddToggle(side, text, default, callback)
+    local Toggle = Create("TextButton", {
+        BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+        Text = "",
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Size = UDim2.new(1, -10, 0, 32),
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
+    Roundify(Toggle, 6)
+
+    local label = Instance.new("TextLabel", Toggle)
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Size = UDim2.new(1, -40, 1, 0)
+    label.Font = Enum.Font.Gotham
+    label.Text = text
+    label.TextSize = 14
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local icon = Instance.new("Frame", Toggle)
+    icon.AnchorPoint = Vector2.new(1, 0.5)
+    icon.Position = UDim2.new(1, -8, 0.5, 0)
+    icon.Size = UDim2.new(0, 20, 0, 20)
+    icon.BackgroundColor3 = default and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(80, 80, 80)
+    icon.BorderSizePixel = 0
+    icon.ZIndex = 2
+    Roundify(icon, 10)
+
+    local tick = Instance.new("TextLabel", icon)
+    tick.Size = UDim2.new(1, 0, 1, 0)
+    tick.BackgroundTransparency = 1
+    tick.Text = "✓"
+    tick.Font = Enum.Font.GothamBold
+    tick.TextSize = 14
+    tick.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tick.TextTransparency = default and 0 or 1
+    tick.ZIndex = 3
+
+    local state = default or false
+
+    Toggle.MouseButton1Click:Connect(function()
+        state = not state
+        icon.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(80, 80, 80)
+        tick.TextTransparency = state and 0 or 1
+        callback(state)
+    end)
+
+    AddElement(side, Toggle)
+end
        function tab:AddTextLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
