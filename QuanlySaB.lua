@@ -377,7 +377,8 @@ Tab:AddButton("Right", "Become While ", function()
         end
     end
 end)
-Tab:AddTextLabel("Right", "_____")
+Tab:Line("Right")
+Tab:Line("Left")
 Web:AddTextbox("Left", "Webhook Url", "", function(text)
 end)
 Web:AddToggle("Left", "Tag Everyone", false, function(v)
@@ -640,9 +641,8 @@ Setting:AddButton("Right", "Wear Shoes 3 (Slippers)", function()
     removeShoes()
     wearShoes(490467584, "Shoes3") -- Example: Roblox slippers
 end)
-Setting:AddTextLabel("Left", "_____")
-Setting:AddTextLabel("Right", "_____")
-
+Setting:Line("Left")
+Setting:Line("Right")
 Steal:AddTextLabel("Left", "Update Please Wait")
 Teleport:AddTextLabel("Left", "Teleport")
 Teleport:AddButton("Left", "TP To Sky", function()
