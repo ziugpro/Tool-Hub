@@ -384,7 +384,7 @@ Tab:AddToggle("Left", "ESP Unicorn", false, function(v)
         end
     end
 end)
-Tab:AddTextbox("Right", "Webhook Url", function(text)
+Tab:AddTextbox("Right", "Webhook Url", "", function(text)
 end)
 Tab:AddToggle("Right", "Start Webhook", false, function(v)
 end)
@@ -463,3 +463,5 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
         _G._AutoClickConnection = nil
     end
 end)
+Tab:Line("Left")
+Tab:Line("Right")
