@@ -240,36 +240,49 @@ Tab:AddToggle("Right", "ESP Player", false, function(v)
 
     local Players = game:GetService("Players")
     local RunService = game:GetService("RunService")
+    local LocalPlayer = Players.LocalPlayer
 
     if v and not _G._PlayerESPConnection then
         _G._PlayerESPConnection = RunService.RenderStepped:Connect(function()
             for _, plr in ipairs(Players:GetPlayers()) do
-                if plr ~= Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
                     if not plr.Character:FindFirstChild("ESPTag") then
                         local billboard = Instance.new("BillboardGui")
                         billboard.Name = "ESPTag"
                         billboard.Adornee = plr.Character:FindFirstChild("Head") or plr.Character:FindFirstChild("HumanoidRootPart")
                         billboard.Size = UDim2.new(0, 200, 0, 50)
-                        billboard.StudsOffset = Vector3.new(0, 2, 0)
+                        billboard.StudsOffset = Vector3.new(0, 2.5, 0)
                         billboard.AlwaysOnTop = true
                         billboard.LightInfluence = 0
                         billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
                         local label = Instance.new("TextLabel")
+                        label.Name = "Text"
                         label.Size = UDim2.new(1, 0, 1, 0)
                         label.BackgroundTransparency = 1
-                        label.TextColor3 = Color3.fromRGB(255, 0, 0)
-                        label.TextStrokeTransparency = 0
-                        label.Text = plr.Name .. " | HP: " .. math.floor((plr.Character:FindFirstChildOfClass("Humanoid") or {}).Health or 0)
+                        label.TextStrokeTransparency = 0.5
                         label.TextScaled = true
-                        label.Font = Enum.Font.Gotham
+                        label.Font = Enum.Font.GothamBold
+                        label.TextXAlignment = Enum.TextXAlignment.Center
+
+                        local function getTeamColor(p)
+                            return p.Team and p.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
+                        end
+
+                        label.TextColor3 = getTeamColor(plr)
+                        local health = math.floor((plr.Character:FindFirstChildOfClass("Humanoid") or {}).Health or 0)
+                        label.Text = plr.Name .. " | HP: " .. health
 
                         label.Parent = billboard
                         billboard.Parent = plr.Character
                     else
                         local tag = plr.Character:FindFirstChild("ESPTag")
-                        if tag and tag:FindFirstChildOfClass("TextLabel") and plr.Character:FindFirstChildOfClass("Humanoid") then
-                            tag.TextLabel.Text = plr.Name .. " | HP: " .. math.floor(plr.Character:FindFirstChildOfClass("Humanoid").Health)
+                        local label = tag:FindFirstChild("Text")
+                        local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
+
+                        if tag and label and humanoid then
+                            label.Text = plr.Name .. " | HP: " .. math.floor(humanoid.Health)
+                            label.TextColor3 = plr.Team and plr.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
                         end
                     end
                 end
@@ -283,6 +296,57 @@ Tab:AddToggle("Right", "ESP Player", false, function(v)
         end
         _G._PlayerESPConnection:Disconnect()
         _G._PlayerESPConnection = nil
+    end
+end)
+Tab:AddToggle("Right", "ESP Brainrot", false, function(v)
+    _G.ModelESP = v
+
+    local RunService = game:GetService("RunService")
+    local Workspace = game:GetService("Workspace")
+
+    if v and not _G._ModelESPConnection then
+        _G._ModelESPConnection = RunService.RenderStepped:Connect(function()
+            for _, obj in ipairs(Workspace:GetDescendants()) do
+                if obj:IsA("Model") and not obj:FindFirstChildOfClass("Humanoid") and not obj:FindFirstChild("ESPTag") then
+                    local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                    if primary then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "ESPTag"
+                        billboard.Adornee = primary
+                        billboard.Size = UDim2.new(0, 200, 0, 50)
+                        billboard.StudsOffset = Vector3.new(0, 3, 0)
+                        billboard.AlwaysOnTop = true
+                        billboard.LightInfluence = 0
+                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+                        local label = Instance.new("TextLabel")
+                        label.Size = UDim2.new(1, 0, 1, 0)
+                        label.BackgroundTransparency = 1
+                        label.TextColor3 = Color3.fromRGB(0, 255, 0)
+                        label.TextStrokeTransparency = 0
+                        label.Text = obj.Name
+                        label.TextScaled = true
+                        label.Font = Enum.Font.Gotham
+                        label.Parent = billboard
+
+                        billboard.Parent = obj
+                    end
+                elseif obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
+                    local tag = obj:FindFirstChild("ESPTag")
+                    if tag and tag:FindFirstChildOfClass("TextLabel") then
+                        tag.TextLabel.Text = obj.Name
+                    end
+                end
+            end
+        end)
+    elseif not v and _G._ModelESPConnection then
+        for _, obj in ipairs(Workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
+                obj.ESPTag:Destroy()
+            end
+        end
+        _G._ModelESPConnection:Disconnect()
+        _G._ModelESPConnection = nil
     end
 end)
 Tab:AddToggle("Right", "ESP NPC", false, function(v)
@@ -390,258 +454,6 @@ Web:AddToggle("Right", "When Brainrot Lost", false, function(v)
 end)
 Web:AddToggle("Right", "When Buy Brainrot", false, function(v)
 end)
-
-Setting:AddTextLabel("Left", "Color Skin")
-Setting:AddButton("Left", "Skin: White", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(255, 224, 189)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Light Tan", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(255, 219, 172)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Medium Tan", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(210, 180, 140)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Olive", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(170, 135, 100)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Brown", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(120, 85, 60)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Dark Brown", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(80, 55, 39)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Black", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(15, 15, 15)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Pale", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(240, 220, 210)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Red Clay", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(155, 80, 60)
-        end
-    end
-end)
-
-Setting:AddButton("Left", "Skin: Ash Gray", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(100, 100, 100)
-        end
-    end
-end)
-Setting:AddTextLabel("Right", "Clothes")
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-local function applyOutfit(shirtId, pantsId)
-    local character = localPlayer.Character
-    if not character then return end
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
-
-    local desc = humanoid:GetAppliedDescription()
-    desc.Shirt = "rbxassetid://" .. shirtId
-    desc.Pants = "rbxassetid://" .. pantsId
-    humanoid:ApplyDescription(desc)
-end
-
-Setting:AddButton("Right", "Outfit 1: Casual", function()
-    applyOutfit(14407675970, 14407676151)
-end)
-
-Setting:AddButton("Right", "Outfit 2: Suit", function()
-    applyOutfit(5707491070, 5707491607)
-end)
-
-Setting:AddButton("Right", "Outfit 3: Ninja", function()
-    applyOutfit(5142045959, 5142046135)
-end)
-
-Setting:AddButton("Right", "Outfit 4: Cyberpunk", function()
-    applyOutfit(10719624857, 10719625392)
-end)
-
-Setting:AddButton("Right", "Outfit 5: Military", function()
-    applyOutfit(12347212376, 12347212592)
-end)
-
-Setting:AddButton("Right", "Outfit 6: Formal", function()
-    applyOutfit(9441222463, 9441222801)
-end)
-
-Setting:AddButton("Right", "Outfit 7: Hoodie", function()
-    applyOutfit(8611026896, 8611027132)
-end)
-
-Setting:AddButton("Right", "Outfit 8: Sporty", function()
-    applyOutfit(7245682337, 7245682687)
-end)
-
-Setting:AddButton("Right", "Outfit 9: Police", function()
-    applyOutfit(9912875938, 9912876182)
-end)
-
-Setting:AddButton("Right", "Outfit 10: Robber", function()
-    applyOutfit(10212393784, 10212394020)
-end)
-
-Setting:AddTextLabel("Right", "Hair Style")
-local Players = game:GetService("Players")
-local InsertService = game:GetService("InsertService")
-local localPlayer = Players.LocalPlayer
-local Character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-
-local function attachHair(assetId, tagName)
-    if Character:FindFirstChild(tagName) then return end
-    local hair = InsertService:LoadAsset(assetId):GetChildren()[1]
-    hair.Name = tagName
-    hair.Parent = Character
-end
-
-local function removeHair(tagName)
-    local hair = Character:FindFirstChild(tagName)
-    if hair then hair:Destroy() end
-end
-
-Setting:AddToggle("Right", "Hair 1: Spiky", false, function(v)
-    if v then attachHair(48474294, "Hair1") else removeHair("Hair1") end
-end)
-
-Setting:AddToggle("Right", "Hair 2: Messy", false, function(v)
-    if v then attachHair(12270248, "Hair2") else removeHair("Hair2") end
-end)
-
-Setting:AddToggle("Right", "Hair 3: Cool Boy", false, function(v)
-    if v then attachHair(80922288, "Hair3") else removeHair("Hair3") end
-end)
-
-Setting:AddToggle("Right", "Hair 4: Dreadlocks", false, function(v)
-    if v then attachHair(564488384, "Hair4") else removeHair("Hair4") end
-end)
-
-Setting:AddToggle("Right", "Hair 5: Anime Hair", false, function(v)
-    if v then attachHair(161246558, "Hair5") else removeHair("Hair5") end
-end)
-
-Setting:AddToggle("Right", "Hair 6: Emo", false, function(v)
-    if v then attachHair(14129164, "Hair6") else removeHair("Hair6") end
-end)
-
-Setting:AddToggle("Right", "Hair 7: Clean Cut", false, function(v)
-    if v then attachHair(376548738, "Hair7") else removeHair("Hair7") end
-end)
-
-Setting:AddToggle("Right", "Hair 8: Afro", false, function(v)
-    if v then attachHair(29467049, "Hair8") else removeHair("Hair8") end
-end)
-
-Setting:AddToggle("Right", "Hair 9: Ponytail", false, function(v)
-    if v then attachHair(37820055, "Hair9") else removeHair("Hair9") end
-end)
-
-Setting:AddToggle("Right", "Hair 10: Bacon Classic", false, function(v)
-    if v then attachHair(62399494, "Hair10") else removeHair("Hair10") end
-end)
-local InsertService = game:GetService("InsertService")
-local Players = game:GetService("Players")
-local Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-
-local function wearShoes(assetId, tagName)
-    if Character:FindFirstChild(tagName) then return end
-    local model = InsertService:LoadAsset(assetId)
-    local shoe = model:FindFirstChildWhichIsA("Accessory")
-    if shoe then
-        shoe.Name = tagName
-        shoe.Parent = Character
-    end
-end
-
-local function removeShoes()
-    for _, obj in ipairs(Character:GetChildren()) do
-        if obj:IsA("Accessory") and (obj.Name == "Shoes1" or obj.Name == "Shoes2" or obj.Name == "Shoes3") then
-            obj:Destroy()
-        end
-    end
-end
-
-Setting:AddButton("Right", "Wear Shoes 1 (Sneakers)", function()
-    removeShoes()
-    wearShoes(10813930350, "Shoes1") -- Example: Nike style sneakers
-end)
-
-Setting:AddButton("Right", "Wear Shoes 2 (Boots)", function()
-    removeShoes()
-    wearShoes(65136872, "Shoes2") -- Example: Black boots
-end)
-
-Setting:AddButton("Right", "Wear Shoes 3 (Slippers)", function()
-    removeShoes()
-    wearShoes(490467584, "Shoes3") -- Example: Roblox slippers
-end)
-Setting:Line("Left")
-Setting:Line("Right")
 Teleport:AddTextLabel("Left", "Teleport")
 Teleport:AddButton("Left", "TP To Sky", function()
 ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
