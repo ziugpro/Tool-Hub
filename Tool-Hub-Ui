@@ -492,7 +492,19 @@ function tab:Line(side)
     Line.BackgroundTransparency = 0.4
     Line.BorderSizePixel = 0
     Line.Parent = parent
-end        
+end  
+function Tab:LineRG(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, -10, 0, 1)
+    Line.Position = UDim2.new(0, 5, 0, 0)
+    Line.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    Line.BorderSizePixel = 0
+    Line.Name = "UILine"
+
+    Line.Parent = parent
+end
         Button.MouseButton1Click:Connect(function()
             for _, p in pairs(Pages) do
                 p.Visible = false
