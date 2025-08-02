@@ -483,61 +483,6 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
 end
-function tab:AddBox(side, text)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, -10, 0, 30)
-    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    frame.BorderSizePixel = 0
-    frame.Parent = parent
-
-    local mask = Instance.new("Frame")
-    mask.Size = UDim2.new(1, 0, 1, 0)
-    mask.BackgroundTransparency = 1
-    mask.Parent = frame
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.TopLeft = true
-    corner.TopRight = true
-    corner.BottomLeft = false
-    corner.BottomRight = false
-    corner.Parent = mask
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, 0, 1, 0)
-    label.BackgroundTransparency = 1
-    label.Text = text
-    label.TextColor3 = Color3.fromRGB(230, 230, 230)
-    label.Font = Enum.Font.Gotham
-    label.TextSize = 14
-    label.Parent = frame
-end
-function tab:AddBoxX(side)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, -10, 0, 30)
-    frame.Position = UDim2.new(0, 0, 0, 15)
-    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    frame.BorderSizePixel = 0
-    frame.ClipsDescendants = true
-    frame.Parent = parent
-
-    local mask = Instance.new("Frame")
-    mask.Size = UDim2.new(1, 0, 1, 0)
-    mask.BackgroundTransparency = 1
-    mask.Parent = frame
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.TopLeft = false
-    corner.TopRight = false
-    corner.BottomLeft = true
-    corner.BottomRight = true
-    corner.Parent = mask
-end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
