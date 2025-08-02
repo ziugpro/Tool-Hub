@@ -336,68 +336,68 @@ function tab:AddTextbox(side, text, placeholder, callback)
 end
 function tab:AddSlider(side, text, min, max, default, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
-    local val = default or min
+    local value = default or min
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 40)
+    Container.Size = UDim2.new(1, -10, 0, 50)
     Container.BackgroundTransparency = 1
     Container.Parent = parent
 
-    local Label = Instance.new("TextLabel", Container)
-    Label.Size = UDim2.new(1, 0, 0, 14)
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(1, 0, 0, 20)
     Label.Position = UDim2.new(0, 0, 0, 0)
     Label.BackgroundTransparency = 1
     Label.Font = Enum.Font.Gotham
     Label.TextSize = 14
     Label.TextColor3 = Color3.new(1, 1, 1)
-    Label.Text = text .. ": " .. val
+    Label.Text = text .. ": " .. tostring(value)
+    Label.Parent = Container
 
-    local SliderBar = Instance.new("Frame", Container)
-    SliderBar.Size = UDim2.new(1, 0, 0, 10)
-    SliderBar.Position = UDim2.new(0, 0, 0, 24)
-    SliderBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    SliderBar.BorderSizePixel = 0
-    SliderBar.ClipsDescendants = true
-    local UICorner = Instance.new("UICorner", SliderBar)
-    UICorner.CornerRadius = UDim.new(0, 4)
+    local Bar = Instance.new("Frame")
+    Bar.Size = UDim2.new(1, 0, 0, 10)
+    Bar.Position = UDim2.new(0, 0, 0, 30)
+    Bar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    Bar.BorderSizePixel = 0
+    Bar.Parent = Container
+    local UICorner = Instance.new("UICorner", Bar)
+    UICorner.CornerRadius = UDim.new(0, 6)
 
-    local Fill = Instance.new("Frame", SliderBar)
-    Fill.Size = UDim2.new((val - min) / (max - min), 0, 1, 0)
+    local Fill = Instance.new("Frame")
+    Fill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
     Fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
     Fill.BorderSizePixel = 0
-    Fill.ZIndex = 2
+    Fill.Parent = Bar
     local FillCorner = Instance.new("UICorner", Fill)
-    FillCorner.CornerRadius = UDim.new(0, 4)
-    Fill.Name = "Fill"
-    Fill.Parent = SliderBar
+    FillCorner.CornerRadius = UDim.new(0, 6)
 
-    local Dragging = false
+    local dragging = false
+    local UIS = game:GetService("UserInputService")
+
     local function Update(input)
-        local absPos = SliderBar.AbsolutePosition.X
-        local absSize = SliderBar.AbsoluteSize.X
-        local mouseX = input.Position.X
-        local percent = math.clamp((mouseX - absPos) / absSize, 0, 1)
-        val = math.floor(min + (max - min) * percent + 0.5)
+        local pos = input.Position.X
+        local rel = pos - Bar.AbsolutePosition.X
+        local percent = math.clamp(rel / Bar.AbsoluteSize.X, 0, 1)
+        value = math.floor(min + (max - min) * percent + 0.5)
         Fill.Size = UDim2.new(percent, 0, 1, 0)
-        Label.Text = text .. ": " .. val
-        callback(val)
+        Label.Text = text .. ": " .. tostring(value)
+        callback(value)
     end
 
-    SliderBar.InputBegan:Connect(function(input)
+    Bar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Dragging = true
+            dragging = true
             Update(input)
         end
     end)
 
-    SliderBar.InputEnded:Connect(function(input)
+    UIS.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Dragging = false
+            dragging = false
         end
     end)
 
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+    UIS.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
             Update(input)
         end
     end)
