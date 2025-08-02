@@ -483,6 +483,82 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
 end
+function Tab:AddDrop(side, text, list, default, callback)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+    local selected = default or list[1] or ""
+    local open = false
+
+    local Holder = Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+        Size = UDim2.new(1, -10, 0, 40)
+    })
+
+    local Label = Create("TextLabel", {
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Size = UDim2.new(1, -40, 0, 20),
+        Position = UDim2.new(0, 5, 0, 0)
+    })
+
+    local Main = Create("TextButton", {
+        BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+        Size = UDim2.new(1, -10, 0, 20),
+        Position = UDim2.new(0, 5, 0, 20),
+        Font = Enum.Font.Gotham,
+        TextSize = 13,
+        TextColor3 = Color3.fromRGB(200, 200, 200),
+        Text = selected
+    })
+
+    Roundify(Holder, 6)
+    Roundify(Main, 4)
+
+    local ListFrame = Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+        Size = UDim2.new(1, -10, 0, #list * 20),
+        Position = UDim2.new(0, 5, 0, 40),
+        Visible = false,
+        ClipsDescendants = true
+    })
+
+    Roundify(ListFrame, 4)
+
+    for i, v in ipairs(list) do
+        local Item = Create("TextButton", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 20),
+            Position = UDim2.new(0, 0, 0, (i - 1) * 20),
+            Font = Enum.Font.Gotham,
+            TextSize = 13,
+            TextColor3 = Color3.fromRGB(220, 220, 220),
+            Text = v
+        })
+
+        Item.MouseButton1Click:Connect(function()
+            selected = v
+            Main.Text = selected
+            ListFrame.Visible = false
+            open = false
+            callback(v)
+        end)
+
+        Item.Parent = ListFrame
+    end
+
+    Main.MouseButton1Click:Connect(function()
+        open = not open
+        ListFrame.Visible = open
+    end)
+
+    Label.Parent = Holder
+    Main.Parent = Holder
+    ListFrame.Parent = Holder
+    AddElement(side, Holder)
+end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
