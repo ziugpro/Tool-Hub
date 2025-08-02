@@ -89,7 +89,7 @@ function SkUI:CreateWindow(title)
         local tab = {}
 
         local Button = Create("TextButton", {
-            Size = UDim2.new(0, 135, 1, 0),
+            Size = UDim2.new(0, 120, 1, 0),
             BackgroundColor3 = Color3.fromRGB(40, 40, 40),
             Text = tabname,
             Font = Enum.Font.GothamBold,
