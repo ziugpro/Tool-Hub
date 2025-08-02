@@ -187,14 +187,14 @@ function tab:AddToggle(side, text, default, callback)
 
     AddElement(side, Toggle)
 end
-       function tab:AddTextLabel(side, text)
+function tab:AddTextLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0, 255, 0, 30)
-    Label.BackgroundTransparency = 1
+    Label.Size = UDim2.new(1, -10, 0, 30)
+    Label.BackgroundTransparency = 0
     Label.Text = text
     Label.Font = Enum.Font.Gotham
-    Label.TextSize = 16
+    Label.TextSize = 15
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
@@ -218,7 +218,7 @@ function tab:AddButton(side, text, callback)
     Roundify(Button, 6)
 
     local Emoji = Instance.new("TextLabel")
-    Emoji.Text = "👆🏻"
+    Emoji.Text = "🖱️"
     Emoji.Size = UDim2.new(0, 20, 0, 20)
     Emoji.Position = UDim2.new(1, -24, 0.5, -10)
     Emoji.BackgroundTransparency = 1
@@ -482,39 +482,6 @@ function tab:AddMultiDropdown(side, text, list, callback)
         DropdownFrame.Visible = open
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
-end
-function tab:AddLabelBox(side, text)
-	local parent = (side == "Left") and LeftScroll or RightScroll
-
-	local holder = Instance.new("Frame")
-	holder.Size = UDim2.new(1, -10, 0, 30)
-	holder.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	holder.BackgroundTransparency = 0
-	holder.BorderSizePixel = 0
-	holder.Position = UDim2.new(0, 5, 0, 0)
-	holder.Name = "LabelBox"
-	holder.AutomaticSize = Enum.AutomaticSize.None
-	holder.ZIndex = 2
-	holder.ClipsDescendants = true
-	holder.Parent = parent
-	holder.LayoutOrder = GetNextLayoutOrder(parent)
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = holder
-
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.new(1, 0, 1, 0)
-	label.BackgroundTransparency = 1
-	label.TextColor3 = Color3.fromRGB(240, 240, 240)
-	label.Font = Enum.Font.Gotham
-	label.TextSize = 14
-	label.Text = text
-	label.TextXAlignment = Enum.TextXAlignment.Center
-	label.TextYAlignment = Enum.TextYAlignment.Center
-	label.Parent = holder
-
-	return holder
 end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
