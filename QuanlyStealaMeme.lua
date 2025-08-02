@@ -191,54 +191,6 @@ Tab:AddButton("Left", "Dash Through Wall", function()
         end
     end)
 end)
-Tab:Line("Left")
-Tab:AddTextLabel("Left", "Teleport")
-Tab:AddButton("Left", "TP To Base 1", function()
-local function teleport(cframe)
-    local player = game.Players.LocalPlayer
-    local character = player and player.Character
-    local root = character and character:FindFirstChild("HumanoidRootPart")
-    if not root then return end
-
-    local offset = cframe.Position - root.Position
-
-    for _, v in pairs(character:GetDescendants()) do
-        if v:IsA("BasePart") and v.Anchored == false then
-            v.CFrame = v.CFrame + offset
-        end
-    end
-end
-Tab:AddButton("Left", "Base 1", function()
-    teleport(CFrame.new(1732.5264892578125, 66.62960815429688, -563.0668334960938))
-end)
-
-Tab:AddButton("Left", "Base 2", function()
-    teleport(CFrame.new(1832.3839111328125, 66.62960815429688, -555.3934936523438))
-end)
-
-Tab:AddButton("Left", "Base 3", function()
-    teleport(CFrame.new(1732.280029296875, 66.62960815429688, -311.3112487792969))
-end)
-
-Tab:AddButton("Left", "Base 4", function()
-    teleport(CFrame.new(1833.0181884765625, 66.62960815429688, -312.1700134277344))
-end)
-
-Tab:AddButton("Left", "Base 5", function()
-    teleport(CFrame.new(1933.1187744140625, 66.62960815429688, -558.0361328125))
-end)
-
-Tab:AddButton("Left", "Base 6", function()
-    teleport(CFrame.new(1934.021240234375, -60.446285247802734, -314.5580139160156))
-end)
-
-Tab:AddButton("Left", "Base 7", function()
-    teleport(CFrame.new(2033.0687255859375, 75.74996185302734, -534.0536499023438))
-end)
-
-Tab:AddButton("Left", "Base 8", function()
-    teleport(CFrame.new(2033.421630859375, 76.94627380371094, -317.597412109375))
-end)
 Tab:AddTextbox("Right", "Webhook", "", function(text)
     _G.WebhookURL = text
 end)
