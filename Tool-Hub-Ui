@@ -334,25 +334,84 @@ function tab:AddTextbox(side, text, placeholder, callback)
 
     AddElement(side, Box)
 end
-        function tab:AddSlider(side, text, min, max, default, callback)
-            local val = default or min
-            local Slider = Create("TextButton", {
-                BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-                Text = text .. ": " .. val,
-                Font = Enum.Font.Gotham,
-                TextSize = 14,
-                TextColor3 = Color3.fromRGB(255, 255, 255)
-            })
-            Roundify(Slider, 6)
-            Slider.MouseButton1Click:Connect(function()
-                val = math.random(min, max)
-                Slider.Text = text .. ": " .. val
-                callback(val)
-            end)
-            AddElement(side, Slider)
-        end
+function tab:AddSlider(side, text, min, max, default, callback)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+    local val = default or min
 
-        
+    local Container = Instance.new("Frame")
+    Container.Size = UDim2.new(1, -10, 0, 40)
+    Container.BackgroundTransparency = 1
+    Container.Parent = parent
+
+    local Label = Instance.new("TextLabel", Container)
+    Label.Size = UDim2.new(1, 0, 0, 14)
+    Label.Position = UDim2.new(0, 0, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 14
+    Label.TextColor3 = Color3.new(1, 1, 1)
+    Label.Text = text .. ": " .. val
+
+    local SliderBar = Instance.new("Frame", Container)
+    SliderBar.Size = UDim2.new(1, 0, 0, 10)
+    SliderBar.Position = UDim2.new(0, 0, 0, 24)
+    SliderBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    SliderBar.BorderSizePixel = 0
+    SliderBar.ClipsDescendants = true
+    local UICorner = Instance.new("UICorner", SliderBar)
+    UICorner.CornerRadius = UDim.new(0, 4)
+
+    local Fill = Instance.new("Frame", SliderBar)
+    Fill.Size = UDim2.new((val - min) / (max - min), 0, 1, 0)
+    Fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    Fill.BorderSizePixel = 0
+    Fill.ZIndex = 2
+    local FillCorner = Instance.new("UICorner", Fill)
+    FillCorner.CornerRadius = UDim.new(0, 4)
+    Fill.Name = "Fill"
+    Fill.Parent = SliderBar
+
+    local Dragging = false
+    local function Update(input)
+        local absPos = SliderBar.AbsolutePosition.X
+        local absSize = SliderBar.AbsoluteSize.X
+        local mouseX = input.Position.X
+        local percent = math.clamp((mouseX - absPos) / absSize, 0, 1)
+        val = math.floor(min + (max - min) * percent + 0.5)
+        Fill.Size = UDim2.new(percent, 0, 1, 0)
+        Label.Text = text .. ": " .. val
+        callback(val)
+    end
+
+    SliderBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = true
+            Update(input)
+        end
+    end)
+
+    SliderBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = false
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            Update(input)
+        end
+    end)
+end
+function tab:Line(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, -10, 0, 2)
+    Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Line.BackgroundTransparency = 0.4
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+end        
         Button.MouseButton1Click:Connect(function()
             for _, p in pairs(Pages) do
                 p.Visible = false
