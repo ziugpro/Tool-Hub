@@ -191,6 +191,79 @@ Tab:AddButton("Left", "Dash Through Wall", function()
         end
     end)
 end)
+Tab:Line("Left")
+Tab:AddTextLabel("Left", "Trolling")
+Tab:AddToggle("Left", "Freeze Others", false, function(v)
+    if v then
+        _G._FreezeConnection = game:GetService("RunService").Stepped:Connect(function()
+            for _, plr in pairs(game.Players:GetPlayers()) do
+                if plr ~= game.Players.LocalPlayer then
+                    local char = plr.Character
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    local root = char and char:FindFirstChild("HumanoidRootPart")
+                    if hum then hum.WalkSpeed = 0 hum.JumpPower = 0 end
+                    if root then root.Velocity = Vector3.new(0, 0, 0) end
+                end
+            end
+        end)
+    else
+        if _G._FreezeConnection then
+            _G._FreezeConnection:Disconnect()
+            _G._FreezeConnection = nil
+        end
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if plr ~= game.Players.LocalPlayer then
+                local char = plr.Character
+                local hum = char and char:FindFirstChildOfClass("Humanoid")
+                if hum then hum.WalkSpeed = 16 hum.JumpPower = 50 end
+            end
+        end
+    end
+end)
+Tab:AddToggle("Left", "Burn Mode", false, function(v)
+    local char = game.Players.LocalPlayer.Character
+    if not char then return end
+
+    if v then
+        if not char:FindFirstChild("Fire") then
+            local fire = Instance.new("Fire")
+            fire.Size = 10
+            fire.Heat = 25
+            fire.Parent = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChildWhichIsA("BasePart")
+        end
+    else
+        local fire = char:FindFirstChild("HumanoidRootPart") and char.HumanoidRootPart:FindFirstChild("Fire")
+        if fire then fire:Destroy() end
+    end
+end)
+Tab:AddToggle("Left", "Infinite Light Buddha", false, function(v)
+    local char = game.Players.LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    if v then
+        local light = Instance.new("PointLight")
+        light.Name = "_PhatQuang"
+        light.Brightness = 10000
+        light.Range = 100
+        light.Color = Color3.fromRGB(255, 255, 200)
+        light.Shadows = true
+        light.Parent = hrp
+
+        local bloom = Instance.new("BloomEffect")
+        bloom.Name = "_PhatQuangBloom"
+        bloom.Intensity = 5
+        bloom.Size = 100
+        bloom.Threshold = 0
+        bloom.Parent = game.Lighting
+    else
+        local light = hrp:FindFirstChild("_PhatQuang")
+        if light then light:Destroy() end
+        local bloom = game.Lighting:FindFirstChild("_PhatQuangBloom")
+        if bloom then bloom:Destroy() end
+    end
+end)
 Tab:AddTextbox("Right", "Webhook", "", function(text)
     _G.WebhookURL = text
 end)
