@@ -40,7 +40,6 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create("General")
-local Setting = UI:Create("Setting Player")
 local Teleport = UI:Create("Teleport")
 local Web = UI:Create("Webhook")
 
