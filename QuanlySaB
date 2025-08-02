@@ -41,6 +41,7 @@ local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create("General")
 local Setting = UI:Create("Setting Player")
+local Teleport = UI:Create("Teleport")
 local Steal = UI:Create("Steal Brainrot")
 local Web = UI:Create("Webhook")
 
@@ -136,15 +137,24 @@ Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
 end)
 Tab:AddToggle("Left", "Lock Base (Coming Soon)", false, function(v)
 end)
-Tab:AddTextLabel("Left", "Teleport")
-Tab:AddButton("Left", "TP To Sky", function()
-ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
-end)
-Tab:AddButton("Left", "TP To Down", function()
-ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 1)
-end)
-Tab:AddButton("Left", "TP To Center", function()
-ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
+Tab:AddToggle("Left", "Anti Hit", false, function(v)
+    local char = game.Players.LocalPlayer.Character
+    if char == nil then return end
+
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if root then
+        if v then
+            root.Size = Vector3.new(0.1, 0.1, 0.1)
+            root.Transparency = 1
+            root.CanCollide = false
+            root.Massless = true
+        else
+            root.Size = Vector3.new(2, 2, 1)
+            root.Transparency = 1
+            root.CanCollide = true
+            root.Massless = false
+        end
+    end
 end)
 Tab:AddToggle("Right", "Super Speed", false, function(v)
     _G.SuperSpeed = v
@@ -597,3 +607,13 @@ Setting:AddTextLabel("Left", "_____")
 Setting:AddTextLabel("Right", "_____")
 
 Steal:AddTextLabel("Left", "Update Please Wait")
+Teleport:AddTextLabel("Left", "Teleport")
+Teleport:AddButton("Left", "TP To Sky", function()
+ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
+end)
+Teleport:AddButton("Left", "TP To Down", function()
+ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 1)
+end)
+Teleport:AddButton("Left", "TP To Center", function()
+ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
+end)
