@@ -188,6 +188,13 @@ Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
         hrp.Anchored = false
     end
 end)
+local currentSpeed = 50
+_G.SuperSpeed = false
+
+Tab:AddSlider("Right", "Speed", 1, 100, currentSpeed, function(val)
+    currentSpeed = val
+end)
+
 Tab:AddToggle("Right", "Super Speed", false, function(v)
     _G.SuperSpeed = v
 
@@ -195,7 +202,7 @@ Tab:AddToggle("Right", "Super Speed", false, function(v)
         _G._SuperSpeedConnection = game:GetService("RunService").RenderStepped:Connect(function()
             local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
             if human and _G.SuperSpeed then
-                human.WalkSpeed = 55
+                human.WalkSpeed = currentSpeed
             end
         end)
     elseif not _G.SuperSpeed and _G._SuperSpeedConnection then
