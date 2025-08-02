@@ -412,77 +412,81 @@ function tab:AddSlider(side, text, min, max, default, callback)
         end)
     end)
 end
-function tab:AddMultiDropdown(side, text, list, callback)
-    local parent = (side == "Left") and LeftScroll or RightScroll
+function Tab:AddDropdown(side, text, list, callback)
+    local selected = list[1] or "Select"
+    local Dropdown = Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+        Size = UDim2.new(1, 0, 0, 30)
+    })
+    Roundify(Dropdown, 6)
 
-    local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 30)
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Container.ClipsDescendants = false
-    Container.Parent = parent
+    local Label = Create("TextLabel", {
+        Parent = Dropdown,
+        Text = text,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0.4, 0, 1, 0),
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
 
-    local UICorner = Instance.new("UICorner", Container)
-    UICorner.CornerRadius = UDim.new(0, 6)
+    local Button = Create("TextButton", {
+        Parent = Dropdown,
+        BackgroundTransparency = 1,
+        Text = selected .. "  ˅",
+        TextColor3 = Color3.fromRGB(200, 200, 200),
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        Size = UDim2.new(0.6, 0, 1, 0),
+        Position = UDim2.new(0.4, 0, 0, 0),
+        TextXAlignment = Enum.TextXAlignment.Right
+    })
 
-    local Button = Instance.new("TextButton", Container)
-    Button.Size = UDim2.new(1, 0, 1, 0)
-    Button.BackgroundTransparency = 1
-    Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text .. " ▼"
+    local ListFrame = Create("Frame", {
+        Parent = Dropdown,
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        Position = UDim2.new(0, 0, 1, 2),
+        Size = UDim2.new(1, 0, 0, #list * 25),
+        Visible = false,
+        ClipsDescendants = true
+    })
+    Roundify(ListFrame, 6)
 
-    local DropdownFrame = Instance.new("ScrollingFrame", Container)
-    DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
-    DropdownFrame.Size = UDim2.new(1, 0, 0, math.min(#list * 28, 100))
-    DropdownFrame.CanvasSize = UDim2.new(0, 0, 0, #list * 28)
-    DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    DropdownFrame.BorderSizePixel = 0
-    DropdownFrame.ScrollBarThickness = 4
-    DropdownFrame.Visible = false
-    DropdownFrame.ZIndex = 10
+    local UIListLayout = Instance.new("UIListLayout", ListFrame)
+    UIListLayout.Padding = UDim.new(0, 2)
 
-    local UIList = Instance.new("UIListLayout", DropdownFrame)
-    UIList.Padding = UDim.new(0, 2)
-    UIList.SortOrder = Enum.SortOrder.LayoutOrder
-
-    local selectedItems = {}
-
-    for i, item in ipairs(list) do
-        local Opt = Instance.new("TextButton", DropdownFrame)
-        Opt.Size = UDim2.new(1, -4, 0, 28)
-        Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = "☐ " .. item
-        Opt.Font = Enum.Font.Gotham
-        Opt.TextSize = 13
-        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Opt.LayoutOrder = i
-
-        Opt.MouseButton1Click:Connect(function()
-            if selectedItems[item] then
-                selectedItems[item] = nil
-                Opt.Text = "☐ " .. item
-            else
-                selectedItems[item] = true
-                Opt.Text = "☑ " .. item
-            end
-
-            local names = {}
-            for name, _ in pairs(selectedItems) do
-                table.insert(names, name)
-            end
-            Button.Text = text .. ": " .. table.concat(names, ", ") .. " ▼"
-            callback(names)
+    for _, v in ipairs(list) do
+        local Option = Create("TextButton", {
+            Parent = ListFrame,
+            Size = UDim2.new(1, 0, 0, 25),
+            BackgroundColor3 = Color3.fromRGB(70, 70, 70),
+            Text = v,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            Font = Enum.Font.Gotham,
+            TextSize = 14
+        })
+        Option.MouseEnter:Connect(function()
+            Option.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+        end)
+        Option.MouseLeave:Connect(function()
+            Option.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        end)
+        Option.MouseButton1Click:Connect(function()
+            selected = v
+            Button.Text = v .. "  ˅"
+            ListFrame.Visible = false
+            callback(v)
         end)
     end
 
-    local open = false
     Button.MouseButton1Click:Connect(function()
-        open = not open
-        DropdownFrame.Visible = open
-        Button.Text = text .. (open and " ▲" or " ▼")
+        ListFrame.Visible = not ListFrame.Visible
     end)
+
+    AddElement(side, Dropdown)
 end
+
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
