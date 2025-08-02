@@ -214,7 +214,7 @@ Tab:AddToggle("Left", "Pose hand 70°", false, function(v)
 
     if v then
         _G._OriginalC0 = motor.C0
-        motor.C0 = CFrame.new(1, 0.5, 0) * CFrame.Angles(math.rad(-70), 0, 0)
+        motor.C0 = CFrame.new(1, 0.5, 0) * CFrame.Angles(math.rad(70), 0, 0)
     else
         if _G._OriginalC0 then
             motor.C0 = _G._OriginalC0
