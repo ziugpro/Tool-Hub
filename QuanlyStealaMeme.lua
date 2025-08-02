@@ -42,33 +42,33 @@ local UI = SkUI:CreateWindow("Aura - Hub")
 local Tab = UI:Create("General")
 Tab:Line("Left")
 Tab:Line("Right")
-Tab:AddToggle("Left", "Noclip", false, function(v)
-    local player = game.Players.LocalPlayer
-    local character = player and player.Character
-    local root = character and character:FindFirstChild("HumanoidRootPart")
+_G.Noclip = false
+_G.NoclipConnection = nil
 
+Tab:AddToggle("Left", "Noclip", false, function(v)
     _G.Noclip = v
 
     if v then
-        _G.NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
-            if _G.Noclip and character then
-                for _, part in pairs(character:GetChildren()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
+        if not _G.NoclipConnection then
+            _G.NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                local player = game.Players.LocalPlayer
+                local character = player and player.Character
+                if character then
+                    for _, part in pairs(character:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
                     end
                 end
-            else
-                if _G.NoclipConnection then
-                    _G.NoclipConnection:Disconnect()
-                    _G.NoclipConnection = nil
-                end
-            end
-        end)
+            end)
+        end
     else
         if _G.NoclipConnection then
             _G.NoclipConnection:Disconnect()
             _G.NoclipConnection = nil
         end
+        local player = game.Players.LocalPlayer
+        local character = player and player.Character
         if character then
             for _, part in pairs(character:GetChildren()) do
                 if part:IsA("BasePart") then
