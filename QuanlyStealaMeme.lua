@@ -44,7 +44,6 @@ Tab:Line("Left")
 Tab:Line("Right")
 _G.Noclip = false
 _G.NoclipConnection = nil
-
 Tab:AddToggle("Left", "Noclip", false, function(v)
     _G.Noclip = v
 
@@ -101,6 +100,8 @@ Tab:AddToggle("Left", "Infinity Jump", false, function(v)
             _G.InfinityJumpConnection = nil
         end
     end
+end)
+Tab:AddToggle("Left", "Inf Money (In Dev)", false, function(v)
 end)
 Tab:AddButton("Left", "Dash Through Wall", function()
     local Players = game:GetService("Players")
