@@ -483,6 +483,47 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
 end
+function tab:AddHalfBox(side, boxType, text)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local holder = Instance.new("Frame")
+    holder.Size = UDim2.new(1, -10, 0, 30)
+    holder.BackgroundTransparency = 1
+    holder.Parent = parent
+
+    local box = Instance.new("Frame")
+    box.Size = UDim2.new(1, 0, 1, 0)
+    box.Position = UDim2.new(0, 0, 0, 0)
+    box.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    box.BorderSizePixel = 0
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = box
+
+    if boxType == "Up" then
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -10, 1, 0)
+        label.Position = UDim2.new(0, 5, 0, 0)
+        label.BackgroundTransparency = 1
+        label.Text = text or "TextLabel"
+        label.TextColor3 = Color3.fromRGB(200, 200, 200)
+        label.Font = Enum.Font.Gotham
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.TextSize = 14
+        label.Parent = box
+        box.Parent = holder
+    elseif boxType == "Down" then
+        box.Position = UDim2.new(0, 0, 0, -15)
+        box.Size = UDim2.new(1, 0, 1, 30)
+        local mask = Instance.new("Frame")
+        mask.Size = UDim2.new(1, 0, 1, 0)
+        mask.BackgroundTransparency = 1
+        mask.ClipsDescendants = true
+        mask.Parent = holder
+        box.Parent = mask
+    end
+end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
