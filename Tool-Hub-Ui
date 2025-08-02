@@ -339,28 +339,44 @@ function tab:AddSlider(side, text, min, max, default, callback)
     local value = default or min
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 50)
-    Container.BackgroundTransparency = 1
+    Container.Size = UDim2.new(1, -10, 0, 60)
+    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Container.BorderSizePixel = 0
     Container.Parent = parent
+    local UICorner = Instance.new("UICorner", Container)
+    UICorner.CornerRadius = UDim.new(0, 6)
 
-    local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, 0, 0, 20)
-    Label.Position = UDim2.new(0, 0, 0, 0)
-    Label.BackgroundTransparency = 1
-    Label.Font = Enum.Font.Gotham
-    Label.TextSize = 14
-    Label.TextColor3 = Color3.new(1, 1, 1)
-    Label.Text = text .. ": " .. tostring(value)
-    Label.Parent = Container
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(0.5, -10, 0, 18)
+    Title.Position = UDim2.new(0, 10, 0, 5)
+    Title.BackgroundTransparency = 1
+    Title.Text = text
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Font = Enum.Font.Gotham
+    Title.TextSize = 13
+    Title.TextColor3 = Color3.new(1, 1, 1)
+    Title.Parent = Container
+
+    local ValueButton = Instance.new("TextButton")
+    ValueButton.Size = UDim2.new(0, 50, 0, 18)
+    ValueButton.Position = UDim2.new(1, -60, 0, 5)
+    ValueButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    ValueButton.Text = tostring(value)
+    ValueButton.Font = Enum.Font.Gotham
+    ValueButton.TextSize = 13
+    ValueButton.TextColor3 = Color3.new(1, 1, 1)
+    ValueButton.Parent = Container
+    local ValueCorner = Instance.new("UICorner", ValueButton)
+    ValueCorner.CornerRadius = UDim.new(0, 4)
 
     local Bar = Instance.new("Frame")
-    Bar.Size = UDim2.new(1, 0, 0, 10)
-    Bar.Position = UDim2.new(0, 0, 0, 30)
+    Bar.Size = UDim2.new(1, -20, 0, 10)
+    Bar.Position = UDim2.new(0, 10, 0, 35)
     Bar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Bar.BorderSizePixel = 0
     Bar.Parent = Container
-    local UICorner = Instance.new("UICorner", Bar)
-    UICorner.CornerRadius = UDim.new(0, 6)
+    local BarCorner = Instance.new("UICorner", Bar)
+    BarCorner.CornerRadius = UDim.new(0, 5)
 
     local Fill = Instance.new("Frame")
     Fill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
@@ -368,38 +384,32 @@ function tab:AddSlider(side, text, min, max, default, callback)
     Fill.BorderSizePixel = 0
     Fill.Parent = Bar
     local FillCorner = Instance.new("UICorner", Fill)
-    FillCorner.CornerRadius = UDim.new(0, 6)
+    FillCorner.CornerRadius = UDim.new(0, 5)
 
-    local dragging = false
-    local UIS = game:GetService("UserInputService")
+    ValueButton.MouseButton1Click:Connect(function()
+        local inputBox = Instance.new("TextBox")
+        inputBox.Size = ValueButton.Size
+        inputBox.Position = ValueButton.Position
+        inputBox.Font = ValueButton.Font
+        inputBox.TextSize = ValueButton.TextSize
+        inputBox.TextColor3 = ValueButton.TextColor3
+        inputBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        inputBox.Text = tostring(value)
+        inputBox.ClearTextOnFocus = true
+        inputBox.TextXAlignment = Enum.TextXAlignment.Center
+        inputBox.Parent = Container
+        inputBox:CaptureFocus()
 
-    local function Update(input)
-        local pos = input.Position.X
-        local rel = pos - Bar.AbsolutePosition.X
-        local percent = math.clamp(rel / Bar.AbsoluteSize.X, 0, 1)
-        value = math.floor(min + (max - min) * percent + 0.5)
-        Fill.Size = UDim2.new(percent, 0, 1, 0)
-        Label.Text = text .. ": " .. tostring(value)
-        callback(value)
-    end
-
-    Bar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            Update(input)
-        end
-    end)
-
-    UIS.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-
-    UIS.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            Update(input)
-        end
+        inputBox.FocusLost:Connect(function()
+            local inputValue = tonumber(inputBox.Text)
+            if inputValue then
+                value = math.clamp(math.floor(inputValue + 0.5), min, max)
+                ValueButton.Text = tostring(value)
+                Fill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
+                callback(value)
+            end
+            inputBox:Destroy()
+        end)
     end)
 end
 function tab:Line(side)
