@@ -43,33 +43,36 @@ local Tab = UI:Create("General")
 Tab:Line("Left")
 Tab:Line("Right")
 Tab:AddToggle("Left", "Noclip", false, function(v)
-    _G.NoclipEnabled = v
+    local player = game.Players.LocalPlayer
+    local character = player and player.Character
+    local root = character and character:FindFirstChild("HumanoidRootPart")
 
-    if _G._NoclipConnection then
-        _G._NoclipConnection:Disconnect()
-        _G._NoclipConnection = nil
-    end
+    _G.Noclip = v
 
     if v then
-        task.wait(0.1)
-        _G._NoclipConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local c = game.Players.LocalPlayer.Character
-            if not c then return end
-            for _, p in ipairs(c:GetDescendants()) do
-                if p:IsA("BasePart") then
-                    p.CanCollide = false
-                    if p.Name == "HumanoidRootPart" or p.Name == "Torso" or p.Name == "UpperTorso" then
-                        p.Velocity = Vector3.zero
+        _G.NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
+            if _G.Noclip and character then
+                for _, part in pairs(character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
                     end
+                end
+            else
+                if _G.NoclipConnection then
+                    _G.NoclipConnection:Disconnect()
+                    _G.NoclipConnection = nil
                 end
             end
         end)
     else
-        local c = game.Players.LocalPlayer.Character
-        if c then
-            for _, p in ipairs(c:GetDescendants()) do
-                if p:IsA("BasePart") then
-                    p.CanCollide = true
+        if _G.NoclipConnection then
+            _G.NoclipConnection:Disconnect()
+            _G.NoclipConnection = nil
+        end
+        if character then
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
                 end
             end
         end
@@ -187,6 +190,15 @@ Tab:AddButton("Left", "Dash Through Wall", function()
             end
         end
     end)
+end)
+Tab:AddTextLabel("Left", "Teleport")
+Tab:AddButton("Left", "TP To Base", function()
+    local player = game.Players.LocalPlayer
+    local character = player and player.Character
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    if root then
+        root.CFrame = CFrame.new(0, 10, 0)
+    end
 end)
 Tab:AddTextbox("Right", "Webhook", "", function(text)
     _G.WebhookURL = text
