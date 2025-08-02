@@ -193,10 +193,10 @@ function tab:AddTextLabel(side, text)
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(1, -10, 0, 30)
     Label.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    Label.BackgroundTransparency = 0
+    Label.BackgroundTransparency = 1
     Label.Text = text
-    Label.Font = Enum.Font.Gotham
-    Label.TextSize = 15
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 16
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
