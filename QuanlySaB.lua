@@ -233,6 +233,56 @@ Tab:AddToggle("Right", "Super Jump", false, function(v)
         end
     end
 end)
+Tab:AddButton("Left", "Dash Through Wall", function()
+    local Players = game:GetService("Players")
+    local Workspace = game:GetService("Workspace")
+    local RunService = game:GetService("RunService")
+
+    local LocalPlayer = Players.LocalPlayer
+    if not LocalPlayer then
+        return
+    end
+
+    local Character = LocalPlayer.Character
+    if not Character then
+        Character = LocalPlayer.CharacterAdded:Wait()
+    end
+
+    local RootPart = Character:FindFirstChild("HumanoidRootPart")
+    if not RootPart then
+        return
+    end
+
+    local CurrentPosition = RootPart.Position
+    local CurrentCFrame = RootPart.CFrame
+    local FacingDirection = CurrentCFrame.LookVector
+
+    local DashMagnitude = 30
+    local DashOffset = Vector3.new(0, 1.25, 0)
+
+    local DashVector = FacingDirection * DashMagnitude
+    local Destination = CurrentPosition + DashVector + DashOffset
+
+    local BodyPosition = Instance.new("BodyPosition")
+    BodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+    BodyPosition.P = 1e5
+    BodyPosition.D = 2000
+    BodyPosition.Position = Destination
+    BodyPosition.Parent = RootPart
+
+    local DashDuration = 0.2
+    local Connection = nil
+    local StartTime = tick()
+
+    Connection = RunService.RenderStepped:Connect(function()
+        if tick() - StartTime >= DashDuration then
+            BodyPosition:Destroy()
+            if Connection then
+                Connection:Disconnect()
+            end
+        end
+    end)
+end)
 Tab:AddTextLabel("Right", "Esp")
 Tab:AddToggle("Right", "ESP Player", false, function(v)
     _G.PlayerESP = v
