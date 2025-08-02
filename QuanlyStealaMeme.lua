@@ -102,45 +102,6 @@ Tab:AddToggle("Left", "Infinity Jump", false, function(v)
         end
     end
 end)
-Tab:AddSlider("Left", "Speed", 50, 500, 100, function(v)
-    if typeof(v) == "number" then
-        _G.SuperSpeedValue = v
-    end
-end)
-
-Tab:AddToggle("Left", "Super Speed", false, function(v)
-    _G.SuperSpeed = v
-
-    if v and not _G._SuperSpeedConnection then
-        local RunService = game:GetService("RunService")
-        _G._SuperSpeedConnection = RunService.RenderStepped:Connect(function()
-            local player = game.Players.LocalPlayer
-            if player then
-                local character = player.Character
-                if character then
-                    local humanoid = character:FindFirstChildWhichIsA("Humanoid")
-                    if humanoid then
-                        humanoid.WalkSpeed = _G.SuperSpeedValue or 100
-                    end
-                end
-            end
-        end)
-    elseif not v and _G._SuperSpeedConnection then
-        _G._SuperSpeedConnection:Disconnect()
-        _G._SuperSpeedConnection = nil
-
-        local player = game.Players.LocalPlayer
-        if player then
-            local character = player.Character
-            if character then
-                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
-                if humanoid then
-                    humanoid.WalkSpeed = 16
-                end
-            end
-        end
-    end
-end)
 Tab:AddButton("Left", "Dash Through Wall", function()
     local Players = game:GetService("Players")
     local Workspace = game:GetService("Workspace")
@@ -361,6 +322,73 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
     elseif not v and _G._WebhookDeathConn then
         _G._WebhookDeathConn:Disconnect()
         _G._WebhookDeathConn = nil
+    end
+end)
+Tab:Line("Right")
+Tab:AddTextLabel("Right", "Player")
+Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
+    if typeof(v) == "number" then
+        _G.SuperSpeedValue = v
+    end
+end)
+
+Tab:AddToggle("Right", "Super Speed", false, function(v)
+    _G.SuperSpeed = v
+
+    if v and not _G._SuperSpeedConnection then
+        local RunService = game:GetService("RunService")
+        _G._SuperSpeedConnection = RunService.RenderStepped:Connect(function()
+            local player = game.Players.LocalPlayer
+            if player then
+                local character = player.Character
+                if character then
+                    local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                    if humanoid then
+                        humanoid.WalkSpeed = _G.SuperSpeedValue or 100
+                    end
+                end
+            end
+        end)
+    elseif not v and _G._SuperSpeedConnection then
+        _G._SuperSpeedConnection:Disconnect()
+        _G._SuperSpeedConnection = nil
+
+        local player = game.Players.LocalPlayer
+        if player then
+            local character = player.Character
+            if character then
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid then
+                    humanoid.WalkSpeed = 16
+                end
+            end
+        end
+    end
+end)
+local jumpPower = 50
+local autoKillEnabled = false
+
+Tab:AddSlider("Right", "Speed", 1, 10000, 50, function(val)
+    jumpPower = val
+    if autoKillEnabled then
+        local player = game.Players.LocalPlayer
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then
+            hum.JumpPower = jumpPower
+        end
+    end
+end)
+
+Tab:AddToggle("Right", "Super Jumb", false, function(v)
+    autoKillEnabled = v
+    local player = game.Players.LocalPlayer
+    local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+    if hum then
+        if v then
+            hum.JumpPower = jumpPower
+        else
+            hum.JumpPower = 50
+        end
     end
 end)
 Tab:Line("Left")
