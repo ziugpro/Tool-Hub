@@ -29,7 +29,7 @@ end
   
 if isPremiumKey(script_key) then  
 local Scripts = {
-   [1234567890] = "link",
+   [7709344486] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/StealaBrainrot",
 }
 local url = Scripts[game.PlaceId] or Scripts[game.GameId]
 if url then
