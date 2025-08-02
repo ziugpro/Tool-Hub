@@ -40,6 +40,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create("General")
+Tab:AddLabelBox("Left", "Main")
 Tab:Line("Left")
 Tab:Line("Right")
 Tab:AddToggle("Left", "Noclip", false, function(v)
@@ -188,6 +189,7 @@ Tab:AddButton("Left", "Dash Through Wall", function()
         end
     end)
 end)
+Tab:AddLabelBox("Right", "Webhook")
 Tab:AddTextbox("Right", "Webhook", "", function(text)
     _G.WebhookURL = text
 end)
