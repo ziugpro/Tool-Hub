@@ -191,6 +191,7 @@ Tab:AddButton("Left", "Dash Through Wall", function()
         end
     end)
 end)
+Tab:Line("Left")
 Tab:AddTextLabel("Left", "Teleport")
 Tab:AddButton("Left", "TP To Base 1", function()
     local player = game.Players.LocalPlayer
