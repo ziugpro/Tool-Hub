@@ -152,7 +152,9 @@ Tab:AddButton("Left", "Dash Through Wall", function()
     end)
 end)
 Tab:RealLine("Left")
+Tab:MultiLine("Left", "Gray")
 Tab:AddTextLabel("Left", "Trolling")
+Tab:RealLine("Left")
 Tab:AddToggle("Left", "Pose hand (Hitler)°", false, function(v)
     local char = game.Players.LocalPlayer.Character
     if not char then return end
@@ -323,8 +325,9 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
         _G._WebhookDeathConn = nil
     end
 end)
-Tab:RealLine("Right")
+Tab:MultiLine("Right", "Gray")
 Tab:AddTextLabel("Right", "Player")
+Tab:RealLine("Right")
 Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
     if typeof(v) == "number" then
         _G.SuperSpeedValue = v
