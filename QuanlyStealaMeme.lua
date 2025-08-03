@@ -36,7 +36,6 @@ task.spawn(function()
     end
 end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
-
 local UI = SkUI:CreateWindow("Aura - Hub")
 local Tab = UI:Create("General")
 Tab:AddTextLabel("Left", "Main")
