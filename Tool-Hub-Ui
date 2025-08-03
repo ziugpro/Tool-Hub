@@ -89,8 +89,8 @@ function SkUI:CreateWindow(title)
         local tab = {}
 
         local Button = Create("TextButton", {
-            Size = UDim2.new(0, 120, 1, 0),
-            BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+            Size = UDim2.new(0, 110, 1, 0),
+            BackgroundColor3 = Color3.fromRGB(50, 50, 50),
             Text = tabname,
             Font = Enum.Font.GothamBold,
             TextSize = 14,
@@ -131,7 +131,7 @@ function SkUI:CreateWindow(title)
         local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
         local function AddElement(side, obj)
-            obj.Size = UDim2.new(1, -10, 0, 40)
+            obj.Size = UDim2.new(1, -10, 0, 44)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
