@@ -113,7 +113,7 @@ function SkUI:CreateWindow(title)
                 Position = posX,
                 BackgroundTransparency = 1,
                 BorderSizePixel = 0,
-                ScrollBarThickness = 3,
+                ScrollBarThickness = 0,
                 AutomaticCanvasSize = Enum.AutomaticSize.Y,
                 ScrollingDirection = Enum.ScrollingDirection.Y,
                 CanvasSize = UDim2.new(0, 0, 0, 0),
