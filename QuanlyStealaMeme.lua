@@ -39,7 +39,6 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Aura - Hub")
 local Tab = UI:Create("General")
 Tab:AddTextLabel("Left", "Main")
-Tab:RealLine("Left")
 _G.Noclip = false
 _G.NoclipConnection = nil
 Tab:AddToggle("Left", "Noclip", false, function(v)
@@ -154,7 +153,6 @@ end)
 Tab:RealLine("Left")
 Tab:Line("Left")
 Tab:AddTextLabel("Left", "Trolling")
-Tab:RealLine("Left")
 Tab:AddToggle("Left", "Pose hand (Hitler)°", false, function(v)
     local char = game.Players.LocalPlayer.Character
     if not char then return end
@@ -255,7 +253,9 @@ Tab:AddToggle("Left", "Infinite Light Buddha", false, function(v)
         if bloom then bloom:Destroy() end
     end
 end)
-Tab:AddTextbox("Right", "Webhook", "", function(text)
+Tab:RealLine("Left")
+Tab:AddTextLabel("Right", "Webhook")
+Tab:AddTextbox("Right", "Webhook Url", "", function(text)
     _G.WebhookURL = text
 end)
 
@@ -325,9 +325,9 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
         _G._WebhookDeathConn = nil
     end
 end)
+Tab:RealLine("Right")
 Tab:Line("Right")
 Tab:AddTextLabel("Right", "Player")
-Tab:RealLine("Right")
 Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
     if typeof(v) == "number" then
         _G.SuperSpeedValue = v
@@ -393,5 +393,4 @@ Tab:AddToggle("Right", "Super Jumb", false, function(v)
         end
     end
 end)
-Tab:RealLine("Left")
 Tab:RealLine("Right")
