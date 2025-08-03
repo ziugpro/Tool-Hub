@@ -186,53 +186,6 @@ Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
         hrp.Anchored = false
     end
 end)
-local currentSpeed = 50
-_G.SuperSpeed = false
-
-Tab:AddSlider("Right", "Speed", 1, 100, currentSpeed, function(val)
-    currentSpeed = val
-end)
-
-Tab:AddToggle("Right", "Super Speed", false, function(v)
-    _G.SuperSpeed = v
-
-    if _G.SuperSpeed and not _G._SuperSpeedConnection then
-        _G._SuperSpeedConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if human and _G.SuperSpeed then
-                human.WalkSpeed = currentSpeed
-            end
-        end)
-    elseif not _G.SuperSpeed and _G._SuperSpeedConnection then
-        _G._SuperSpeedConnection:Disconnect()
-        _G._SuperSpeedConnection = nil
-
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if human then
-            human.WalkSpeed = 16
-        end
-    end
-end)
-Tab:AddToggle("Right", "Super Jump", false, function(v)
-    _G.SuperJump = v
-
-    if _G.SuperJump and not _G._SuperJumpConnection then
-        _G._SuperJumpConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if human and _G.SuperJump then
-                human.JumpPower = 150
-            end
-        end)
-    elseif not _G.SuperJump and _G._SuperJumpConnection then
-        _G._SuperJumpConnection:Disconnect()
-        _G._SuperJumpConnection = nil
-
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if human then
-            human.JumpPower = 50
-        end
-    end
-end)
 Tab:AddButton("Left", "Dash Through Wall", function()
     local Players = game:GetService("Players")
     local Workspace = game:GetService("Workspace")
@@ -284,171 +237,51 @@ Tab:AddButton("Left", "Dash Through Wall", function()
     end)
 end)
 Tab:RealLine("Left")
-Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Esp")
-Tab:AddToggle("Right", "ESP Player", false, function(v)
-    _G.PlayerESP = v
+local currentSpeed = 50
+_G.SuperSpeed = false
 
-    local Players = game:GetService("Players")
-    local RunService = game:GetService("RunService")
-    local LocalPlayer = Players.LocalPlayer
+Tab:AddSlider("Right", "Speed", 1, 100, currentSpeed, function(val)
+    currentSpeed = val
+end)
 
-    if v and not _G._PlayerESPConnection then
-        _G._PlayerESPConnection = RunService.RenderStepped:Connect(function()
-            for _, plr in ipairs(Players:GetPlayers()) do
-                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                    if not plr.Character:FindFirstChild("ESPTag") then
-                        local billboard = Instance.new("BillboardGui")
-                        billboard.Name = "ESPTag"
-                        billboard.Adornee = plr.Character:FindFirstChild("Head") or plr.Character:FindFirstChild("HumanoidRootPart")
-                        billboard.Size = UDim2.new(0, 200, 0, 50)
-                        billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-                        billboard.AlwaysOnTop = true
-                        billboard.LightInfluence = 0
-                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Tab:AddToggle("Right", "Super Speed", false, function(v)
+    _G.SuperSpeed = v
 
-                        local label = Instance.new("TextLabel")
-                        label.Name = "Text"
-                        label.Size = UDim2.new(1, 0, 1, 0)
-                        label.BackgroundTransparency = 1
-                        label.TextStrokeTransparency = 0.5
-                        label.TextScaled = true
-                        label.Font = Enum.Font.GothamBold
-                        label.TextXAlignment = Enum.TextXAlignment.Center
-
-                        local function getTeamColor(p)
-                            return p.Team and p.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
-                        end
-
-                        label.TextColor3 = getTeamColor(plr)
-                        local health = math.floor((plr.Character:FindFirstChildOfClass("Humanoid") or {}).Health or 0)
-                        label.Text = plr.Name .. " | HP: " .. health
-
-                        label.Parent = billboard
-                        billboard.Parent = plr.Character
-                    else
-                        local tag = plr.Character:FindFirstChild("ESPTag")
-                        local label = tag:FindFirstChild("Text")
-                        local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
-
-                        if tag and label and humanoid then
-                            label.Text = plr.Name .. " | HP: " .. math.floor(humanoid.Health)
-                            label.TextColor3 = plr.Team and plr.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
-                        end
-                    end
-                end
+    if _G.SuperSpeed and not _G._SuperSpeedConnection then
+        _G._SuperSpeedConnection = game:GetService("RunService").RenderStepped:Connect(function()
+            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if human and _G.SuperSpeed then
+                human.WalkSpeed = currentSpeed
             end
         end)
-    elseif not v and _G._PlayerESPConnection then
-        for _, plr in ipairs(Players:GetPlayers()) do
-            if plr.Character and plr.Character:FindFirstChild("ESPTag") then
-                plr.Character.ESPTag:Destroy()
-            end
+    elseif not _G.SuperSpeed and _G._SuperSpeedConnection then
+        _G._SuperSpeedConnection:Disconnect()
+        _G._SuperSpeedConnection = nil
+
+        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if human then
+            human.WalkSpeed = 16
         end
-        _G._PlayerESPConnection:Disconnect()
-        _G._PlayerESPConnection = nil
     end
 end)
-Tab:AddToggle("Right", "ESP Brainrot", false, function(v)
-    _G.ModelESP = v
+Tab:AddToggle("Right", "Super Jump", false, function(v)
+    _G.SuperJump = v
 
-    local RunService = game:GetService("RunService")
-    local Workspace = game:GetService("Workspace")
-
-    if v and not _G._ModelESPConnection then
-        _G._ModelESPConnection = RunService.RenderStepped:Connect(function()
-            for _, obj in ipairs(Workspace:GetDescendants()) do
-                if obj:IsA("Model") and not obj:FindFirstChildOfClass("Humanoid") and not obj:FindFirstChild("ESPTag") then
-                    local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-                    if primary then
-                        local billboard = Instance.new("BillboardGui")
-                        billboard.Name = "ESPTag"
-                        billboard.Adornee = primary
-                        billboard.Size = UDim2.new(0, 200, 0, 50)
-                        billboard.StudsOffset = Vector3.new(0, 3, 0)
-                        billboard.AlwaysOnTop = true
-                        billboard.LightInfluence = 0
-                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-                        local label = Instance.new("TextLabel")
-                        label.Size = UDim2.new(1, 0, 1, 0)
-                        label.BackgroundTransparency = 1
-                        label.TextColor3 = Color3.fromRGB(0, 255, 0)
-                        label.TextStrokeTransparency = 0
-                        label.Text = obj.Name
-                        label.TextScaled = true
-                        label.Font = Enum.Font.Gotham
-                        label.Parent = billboard
-
-                        billboard.Parent = obj
-                    end
-                elseif obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
-                    local tag = obj:FindFirstChild("ESPTag")
-                    if tag and tag:FindFirstChildOfClass("TextLabel") then
-                        tag.TextLabel.Text = obj.Name
-                    end
-                end
+    if _G.SuperJump and not _G._SuperJumpConnection then
+        _G._SuperJumpConnection = game:GetService("RunService").RenderStepped:Connect(function()
+            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if human and _G.SuperJump then
+                human.JumpPower = 150
             end
         end)
-    elseif not v and _G._ModelESPConnection then
-        for _, obj in ipairs(Workspace:GetDescendants()) do
-            if obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
-                obj.ESPTag:Destroy()
-            end
+    elseif not _G.SuperJump and _G._SuperJumpConnection then
+        _G._SuperJumpConnection:Disconnect()
+        _G._SuperJumpConnection = nil
+
+        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if human then
+            human.JumpPower = 50
         end
-        _G._ModelESPConnection:Disconnect()
-        _G._ModelESPConnection = nil
-    end
-end)
-Tab:AddToggle("Right", "ESP NPC", false, function(v)
-    _G.NPCEspEnabled = v
-
-    local RunService = game:GetService("RunService")
-    local NPCFolder = workspace:FindFirstChild("NPCs") or workspace -- sửa nếu NPC ở folder khác
-
-    if v and not _G._NPCEspConnection then
-        _G._NPCEspConnection = RunService.RenderStepped:Connect(function()
-            for _, npc in ipairs(NPCFolder:GetChildren()) do
-                if npc:IsA("Model") and not npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") and npc:FindFirstChild("HumanoidRootPart") then
-                    local name = npc.Name
-                    local hp = npc.Humanoid and math.floor(npc.Humanoid.Health) or "?"
-
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = "ESPTag"
-                    billboard.Adornee = npc:FindFirstChild("Head") or npc:FindFirstChild("HumanoidRootPart")
-                    billboard.Size = UDim2.new(0, 200, 0, 50)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-                    billboard.LightInfluence = 0
-                    billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-                    local label = Instance.new("TextLabel")
-                    label.Size = UDim2.new(1, 0, 1, 0)
-                    label.BackgroundTransparency = 1
-                    label.TextColor3 = Color3.fromRGB(255, 255, 0)
-                    label.TextStrokeTransparency = 0
-                    label.Text = name .. " | HP: " .. tostring(hp)
-                    label.TextScaled = true
-                    label.Font = Enum.Font.Gotham
-                    label.Parent = billboard
-
-                    billboard.Parent = npc
-                elseif npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") then
-                    local label = npc.ESPTag:FindFirstChildOfClass("TextLabel")
-                    if label then
-                        label.Text = npc.Name .. " | HP: " .. math.floor(npc.Humanoid.Health)
-                    end
-                end
-            end
-        end)
-    elseif not v and _G._NPCEspConnection then
-        for _, npc in ipairs(NPCFolder:GetChildren()) do
-            if npc:IsA("Model") and npc:FindFirstChild("ESPTag") then
-                npc.ESPTag:Destroy()
-            end
-        end
-        _G._NPCEspConnection:Disconnect()
-        _G._NPCEspConnection = nil
     end
 end)
 Tab:RealLine("Right")
@@ -523,3 +356,170 @@ Teleport:AddButton("Left", "TP To Center", function()
 ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
 end)
 Teleport:RealLine("Left")
+Esp:AddTextLabel("Right", "Esp")
+Esp:AddToggle("Right", "ESP Player", false, function(v)
+    _G.PlayerESP = v
+
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local LocalPlayer = Players.LocalPlayer
+
+    if v and not _G._PlayerESPConnection then
+        _G._PlayerESPConnection = RunService.RenderStepped:Connect(function()
+            for _, plr in ipairs(Players:GetPlayers()) do
+                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    if not plr.Character:FindFirstChild("ESPTag") then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "ESPTag"
+                        billboard.Adornee = plr.Character:FindFirstChild("Head") or plr.Character:FindFirstChild("HumanoidRootPart")
+                        billboard.Size = UDim2.new(0, 200, 0, 50)
+                        billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+                        billboard.AlwaysOnTop = true
+                        billboard.LightInfluence = 0
+                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+                        local label = Instance.new("TextLabel")
+                        label.Name = "Text"
+                        label.Size = UDim2.new(1, 0, 1, 0)
+                        label.BackgroundTransparency = 1
+                        label.TextStrokeTransparency = 0.5
+                        label.TextScaled = true
+                        label.Font = Enum.Font.GothamBold
+                        label.TextXAlignment = Enum.TextXAlignment.Center
+
+                        local function getTeamColor(p)
+                            return p.Team and p.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
+                        end
+
+                        label.TextColor3 = getTeamColor(plr)
+                        local health = math.floor((plr.Character:FindFirstChildOfClass("Humanoid") or {}).Health or 0)
+                        label.Text = plr.Name .. " | HP: " .. health
+
+                        label.Parent = billboard
+                        billboard.Parent = plr.Character
+                    else
+                        local tag = plr.Character:FindFirstChild("ESPTag")
+                        local label = tag:FindFirstChild("Text")
+                        local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
+
+                        if tag and label and humanoid then
+                            label.Text = plr.Name .. " | HP: " .. math.floor(humanoid.Health)
+                            label.TextColor3 = plr.Team and plr.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
+                        end
+                    end
+                end
+            end
+        end)
+    elseif not v and _G._PlayerESPConnection then
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr.Character and plr.Character:FindFirstChild("ESPTag") then
+                plr.Character.ESPTag:Destroy()
+            end
+        end
+        _G._PlayerESPConnection:Disconnect()
+        _G._PlayerESPConnection = nil
+    end
+end)
+Esp:AddToggle("Right", "ESP Brainrot", false, function(v)
+    _G.ModelESP = v
+
+    local RunService = game:GetService("RunService")
+    local Workspace = game:GetService("Workspace")
+
+    if v and not _G._ModelESPConnection then
+        _G._ModelESPConnection = RunService.RenderStepped:Connect(function()
+            for _, obj in ipairs(Workspace:GetDescendants()) do
+                if obj:IsA("Model") and not obj:FindFirstChildOfClass("Humanoid") and not obj:FindFirstChild("ESPTag") then
+                    local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                    if primary then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "ESPTag"
+                        billboard.Adornee = primary
+                        billboard.Size = UDim2.new(0, 200, 0, 50)
+                        billboard.StudsOffset = Vector3.new(0, 3, 0)
+                        billboard.AlwaysOnTop = true
+                        billboard.LightInfluence = 0
+                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+                        local label = Instance.new("TextLabel")
+                        label.Size = UDim2.new(1, 0, 1, 0)
+                        label.BackgroundTransparency = 1
+                        label.TextColor3 = Color3.fromRGB(0, 255, 0)
+                        label.TextStrokeTransparency = 0
+                        label.Text = obj.Name
+                        label.TextScaled = true
+                        label.Font = Enum.Font.Gotham
+                        label.Parent = billboard
+
+                        billboard.Parent = obj
+                    end
+                elseif obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
+                    local tag = obj:FindFirstChild("ESPTag")
+                    if tag and tag:FindFirstChildOfClass("TextLabel") then
+                        tag.TextLabel.Text = obj.Name
+                    end
+                end
+            end
+        end)
+    elseif not v and _G._ModelESPConnection then
+        for _, obj in ipairs(Workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
+                obj.ESPTag:Destroy()
+            end
+        end
+        _G._ModelESPConnection:Disconnect()
+        _G._ModelESPConnection = nil
+    end
+end)
+Esp:AddToggle("Right", "ESP NPC", false, function(v)
+    _G.NPCEspEnabled = v
+
+    local RunService = game:GetService("RunService")
+    local NPCFolder = workspace:FindFirstChild("NPCs") or workspace -- sửa nếu NPC ở folder khác
+
+    if v and not _G._NPCEspConnection then
+        _G._NPCEspConnection = RunService.RenderStepped:Connect(function()
+            for _, npc in ipairs(NPCFolder:GetChildren()) do
+                if npc:IsA("Model") and not npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") and npc:FindFirstChild("HumanoidRootPart") then
+                    local name = npc.Name
+                    local hp = npc.Humanoid and math.floor(npc.Humanoid.Health) or "?"
+
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "ESPTag"
+                    billboard.Adornee = npc:FindFirstChild("Head") or npc:FindFirstChild("HumanoidRootPart")
+                    billboard.Size = UDim2.new(0, 200, 0, 50)
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.AlwaysOnTop = true
+                    billboard.LightInfluence = 0
+                    billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+                    local label = Instance.new("TextLabel")
+                    label.Size = UDim2.new(1, 0, 1, 0)
+                    label.BackgroundTransparency = 1
+                    label.TextColor3 = Color3.fromRGB(255, 255, 0)
+                    label.TextStrokeTransparency = 0
+                    label.Text = name .. " | HP: " .. tostring(hp)
+                    label.TextScaled = true
+                    label.Font = Enum.Font.Gotham
+                    label.Parent = billboard
+
+                    billboard.Parent = npc
+                elseif npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") then
+                    local label = npc.ESPTag:FindFirstChildOfClass("TextLabel")
+                    if label then
+                        label.Text = npc.Name .. " | HP: " .. math.floor(npc.Humanoid.Health)
+                    end
+                end
+            end
+        end)
+    elseif not v and _G._NPCEspConnection then
+        for _, npc in ipairs(NPCFolder:GetChildren()) do
+            if npc:IsA("Model") and npc:FindFirstChild("ESPTag") then
+                npc.ESPTag:Destroy()
+            end
+        end
+        _G._NPCEspConnection:Disconnect()
+        _G._NPCEspConnection = nil
+    end
+end)
+Esp:RealLine("Right")
