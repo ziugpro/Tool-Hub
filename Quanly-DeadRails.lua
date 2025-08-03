@@ -40,6 +40,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Dead Rails")
 
 local Tab = UI:Create("General")
+local Misc = UI:Create("Misc")
 
 Tab:AddTextLabel("Left", "Player")
 Tab:AddToggle("Left", "Full Bright", false, function(v)
@@ -457,3 +458,22 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
     end
 end)
 Tab:RealLine("Right")
+Misc:AddLabel("Right", "Time:")
+local remainingTime = 600
+local function formatTime(seconds)
+    local hrs = math.floor(seconds / 3600)
+    local mins = math.floor((seconds % 3600) / 60)
+    local secs = seconds % 60
+    return string.format("%02d:%02d:%02d", hrs, mins, secs)
+end
+Tab:AddButton("Right", "Start Countdown: " .. formatTime(remainingTime), function(self)
+    task.spawn(function()
+        while remainingTime > 0 do
+            remainingTime -= 1
+            self:SetText("Start Countdown: " .. formatTime(remainingTime))
+            task.wait(1)
+        end
+        self:SetText("Time's up")
+    end)
+end)
+Misc:RealLine("Left")
