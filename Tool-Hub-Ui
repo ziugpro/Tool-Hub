@@ -504,7 +504,7 @@ function tab:RealLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(1, -10, 0, 5)
+    Line.Size = UDim2.new(1, -10, 0, 9)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Line.BackgroundTransparency = 0
     Line.BorderSizePixel = 0
