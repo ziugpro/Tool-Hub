@@ -131,7 +131,7 @@ function SkUI:CreateWindow(title)
         local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
         local function AddElement(side, obj)
-            obj.Size = UDim2.new(1, -10, 0, 34)
+            obj.Size = UDim2.new(1, -10, 0, 40)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
@@ -482,6 +482,20 @@ function tab:AddMultiDropdown(side, text, list, callback)
         DropdownFrame.Visible = open
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
+end
+function tab:RealLine(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, -10, 0, 9)
+    Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Line.BackgroundTransparency = 0
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 3)
+    Corner.Parent = Line
 end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
