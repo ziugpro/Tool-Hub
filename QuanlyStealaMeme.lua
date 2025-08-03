@@ -154,6 +154,7 @@ Tab:AddButton("Left", "Dash Through Wall", function()
     end)
 end)
 Tab:Line("Left")
+Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Trolling")
 Tab:AddToggle("Left", "Pose hand (Hitler)°", false, function(v)
     local char = game.Players.LocalPlayer.Character
@@ -326,6 +327,7 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
     end
 end)
 Tab:Line("Right")
+Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Player")
 Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
     if typeof(v) == "number" then
@@ -369,7 +371,7 @@ end)
 local jumpPower = 50
 local autoKillEnabled = false
 
-Tab:AddSlider("Right", "Speed", 1, 10000, 50, function(val)
+Tab:AddSlider("Right", "Jumb", 1, 10000, 50, function(val)
     jumpPower = val
     if autoKillEnabled then
         local player = game.Players.LocalPlayer
