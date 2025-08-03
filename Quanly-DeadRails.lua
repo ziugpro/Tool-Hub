@@ -40,8 +40,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Dead Rails")
 
 local Tab = UI:Create("General")
-Tab:Line("Left")
-Tab:Line("Right")
+
 Tab:AddTextLabel("Left", "Player")
 Tab:AddToggle("Left", "Full Bright", false, function(v)
     if v then
@@ -151,14 +150,6 @@ Tab:AddToggle("Left", "Noclip", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Unlock Camera", false, function(v)
-    local camera = workspace.CurrentCamera
-    if v then
-        camera.CameraType = Enum.CameraType.Scriptable
-    else
-        camera.CameraType = Enum.CameraType.Custom
-    end
-end)
 Tab:AddButton("Left", "Unlock Zoom", function()
     local player = game.Players.LocalPlayer
     player.CameraMaxZoomDistance = 10000
@@ -177,6 +168,7 @@ Tab:AddButton("Left", "Bring Bond", function()
         end
     end
 end)
+Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Esp")
 Tab:AddToggle("Left", "ESP Player", false, function(v)
     local espFolder = game.CoreGui:FindFirstChild("PlayerESP") or Instance.new("Folder", game.CoreGui)
@@ -385,6 +377,8 @@ Tab:AddToggle("Left", "ESP Unicorn", false, function(v)
         end
     end
 end)
+Tab:RealLine("Left")
+Tab:AddTextLabel("Right", "Webhook")
 Tab:AddTextbox("Right", "Webhook Url", "", function(text)
 end)
 Tab:AddToggle("Right", "Start Webhook", false, function(v)
@@ -393,24 +387,22 @@ Tab:AddToggle("Right", "When Win Game", false, function(v)
 end)
 Tab:AddToggle("Right", "When Bond Game", false, function(v)
 end)
+Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Misc")
-Tab:AddButton("Right", "Unlock All Power", function()
+Tab:AddButton("Right", "Unlock Camera (Fixed)", function()
     local player = game.Players.LocalPlayer
-    if player and player.CameraMaxZoomDistance then
-        player.CameraMaxZoomDistance = 99999
-        player.CameraMinZoomDistance = 0
-    end
+    local cam = workspace.CurrentCamera
 
-    local settings = UserSettings()
-    if settings then
+    game:GetService("RunService").RenderStepped:Connect(function()
         pcall(function()
-            settings.GameSettings.ControlMode = Enum.ControlMode.MouseLockSwitch
-            settings.GameSettings.ComputerCameraMovementMode = Enum.ComputerCameraMovementMode.Classic
+            player.CameraMode = Enum.CameraMode.Classic
+            player.CameraMaxZoomDistance = 1000
+            player.CameraMinZoomDistance = 0
+            cam.CameraType = Enum.CameraType.Custom
         end)
-    end
-
-    workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+    end)
 end)
+Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Farming")
 Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
     local rs = game:GetService("RunService")
@@ -464,5 +456,4 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
         _G._AutoClickConnection = nil
     end
 end)
-Tab:Line("Left")
-Tab:Line("Right")
+Tab:RealLine("Right")
