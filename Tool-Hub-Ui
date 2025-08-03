@@ -514,6 +514,34 @@ function tab:RealLine(side)
     Corner.CornerRadius = UDim.new(0, 3)
     Corner.Parent = Line
 end
+function tab:LineGray(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, -10, 0, 4)
+    Line.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
+    Line.BackgroundTransparency = 0
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 3)
+    Corner.Parent = Line
+end
+function tab:MultiLine(side, color)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, -10, 0, 5)
+    Line.BackgroundColor3 = color
+    Line.BackgroundTransparency = 0
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 3)
+    Corner.Parent = Line
+end
         Button.MouseButton1Click:Connect(function()
             for _, p in pairs(Pages) do
                 p.Visible = false
