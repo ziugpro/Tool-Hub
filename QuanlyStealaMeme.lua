@@ -1,3 +1,59 @@
+local HttpService = game:GetService("HttpService")
+local SaveFileName = "AuraUISettings.json"
+local function FileExists(path)
+    local success, result = pcall(function() return isfile(path) end)
+    if success then return result else return false end
+end
+local function ReadFileSafe(path)
+    local success, content = pcall(function() return readfile(path) end)
+    if success then return content else return nil end
+end
+local function WriteFileSafe(path, content)
+    local success, err = pcall(function() writefile(path, content) end)
+    return success, err
+end
+local function DeleteFileSafe(path)
+    local success, err = pcall(function() delfile(path) end)
+    return success, err
+end
+local function DecodeJSONSafe(jsonStr)
+    local success, data = pcall(function() return HttpService:JSONDecode(jsonStr) end)
+    if success and type(data) == "table" then return data else return nil end
+end
+local function EncodeJSONSafe(data)
+    local success, jsonStr = pcall(function() return HttpService:JSONEncode(data) end)
+    if success then return jsonStr else return nil end
+end
+local function LoadAllSettings()
+    if not FileExists(SaveFileName) then return {} end
+    local content = ReadFileSafe(SaveFileName)
+    if not content or content == "" then return {} end
+    local data = DecodeJSONSafe(content)
+    if not data then
+        DeleteFileSafe(SaveFileName)
+        return {}
+    end
+    return data
+end
+local function SaveAllSettings(data)
+    local jsonStr = EncodeJSONSafe(data)
+    if jsonStr then
+        local success, err = WriteFileSafe(SaveFileName, jsonStr)
+        return success, err
+    else
+        return false, "Encode failed"
+    end
+end
+local SettingsData = LoadAllSettings()
+local function LoadSetting(key, default)
+    if SettingsData[key] ~= nil then return SettingsData[key] end
+    return default
+end
+local function SaveSetting(key, value)
+    SettingsData[key] = value
+    local success, err = SaveAllSettings(SettingsData)
+    if not success then warn("Save failed:", err) end
+end
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
     Text = "Success Loading",
@@ -36,14 +92,17 @@ task.spawn(function()
     end
 end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
+
 local UI = SkUI:CreateWindow("Aura - Hub")
 local Tab = UI:Create("General")
+
 Tab:AddTextLabel("Left", "Main")
 _G.Noclip = false
 _G.NoclipConnection = nil
-Tab:AddToggle("Left", "Noclip", false, function(v)
+local savedValue = LoadSetting("Noclip", false)
+Tab:AddToggle("Left", "Noclip", savedValue, function(v)
+    SaveSetting("Noclip", v)
     _G.Noclip = v
-
     if v then
         if not _G.NoclipConnection then
             _G.NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
@@ -74,7 +133,9 @@ Tab:AddToggle("Left", "Noclip", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Infinity Jump", false, function(v)
+local savedValue = LoadSetting("Infinity Jumb", false)
+Tab:AddToggle("Left", "Infinity Jumb", savedValue, function(v)
+    SaveSetting("Infinity Jumb", v)
     _G.InfinityJumpEnabled = v
 
     if _G.InfinityJumpEnabled then
@@ -254,11 +315,14 @@ Tab:AddToggle("Left", "Infinite Light Buddha", false, function(v)
 end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Right", "Webhook")
-Tab:AddTextbox("Right", "Webhook Url", "", function(text)
-    _G.WebhookURL = text
+local savedText = LoadSetting("Webhook Url", "")
+Tab:AddTextbox("Left", "Webhook Url", savedText, function(text)
+    SaveSetting("Webhook Url", text)
+_G.WebhookURL = text
 end)
-
-Tab:AddToggle("Right", "Start Webhook ", false, function(v)
+local savedValue = LoadSetting("Start Webhook", false)
+Tab:AddToggle("Right", "Start Webhook", savedValue, function(v)
+    SaveSetting("Start Webhook", v)
     if v and _G.WebhookURL and _G.WebhookURL ~= "" then
         local Data = {
             ["content"] = "🚨 Webhook Started",
@@ -277,8 +341,9 @@ Tab:AddToggle("Right", "Start Webhook ", false, function(v)
     end
 end)
 
-Tab:AddToggle("Right", "When Steal Meme", false, function(v)
-    if v and _G.WebhookURL and _G.WebhookURL ~= "" then
+local savedValue = LoadSetting("When Steal Meme", false)
+Tab:AddToggle("Right", "When Steal Meme", savedValue, function(v)
+    SaveSetting("When Steal Meme", v)    if v and _G.WebhookURL and _G.WebhookURL ~= "" then
         local HttpService = game:GetService("HttpService")
         local Content = {
             ["content"] = "😂 Someone just stole a meme!",
@@ -296,8 +361,10 @@ Tab:AddToggle("Right", "When Steal Meme", false, function(v)
     end
 end)
 
-Tab:AddToggle("Right", "When You Die", false, function(v)
-    if v and _G.WebhookURL and _G.WebhookURL ~= "" then
+local savedValue = LoadSetting("When You Die", false)
+Tab:AddToggle("Right", "When You Die", savedValue, function(v)
+    SaveSetting("When You Die", v)
+        if v and _G.WebhookURL and _G.WebhookURL ~= "" then
         local player = game.Players.LocalPlayer
         if player and player.Character then
             local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
@@ -326,15 +393,18 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
 end)
 Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Player")
-Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
+local savedSpeed = LoadSetting("Speed", 50)
+Tab:AddSlider("Right", "Speed", 16, 500, savedSpeed, function(val)
+    SaveSetting("Speed", val)
     if typeof(v) == "number" then
         _G.SuperSpeedValue = v
     end
 end)
 
-Tab:AddToggle("Right", "Super Speed", false, function(v)
+local savedValue = LoadSetting("Super Speed", false)
+Tab:AddToggle("Right", "Super Speed", savedValue, function(v)
+    SaveSetting("Super Speed", v)
     _G.SuperSpeed = v
-
     if v and not _G._SuperSpeedConnection then
         local RunService = game:GetService("RunService")
         _G._SuperSpeedConnection = RunService.RenderStepped:Connect(function()
@@ -368,7 +438,9 @@ end)
 local jumpPower = 50
 local autoKillEnabled = false
 
-Tab:AddSlider("Right", "Jumb", 1, 10000, 50, function(val)
+local savedSpeed = LoadSetting("Jumb", 50)
+Tab:AddSlider("Right", "Jumb", 1, 1000, savedSpeed, function(val)
+    SaveSetting("Jumb", val)
     jumpPower = val
     if autoKillEnabled then
         local player = game.Players.LocalPlayer
@@ -379,7 +451,9 @@ Tab:AddSlider("Right", "Jumb", 1, 10000, 50, function(val)
     end
 end)
 
-Tab:AddToggle("Right", "Super Jumb", false, function(v)
+local savedValue = LoadSetting("Super Jumb", false)
+Tab:AddToggle("Right", "Super Jumb", savedValue, function(v)
+    SaveSetting("Super Jumb", v)
     autoKillEnabled = v
     local player = game.Players.LocalPlayer
     local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
