@@ -131,7 +131,7 @@ function SkUI:CreateWindow(title)
         local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
         local function AddElement(side, obj)
-            obj.Size = UDim2.new(1, -10, 0, 34)
+            obj.Size = UDim2.new(1, -10, 0, 40)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
