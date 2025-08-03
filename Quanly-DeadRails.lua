@@ -458,7 +458,7 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
     end
 end)
 Tab:RealLine("Right")
-Misc:AddLabel("Right", "Time:")
+Misc:AddLabel("Left", "Time:")
 local remainingTime = 600
 local function formatTime(seconds)
     local hrs = math.floor(seconds / 3600)
@@ -466,7 +466,7 @@ local function formatTime(seconds)
     local secs = seconds % 60
     return string.format("%02d:%02d:%02d", hrs, mins, secs)
 end
-Tab:AddButton("Right", "Start Countdown: " .. formatTime(remainingTime), function(self)
+Misc:AddButton("Left", "Start Countdown: " .. formatTime(remainingTime), function(self)
     task.spawn(function()
         while remainingTime > 0 do
             remainingTime -= 1
