@@ -510,6 +510,22 @@ function tab:RealLine(side)
     Corner.CornerRadius = UDim.new(0, 3)
     Corner.Parent = Line
 end
+function tab:AddText(side, text)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(0, 255, 0, 30)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 12
+    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Label.TextXAlignment = Enum.TextXAlignment.Center
+    Label.TextYAlignment = Enum.TextYAlignment.Center
+    Label.AnchorPoint = Vector2.new(0.5, 0)
+    Label.Position = UDim2.new(0.5, 0, 0, 0)
+    Label.TextWrapped = true
+    Label.Parent = parent
+end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
