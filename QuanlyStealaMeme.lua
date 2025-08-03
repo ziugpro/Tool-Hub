@@ -326,7 +326,7 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
         _G._WebhookDeathConn = nil
     end
 end)
-Tab:Line("Right"))
+Tab:Line("Right")
 Tab:AddTextLabel("Right", "Player")
 Tab:RealLine("Right")
 Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
