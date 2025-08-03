@@ -316,7 +316,7 @@ end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Right", "Webhook")
 local savedText = LoadSetting("Webhook Url", "")
-Tab:AddTextbox("Left", "Webhook Url", savedText, function(text)
+Tab:AddTextbox("Right", "Webhook Url", savedText, function(text)
     SaveSetting("Webhook Url", text)
 _G.WebhookURL = text
 end)
