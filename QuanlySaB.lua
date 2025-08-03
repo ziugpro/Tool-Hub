@@ -6,7 +6,7 @@ game.StarterGui:SetCore("SendNotification", {
     Callback = function()
     end
 })
-repeat task.wait() until game:IsLoaded()
+repeat wait(5) until game:IsLoaded() and game.Players.LocalPlayer
 
 getgenv().Image = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420"
 getgenv().ToggleUI = "LeftControl"
