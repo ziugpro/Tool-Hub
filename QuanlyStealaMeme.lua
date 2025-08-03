@@ -38,10 +38,8 @@ end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("Aura - Hub")
-
 local Tab = UI:Create("General")
-Tab:Line("Left")
-Tab:Line("Right")
+Tab:AddTextLabel("Left", "Main")
 _G.Noclip = false
 _G.NoclipConnection = nil
 Tab:AddToggle("Left", "Noclip", false, function(v)
@@ -153,7 +151,6 @@ Tab:AddButton("Left", "Dash Through Wall", function()
         end
     end)
 end)
-Tab:Line("Left")
 Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Trolling")
 Tab:AddToggle("Left", "Pose hand (Hitler)°", false, function(v)
@@ -326,7 +323,6 @@ Tab:AddToggle("Right", "When You Die", false, function(v)
         _G._WebhookDeathConn = nil
     end
 end)
-Tab:Line("Right")
 Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Player")
 Tab:AddSlider("Right", "Speed", 50, 500, 100, function(v)
@@ -394,5 +390,5 @@ Tab:AddToggle("Right", "Super Jumb", false, function(v)
         end
     end
 end)
-Tab:Line("Left")
-Tab:Line("Right")
+Tab:RealLine("Left")
+Tab:RealLine("Right")
