@@ -41,6 +41,7 @@ local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create("General")
 local Teleport = UI:Create("Teleport")
+local Esp = UI:Create("Esp")
 local Web = UI:Create("Webhook")
 
 function ForceTeleport(cf, holdTime)
