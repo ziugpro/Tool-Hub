@@ -292,9 +292,8 @@ function tab:AddDropdown(side, text, list, callback)
         Button.Text = open and (text .. " ▲") or (text .. " ▼")
     end)
 end
-function tab:AddTextSbox(side, text)
+function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
-
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(1, -10, 0, 30)
     Label.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -304,18 +303,7 @@ function tab:AddTextSbox(side, text)
     Label.Text = text
     Label.ClipsDescendants = true
     Label.Parent = parent
-
     Roundify(Label, 6)
-
-    local Emoji = Instance.new("TextLabel")
-    Emoji.Text = "🪧"
-    Emoji.Size = UDim2.new(0, 20, 0, 20)
-    Emoji.Position = UDim2.new(1, -24, 0.5, -10)
-    Emoji.BackgroundTransparency = 1
-    Emoji.TextSize = 18
-    Emoji.Font = Enum.Font.Gotham
-    Emoji.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Emoji.Parent = Label
 end
 function tab:AddTextbox(side, text, placeholder, callback)
     local Box = Instance.new("Frame")
