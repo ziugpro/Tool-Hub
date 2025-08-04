@@ -113,7 +113,7 @@ function SkUI:CreateWindow(title)
 
         local function makeScroll(posX)
             local scroll = Create("ScrollingFrame", {
-                Size = UDim2.new(0.5, -10, 0, 295),
+                Size = UDim2.new(0.5, -10, 0, 298),
                 Position = posX,
                 BackgroundTransparency = 1,
                 BorderSizePixel = 0,
