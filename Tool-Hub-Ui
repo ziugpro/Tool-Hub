@@ -28,14 +28,17 @@ function SkUI:CreateWindow(title)
     })
 
     local Holder = Create("Frame", {
-    Name = "Holder",
-    Size = UDim2.new(0, 550, 0, 370),
-    Position = UDim2.new(0.5, -275, 0, -60),
-    BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-    BorderSizePixel = 0,
-    Visible = true,
-    Parent = Screen
+         Name = "Holder",
+         Size = UDim2.new(0, 550, 0, 370),
+         Position = UDim2.new(0.5, -275, 0, -60),
+         BackgroundColor3 = Color3.fromRGB(22, 22, 22),
+         BorderSizePixel = 0,
+         Visible = true,
+         Parent = Screen
     })
+    Holder.Active = true
+    Holder.Draggable = true
+
     Roundify(Holder, 8)
 
     local Header = Create("Frame", {
