@@ -39,14 +39,7 @@ function SkUI:CreateWindow(title)
 })
 Holder.Active = true
 Holder.Draggable = true
-coroutine.wrap(function()
-    local h = 0
-    while Holder and Holder.Parent do
-        Holder.BackgroundColor3 = Color3.fromHSV(h, 0.5, 1)
-        h = (h + 0.005) % 1
-        task.wait()
-    end
-end)()
+
     Roundify(Holder, 8)
 
     local Header = Create("Frame", {
