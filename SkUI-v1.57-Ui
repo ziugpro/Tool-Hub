@@ -139,7 +139,6 @@ function SkUI:CreateWindow(title)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
-
 function tab:AddToggle(side, text, default, callback)
     local Toggle = Create("TextButton", {
         BackgroundColor3 = Color3.fromRGB(45, 45, 45),
@@ -182,6 +181,19 @@ function tab:AddToggle(side, text, default, callback)
 
     local state = default or false
 
+    task.spawn(function()
+        local t = 0
+        while Toggle and Toggle.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Toggle.BackgroundColor3 = Color3.fromRGB(r, g, b)
+            Toggle.BackgroundTransparency = 0.2 + math.abs(math.sin(t)) * 0.2
+            task.wait()
+        end
+    end)
+
     Toggle.MouseButton1Click:Connect(function()
         state = not state
         icon.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(80, 80, 80)
@@ -205,6 +217,18 @@ function tab:AddTextLabel(side, text)
     Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.Parent = parent
+
+    task.spawn(function()
+        local t = 0
+        while Label and Label.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Label.TextColor3 = Color3.fromRGB(r, g, b)
+            task.wait()
+        end
+    end)
 end
 function tab:AddButton(side, text, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
@@ -231,8 +255,20 @@ function tab:AddButton(side, text, callback)
     Emoji.TextColor3 = Color3.fromRGB(255, 255, 255)
     Emoji.Parent = Button
 
+    task.spawn(function()
+        local t = 0
+        while Button and Button.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Button.BackgroundColor3 = Color3.fromRGB(r, g, b)
+            task.wait()
+        end
+    end)
+
     Button.MouseButton1Click:Connect(callback)
-end        
+end
 function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
@@ -295,6 +331,19 @@ function tab:AddDropdown(side, text, list, callback)
         DropdownFrame.Size = open and UDim2.new(1, 0, 0, math.min(#list * 30, 150)) or UDim2.new(1, 0, 0, 0)
         Button.Text = open and (text .. " ▲") or (text .. " ▼")
     end)
+
+    task.spawn(function()
+        local t = 0
+        while Container and Container.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Container.BackgroundColor3 = Color3.fromRGB(r, g, b)
+            Container.BackgroundTransparency = 0.15 + math.abs(math.sin(t)) * 0.2
+            task.wait()
+        end
+    end)
 end
 function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
@@ -308,6 +357,19 @@ function tab:AddLabel(side, text)
     Label.ClipsDescendants = true
     Label.Parent = parent
     Roundify(Label, 6)
+
+    task.spawn(function()
+        local t = 0
+        while Label and Label.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Label.BackgroundColor3 = Color3.fromRGB(r, g, b)
+            Label.BackgroundTransparency = 0.1 + math.abs(math.sin(t)) * 0.2
+            task.wait()
+        end
+    end)
 end
 function tab:AddTextbox(side, text, placeholder, callback)
     local Box = Instance.new("Frame")
@@ -350,6 +412,91 @@ function tab:AddTextbox(side, text, placeholder, callback)
     end)
 
     AddElement(side, Box)
+
+    task.spawn(function()
+        local t = 0
+        while Box and Box.Parent do
+            t += 0.05
+            local r = math.sin(t) * 127 + 128
+            local g = math.sin(t + 2) * 127 + 128
+            local b = math.sin(t + 4) * 127 + 128
+            Box.BackgroundColor3 = Color3.fromRGB(r, g, b)
+            Box.BackgroundTransparency = 0.1 + math.abs(math.sin(t)) * 0.2
+            task.wait()
+        end
+    end)
+end
+
+function tab:AddMultiDropdown(side, text, list, callback)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Container = Instance.new("Frame")
+    Container.Size = UDim2.new(1, -10, 0, 30)
+    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Container.ClipsDescendants = false
+    Container.Parent = parent
+
+    local UICorner = Instance.new("UICorner", Container)
+    UICorner.CornerRadius = UDim.new(0, 6)
+
+    local Button = Instance.new("TextButton", Container)
+    Button.Size = UDim2.new(1, 0, 1, 0)
+    Button.BackgroundTransparency = 1
+    Button.Font = Enum.Font.Gotham
+    Button.TextSize = 14
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Text = text .. " ▼"
+
+    local DropdownFrame = Instance.new("ScrollingFrame", Container)
+    DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
+    DropdownFrame.Size = UDim2.new(1, 0, 0, math.min(#list * 28, 100))
+    DropdownFrame.CanvasSize = UDim2.new(0, 0, 0, #list * 28)
+    DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    DropdownFrame.BorderSizePixel = 0
+    DropdownFrame.ScrollBarThickness = 4
+    DropdownFrame.Visible = false
+    DropdownFrame.ZIndex = 10
+
+    local UIList = Instance.new("UIListLayout", DropdownFrame)
+    UIList.Padding = UDim.new(0, 2)
+    UIList.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local selectedItems = {}
+
+    for i, item in ipairs(list) do
+        local Opt = Instance.new("TextButton", DropdownFrame)
+        Opt.Size = UDim2.new(1, -4, 0, 28)
+        Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        Opt.Text = "☐ " .. item
+        Opt.Font = Enum.Font.Gotham
+        Opt.TextSize = 13
+        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Opt.LayoutOrder = i
+
+        Opt.MouseButton1Click:Connect(function()
+            if selectedItems[item] then
+                selectedItems[item] = nil
+                Opt.Text = "☐ " .. item
+            else
+                selectedItems[item] = true
+                Opt.Text = "☑ " .. item
+            end
+
+            local names = {}
+            for name, _ in pairs(selectedItems) do
+                table.insert(names, name)
+            end
+            Button.Text = text .. ": " .. table.concat(names, ", ") .. " ▼"
+            callback(names)
+        end)
+    end
+
+    local open = false
+    Button.MouseButton1Click:Connect(function()
+        open = not open
+        DropdownFrame.Visible = open
+        Button.Text = text .. (open and " ▲" or " ▼")
+    end)
 end
 function tab:AddSlider(side, text, min, max, default, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
@@ -428,92 +575,42 @@ function tab:AddSlider(side, text, min, max, default, callback)
             inputBox:Destroy()
         end)
     end)
-end
-function tab:AddMultiDropdown(side, text, list, callback)
-    local parent = (side == "Left") and LeftScroll or RightScroll
 
-    local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 30)
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Container.ClipsDescendants = false
-    Container.Parent = parent
-
-    local UICorner = Instance.new("UICorner", Container)
-    UICorner.CornerRadius = UDim.new(0, 6)
-
-    local Button = Instance.new("TextButton", Container)
-    Button.Size = UDim2.new(1, 0, 1, 0)
-    Button.BackgroundTransparency = 1
-    Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text .. " ▼"
-
-    local DropdownFrame = Instance.new("ScrollingFrame", Container)
-    DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
-    DropdownFrame.Size = UDim2.new(1, 0, 0, math.min(#list * 28, 100))
-    DropdownFrame.CanvasSize = UDim2.new(0, 0, 0, #list * 28)
-    DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    DropdownFrame.BorderSizePixel = 0
-    DropdownFrame.ScrollBarThickness = 4
-    DropdownFrame.Visible = false
-    DropdownFrame.ZIndex = 10
-
-    local UIList = Instance.new("UIListLayout", DropdownFrame)
-    UIList.Padding = UDim.new(0, 2)
-    UIList.SortOrder = Enum.SortOrder.LayoutOrder
-
-    local selectedItems = {}
-
-    for i, item in ipairs(list) do
-        local Opt = Instance.new("TextButton", DropdownFrame)
-        Opt.Size = UDim2.new(1, -4, 0, 28)
-        Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = "☐ " .. item
-        Opt.Font = Enum.Font.Gotham
-        Opt.TextSize = 13
-        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Opt.LayoutOrder = i
-
-        Opt.MouseButton1Click:Connect(function()
-            if selectedItems[item] then
-                selectedItems[item] = nil
-                Opt.Text = "☐ " .. item
-            else
-                selectedItems[item] = true
-                Opt.Text = "☑ " .. item
-            end
-
-            local names = {}
-            for name, _ in pairs(selectedItems) do
-                table.insert(names, name)
-            end
-            Button.Text = text .. ": " .. table.concat(names, ", ") .. " ▼"
-            callback(names)
-        end)
-    end
-
-    local open = false
-    Button.MouseButton1Click:Connect(function()
-        open = not open
-        DropdownFrame.Visible = open
-        Button.Text = text .. (open and " ▲" or " ▼")
-    end)
+    coroutine.wrap(function()
+        local t = 0
+        while Container and Container.Parent do
+            local r = math.sin(t) * 0.5 + 0.5
+            local g = math.sin(t + 2) * 0.5 + 0.5
+            local b = math.sin(t + 4) * 0.5 + 0.5
+            local rainbow = Color3.new(r, g, b)
+            Container.BackgroundColor3 = rainbow
+            ValueButton.BackgroundColor3 = rainbow
+            t += 0.05
+            task.wait(0.03)
+        end
+    end)()
 end
 function tab:RealLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
-
     local Line = Instance.new("Frame")
     Line.Size = UDim2.new(1, -10, 0, 9)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Line.BackgroundTransparency = 0
     Line.BorderSizePixel = 0
     Line.Parent = parent
-
     local Corner = Instance.new("UICorner")
     Corner.CornerRadius = UDim.new(0, 3)
     Corner.Parent = Line
+    coroutine.wrap(function()
+        local h = 0
+        while Line and Line.Parent do
+            Line.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+            h = (h + 0.01) % 1
+            task.wait()
+        end
+    end)()
 end
+
 function tab:AddText(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
@@ -529,6 +626,14 @@ function tab:AddText(side, text)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.TextWrapped = true
     Label.Parent = parent
+    coroutine.wrap(function()
+        local h = 0
+        while Label and Label.Parent do
+            Label.TextColor3 = Color3.fromHSV(h, 1, 1)
+            h = (h + 0.01) % 1
+            task.wait()
+        end
+    end)()
 end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
