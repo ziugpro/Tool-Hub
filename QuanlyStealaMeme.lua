@@ -94,6 +94,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Aura - Hub")
 local Tab = UI:Create("General")
+local Web = UI:Create("Webhook")
 
 Tab:AddTextLabel("Left", "Main")
 _G.Noclip = false
@@ -362,84 +363,6 @@ Tab:AddToggle("Left", "Infinite Light Buddha", false, function(v)
     end
 end)
 Tab:RealLine("Left")
-Tab:AddTextLabel("Right", "Webhook")
-local savedText = LoadSetting("Webhook Url", "")
-Tab:AddTextbox("Right", "Webhook Url", savedText, function(text)
-    SaveSetting("Webhook Url", text)
-_G.WebhookURL = text
-end)
-local savedValue = LoadSetting("Start Webhook", false)
-Tab:AddToggle("Right", "Start Webhook", savedValue, function(v)
-    SaveSetting("Start Webhook", v)
-    if v and _G.WebhookURL and _G.WebhookURL ~= "" then
-        local Data = {
-            ["content"] = "🚨 Webhook Started",
-            ["username"] = "Webhook Bot",
-            ["embeds"] = {{
-                ["title"] = "Status",
-                ["description"] = "Webhook successfully started at: " .. os.date("%Y-%m-%d %H:%M:%S"),
-                ["color"] = 65280
-            }}
-        }
-
-        local HttpService = game:GetService("HttpService")
-        local Success, Response = pcall(function()
-            game:HttpPostAsync(_G.WebhookURL, HttpService:JSONEncode(Data))
-        end)
-    end
-end)
-
-local savedValue = LoadSetting("When Steal Meme", false)
-Tab:AddToggle("Right", "When Steal Meme", savedValue, function(v)
-    SaveSetting("When Steal Meme", v)    if v and _G.WebhookURL and _G.WebhookURL ~= "" then
-        local HttpService = game:GetService("HttpService")
-        local Content = {
-            ["content"] = "😂 Someone just stole a meme!",
-            ["username"] = "Meme Logger",
-            ["embeds"] = {{
-                ["title"] = "Stolen Meme",
-                ["description"] = "A meme was taken at " .. tick(),
-                ["color"] = 16753920
-            }}
-        }
-
-        pcall(function()
-            game:HttpPostAsync(_G.WebhookURL, HttpService:JSONEncode(Content))
-        end)
-    end
-end)
-
-local savedValue = LoadSetting("When You Die", false)
-Tab:AddToggle("Right", "When You Die", savedValue, function(v)
-    SaveSetting("When You Die", v)
-        if v and _G.WebhookURL and _G.WebhookURL ~= "" then
-        local player = game.Players.LocalPlayer
-        if player and player.Character then
-            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and not _G._WebhookDeathConn then
-                _G._WebhookDeathConn = humanoid.Died:Connect(function()
-                    local HttpService = game:GetService("HttpService")
-                    local Payload = {
-                        ["content"] = "☠️ You died!",
-                        ["username"] = "Death Logger",
-                        ["embeds"] = {{
-                            ["title"] = "Player Death",
-                            ["description"] = "Player died at: " .. os.date("%H:%M:%S"),
-                            ["color"] = 16711680
-                        }}
-                    }
-                    pcall(function()
-                        game:HttpPostAsync(_G.WebhookURL, HttpService:JSONEncode(Payload))
-                    end)
-                end)
-            end
-        end
-    elseif not v and _G._WebhookDeathConn then
-        _G._WebhookDeathConn:Disconnect()
-        _G._WebhookDeathConn = nil
-    end
-end)
-Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Player")
 local savedSpeed = LoadSetting("Speed", 50)
 Tab:AddSlider("Right", "Speed", 16, 500, savedSpeed, function(val)
@@ -514,3 +437,21 @@ Tab:AddToggle("Right", "Super Jumb", savedValue, function(v)
     end
 end)
 Tab:RealLine("Right")
+Web:AddTextLabel("Left", "Main")
+Web:AddTextbox("Left", "Webhook Url", "", function(text)
+end)
+Web:AddToggle("Left", "Tag Everyone", false, function(v)
+end)
+Web:AddToggle("Left", "Start Webhook", false, function(v)
+end)
+Web:AddText("Left", "Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance")
+Web:AddLabel("Left", "Status : 🔴")
+Web:RealLine("Left")
+Web:AddTextLabel("Right", "Setting")
+Web:AddToggle("Right", "When Steal Meme", false, function(v)
+end)
+Web:AddToggle("Right", "When Meme Lost", false, function(v)
+end)
+Web:AddToggle("Right", "When Buy Meme", false, function(v)
+end)
+Web:RealLine("Right")
