@@ -211,6 +211,58 @@ Tab:AddButton("Left", "Dash Through Wall", function()
     end)
 end)
 Tab:RealLine("Left")
+Tab:AddTextLabel("Left", "Farming")
+Tab:AddToggle("Left", "Kill Player (Testing)", false, function(v)
+    _G.AutoKill = v
+
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local lp = Players.LocalPlayer
+    local char = lp.Character or lp.CharacterAdded:Wait()
+    local root = char:WaitForChild("HumanoidRootPart")
+
+    local bv = Instance.new("BodyVelocity")
+    bv.MaxForce = Vector3.new(1e6, 1e6, 1e6)
+    bv.P = 1500
+    bv.Velocity = Vector3.zero
+    bv.Parent = root
+
+    local connection
+    connection = RunService.RenderStepped:Connect(function()
+        if not _G.AutoKill then
+            connection:Disconnect()
+            bv:Destroy()
+            return
+        end
+
+        local closest, dist = nil, math.huge
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                local mag = (p.Character.HumanoidRootPart.Position - root.Position).Magnitude
+                if mag < dist then
+                    dist = mag
+                    closest = p
+                end
+            end
+        end
+
+        if closest then
+            local targetPos = closest.Character.HumanoidRootPart.Position + Vector3.new(0, 3, 0)
+            local direction = (targetPos - root.Position).Unit * 50
+            bv.Velocity = direction
+
+            if dist < 5 then
+                local humanoid = closest.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid:TakeDamage(5)
+                end
+            end
+        else
+            bv.Velocity = Vector3.zero
+        end
+    end)
+end)
+Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Trolling")
 Tab:AddToggle("Left", "Pose hand (Hitler)°", false, function(v)
     local char = game.Players.LocalPlayer.Character
