@@ -213,6 +213,61 @@ Tab:AddButton("Left", "Dash Through Wall", function()
 end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Farming")
+Tab:AddToggle("Left", "Anti Hit (Experiment)", false, function(v)
+    _G.AntiHit = v
+
+    local rs = game:GetService("RunService")
+    local plr = game:GetService("Players").LocalPlayer
+    local hrp = plr.Character and plr.Character:WaitForChild("HumanoidRootPart")
+
+    if not _G._AntiHitConn then
+        _G._AntiHitConn = rs.RenderStepped:Connect(function()
+            if not _G.AntiHit or not hrp then return end
+
+            for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+                if p ~= plr and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                    local d = (p.Character.HumanoidRootPart.Position - hrp.Position).Magnitude
+                    if d < 5 then
+                        hrp.CFrame = hrp.CFrame + Vector3.new(0, 5, 0)
+                    end
+                end
+            end
+        end)
+    end
+end)
+Tab:AddToggle("Left", "Aimbot Head (Player)", false, function(v)
+    _G.AimbotHead = v
+
+    local rs = game:GetService("RunService")
+    local plr = game:GetService("Players").LocalPlayer
+    local mouse = plr:GetMouse()
+    local cam = workspace.CurrentCamera
+
+    if not _G._AimbotConn then
+        _G._AimbotConn = rs.RenderStepped:Connect(function()
+            if not _G.AimbotHead then return end
+
+            local closest, dist = nil, math.huge
+            for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+                if p ~= plr and p.Character and p.Character:FindFirstChild("Head") then
+                    local headPos = p.Character.Head.Position
+                    local screenPos, onScreen = cam:WorldToViewportPoint(headPos)
+                    if onScreen then
+                        local mag = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                        if mag < dist then
+                            dist = mag
+                            closest = p.Character.Head
+                        end
+                    end
+                end
+            end
+
+            if closest then
+                cam.CFrame = CFrame.new(cam.CFrame.Position, closest.Position)
+            end
+        end)
+    end
+end)
 Tab:AddToggle("Left", "Kill Player (Testing)", false, function(v)
     _G.AutoKill = v
 
