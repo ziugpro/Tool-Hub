@@ -226,37 +226,62 @@ Tab:AddToggle("Left", "Anti-Hitbox", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Aimbot Head (Player)", false, function(v)
-    _G.AimbotHead = v
+Tab:AddSlider("Left", "Aimbot Radius", 50, 500, 150, function(v)
+    _G.AimbotRadius = v
+end)
 
-    local rs = game:GetService("RunService")
-    local plr = game:GetService("Players").LocalPlayer
-    local mouse = plr:GetMouse()
-    local cam = workspace.CurrentCamera
+Tab:AddToggle("Left", "Aimbot Circle", false, function(v)
+    _G.AimbotCircle = v
 
-    if not _G._AimbotConn then
-        _G._AimbotConn = rs.RenderStepped:Connect(function()
-            if not _G.AimbotHead then return end
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local LocalPlayer = Players.LocalPlayer
+    local Mouse = LocalPlayer:GetMouse()
+    local Camera = workspace.CurrentCamera
 
-            local closest, dist = nil, math.huge
-            for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-                if p ~= plr and p.Character and p.Character:FindFirstChild("Head") then
-                    local headPos = p.Character.Head.Position
-                    local screenPos, onScreen = cam:WorldToViewportPoint(headPos)
-                    if onScreen then
-                        local mag = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-                        if mag < dist then
-                            dist = mag
-                            closest = p.Character.Head
-                        end
+    local AimPart = "Head"
+    local Circle = Drawing.new("Circle")
+    Circle.Radius = _G.AimbotRadius or 150
+    Circle.Thickness = 2
+    Circle.Color = Color3.fromRGB(0, 255, 0)
+    Circle.Transparency = 1
+    Circle.Filled = false
+
+    local function getClosest()
+        local closest = nil
+        local shortest = _G.AimbotRadius or 150
+        for _, v in pairs(Players:GetPlayers()) do
+            if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(AimPart) then
+                local pos, onScreen = Camera:WorldToViewportPoint(v.Character[AimPart].Position)
+                if onScreen then
+                    local dist = (Vector2.new(pos.X, pos.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+                    if dist < shortest then
+                        shortest = dist
+                        closest = v.Character[AimPart]
                     end
                 end
             end
+        end
+        return closest
+    end
 
-            if closest then
-                cam.CFrame = CFrame.new(cam.CFrame.Position, closest.Position)
+    local conn
+    if v then
+        conn = RunService.RenderStepped:Connect(function()
+            Circle.Visible = true
+            Circle.Position = Vector2.new(Mouse.X, Mouse.Y)
+            Circle.Radius = _G.AimbotRadius or 150
+
+            local target = getClosest()
+            if target then
+                Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position)
             end
         end)
+    else
+        if conn then
+            conn:Disconnect()
+        end
+        Circle:Remove()
     end
 end)
 Tab:AddToggle("Left", "Kill Player (Testing)", false, function(v)
