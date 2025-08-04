@@ -213,26 +213,17 @@ Tab:AddButton("Left", "Dash Through Wall", function()
 end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Farming")
-Tab:AddToggle("Left", "Anti Hit (Experiment)", false, function(v)
-    _G.AntiHit = v
+Tab:AddToggle("Left", "Anti-Hitbox", false, function(v)
+    _G.AntiHitbox = v
 
-    local rs = game:GetService("RunService")
-    local plr = game:GetService("Players").LocalPlayer
-    local hrp = plr.Character and plr.Character:WaitForChild("HumanoidRootPart")
+    local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 
-    if not _G._AntiHitConn then
-        _G._AntiHitConn = rs.RenderStepped:Connect(function()
-            if not _G.AntiHit or not hrp then return end
-
-            for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-                if p ~= plr and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                    local d = (p.Character.HumanoidRootPart.Position - hrp.Position).Magnitude
-                    if d < 5 then
-                        hrp.CFrame = hrp.CFrame + Vector3.new(0, 5, 0)
-                    end
-                end
-            end
-        end)
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.CanCollide = not v
+            part.Massless = v
+            part.Size = v and Vector3.new(0.1, 0.1, 0.1) or Vector3.new(2, 2, 1)
+        end
     end
 end)
 Tab:AddToggle("Left", "Aimbot Head (Player)", false, function(v)
