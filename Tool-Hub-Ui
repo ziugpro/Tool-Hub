@@ -1,3 +1,12 @@
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Skui v1-73",
+    Text = "Copyright: Ziugpro",
+    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat task.wait() until game:IsLoaded()
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
