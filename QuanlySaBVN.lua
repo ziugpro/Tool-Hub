@@ -1,6 +1,6 @@
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
-    Text = "Success Loading",
+    Text = "Thành Công",
     Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
     Duration = 5,
     Callback = function()
@@ -39,10 +39,10 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Aura - Hub")
 
-local Tab = UI:Create("General")
-local Teleport = UI:Create("Teleport")
-local Esp = UI:Create("Esp")
-local Misc = UI:Create("Misc")
+local Tab = UI:Create("Tổng Quan")
+local Teleport = UI:Create("Dịch Chuyển")
+local Esp = UI:Create("Định Vị")
+local Misc = UI:Create("Khác")
 local Web = UI:Create("Webhook")
 
 function ForceTeleport(cf, holdTime)
@@ -58,8 +58,8 @@ function ForceTeleport(cf, holdTime)
         task.wait()
     end
 end
-Tab:AddTextLabel("Left", "Main")
-Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
+Tab:AddTextLabel("Left", "Chính")
+Tab:AddToggle("Left", "Mua Brainrot", false, function(v)
     _G.AutoWalkToTargetActive = v
 
     local x1 = -411.5451354980469
@@ -135,9 +135,9 @@ Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
         _G._AutoWalkToTargetConnection = nil
     end
 end)
-Tab:AddToggle("Left", "Lock Base (Coming Soon)", false, function(v)
+Tab:AddToggle("Left", "Khoá Base (Sắp Có)", false, function(v)
 end)
-Tab:AddToggle("Left", "Anti Hit", false, function(v)
+Tab:AddToggle("Left", "Chống Đánh", false, function(v)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
     local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -161,7 +161,7 @@ Tab:AddToggle("Left", "Anti Hit", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
+Tab:AddToggle("Left", "Chống Đánh(v2)", false, function(v)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
     local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -188,7 +188,7 @@ Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
         hrp.Anchored = false
     end
 end)
-Tab:AddButton("Left", "Dash Through Wall", function()
+Tab:AddButton("Left", "Xuyên Tường", function()
     local Players = game:GetService("Players")
     local Workspace = game:GetService("Workspace")
     local RunService = game:GetService("RunService")
@@ -242,11 +242,11 @@ Tab:RealLine("Left")
 local currentSpeed = 50
 _G.SuperSpeed = false
 
-Tab:AddSlider("Right", "Speed", 1, 100, currentSpeed, function(val)
+Tab:AddSlider("Right", "Tốc Độ", 1, 100, currentSpeed, function(val)
     currentSpeed = val
 end)
 
-Tab:AddToggle("Right", "Super Speed", false, function(v)
+Tab:AddToggle("Right", "Siêu Tốc Độ", false, function(v)
     _G.SuperSpeed = v
 
     if _G.SuperSpeed and not _G._SuperSpeedConnection then
@@ -266,7 +266,7 @@ Tab:AddToggle("Right", "Super Speed", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Right", "Super Jump", false, function(v)
+Tab:AddToggle("Right", "Nhảy Siesu Cao", false, function(v)
     _G.SuperJump = v
 
     if _G.SuperJump and not _G._SuperJumpConnection then
@@ -287,8 +287,8 @@ Tab:AddToggle("Right", "Super Jump", false, function(v)
     end
 end)
 Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Bug Game")
-Tab:AddToggle("Right", "Spam Remotes", false, function(v)
+Tab:AddTextLabel("Right", "Lỗi Game")
+Tab:AddToggle("Right", "Lỗi Game 1", false, function(v)
     _G.SpamRemotes = v
 
     while _G.SpamRemotes do
@@ -307,8 +307,8 @@ Tab:AddToggle("Right", "Spam Remotes", false, function(v)
     end
 end)
 Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Misc")
-Tab:AddButton("Right", "Become Black", function()
+Tab:AddTextLabel("Right", "Khác")
+Tab:AddButton("Right", "Trở thành người da đen", function()
     local char = game.Players.LocalPlayer.Character
     if not char then return end
 
@@ -318,7 +318,7 @@ Tab:AddButton("Right", "Become Black", function()
         end
     end
 end)
-Tab:AddButton("Right", "Become While ", function()
+Tab:AddButton("Right", "Trở thành người da trắng", function()
     local char = game.Players.LocalPlayer.Character
     if not char then return end
 
@@ -329,37 +329,37 @@ Tab:AddButton("Right", "Become While ", function()
     end
 end)
 Tab:RealLine("Right")
-Web:AddTextLabel("Left", "Main")
+Web:AddTextLabel("Left", "Chính")
 Web:AddTextbox("Left", "Webhook Url", "", function(text)
 end)
-Web:AddToggle("Left", "Tag Everyone", false, function(v)
+Web:AddToggle("Left", "Tag Mọi Người", false, function(v)
 end)
-Web:AddToggle("Left", "Start Webhook", false, function(v)
+Web:AddToggle("Left", "Kích Hoạt", false, function(v)
 end)
-Web:AddText("Left", "Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance")
-Web:AddLabel("Left", "Status : 🔴")
+Web:AddText("Left", "Vui lòng xem trạng thái hoạt động của webhook bên dưới nếu 🔴 không hoạt động 🟢 đang hoạt động 🟡 đang bảo trì")
+Web:AddLabel("Left", "Trạng Thái : 🟡")
 Web:RealLine("Left")
 Web:AddTextLabel("Right", "Setting")
-Web:AddToggle("Right", "When Steal Brainrot", false, function(v)
+Web:AddToggle("Right", "Khi Cướp Brainrot", false, function(v)
 end)
-Web:AddToggle("Right", "When Brainrot Lost", false, function(v)
+Web:AddToggle("Right", "Khi Brainrot Bị Cướp", false, function(v)
 end)
-Web:AddToggle("Right", "When Buy Brainrot", false, function(v)
+Web:AddToggle("Right", "Khi Mua Brainrot", false, function(v)
 end)
 Web:RealLine("Right")
 Teleport:AddTextLabel("Left", "Teleport")
-Teleport:AddButton("Left", "TP To Sky", function()
+Teleport:AddButton("Left", "TP Đến Sky", function()
 ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
 end)
-Teleport:AddButton("Left", "TP To Down", function()
+Teleport:AddButton("Left", "TP Đến Down", function()
 ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 1)
 end)
-Teleport:AddButton("Left", "TP To Center", function()
+Teleport:AddButton("Left", "TP Đến Trung Tâm", function()
 ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
 end)
 Teleport:RealLine("Left")
-Esp:AddTextLabel("Right", "Esp")
-Esp:AddToggle("Right", "ESP Player", false, function(v)
+Esp:AddTextLabel("Right", "Định Vị")
+Esp:AddToggle("Right", "ESP Người Chơi", false, function(v)
     _G.PlayerESP = v
 
     local Players = game:GetService("Players")
@@ -525,19 +525,19 @@ Esp:AddToggle("Right", "ESP NPC", false, function(v)
     end
 end)
 Esp:RealLine("Right")
-Misc:AddTextLabel("Left", "Shop")
+Misc:AddTextLabel("Left", "Cửa Hàng")
 Misc:AddDropdown("Left", "Brainrot", {"nill value"}, "nill value", function(choice)
 end)
-Misc:AddToggle("Left", "Auto Buy (All)", false, function(v)
+Misc:AddToggle("Left", "Mua Brainrot (All)", false, function(v)
 end)
-Misc:AddToggle("Left", "Auto Buy (Bug)", false, function(v)
+Misc:AddToggle("Left", "Mua Brainrot (Bug)", false, function(v)
 end)
 Misc:RealLine("Left")
-Misc:AddTextLabel("Right", "Anti-Player")
-Misc:AddToggle("Right", "Anti-Ban", false, function(v)
+Misc:AddTextLabel("Right", "Chống Người Chơi")
+Misc:AddToggle("Right", "Chống Ban", false, function(v)
 end)
-Misc:AddToggle("Right", "Anti-Steal", false, function(v)
+Misc:AddToggle("Right", "Chống Trộm", false, function(v)
 end)
-Misc:AddToggle("Right", "Anti-Kick", false, function(v)
+Misc:AddToggle("Right", "Chống Kick", false, function(v)
 end)
 Misc:RealLine("Right")
