@@ -1,3 +1,33 @@
+local PremiumKeys = {  
+    "ziugpro-depzai0123",  
+}  
+  
+local BlacklistKeys = {  
+    ["abc123"] = "Hành vi gian lận bị phát hiện",  
+    ["badkey456"] = "Vi phạm điều khoản sử dụng",  
+    ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
+}  
+  
+local function isPremiumKey(key)  
+    for _, v in ipairs(PremiumKeys) do  
+        if v == key then  
+            return true  
+        end  
+    end  
+    return false  
+end  
+  
+local function getBlacklistReason(key)  
+    return BlacklistKeys[key]  
+end  
+  
+if not script_key or getBlacklistReason(script_key) then  
+    local reason = getBlacklistReason(script_key) or "Key bị chặn"  
+    game:GetService("Players").LocalPlayer:Kick(reason)  
+    return  
+end  
+  
+if isPremiumKey(script_key) then  
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
     Text = "Thành Công",
@@ -541,3 +571,6 @@ end)
 Misc:AddToggle("Right", "Chống Kick", false, function(v)
 end)
 Misc:RealLine("Right")
+else  
+    game:GetService("Players").LocalPlayer:Kick("Invalid Key")  
+end
