@@ -241,19 +241,19 @@ function tab:AddDropdown(side, text, list, callback)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.ClipsDescendants = false
     Container.BackgroundTransparency = 0
-    Container.AutomaticSize = Enum.AutomaticSize.Y
     Container.Parent = parent
 
     local UICorner = Instance.new("UICorner", Container)
     UICorner.CornerRadius = UDim.new(0, 6)
 
     local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(1, 0, 0, 30)
+    Button.Size = UDim2.new(1, 0, 1, 0)
     Button.BackgroundTransparency = 1
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 14
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Text = text .. " ▼"
+    Button.TextTransparency = 0
     Button.Parent = Container
 
     local DropdownFrame = Instance.new("Frame")
@@ -263,7 +263,6 @@ function tab:AddDropdown(side, text, list, callback)
     DropdownFrame.Visible = false
     DropdownFrame.ClipsDescendants = true
     DropdownFrame.ZIndex = 2
-    DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
     DropdownFrame.Parent = Container
 
     local UIList = Instance.new("UIListLayout", DropdownFrame)
@@ -273,14 +272,15 @@ function tab:AddDropdown(side, text, list, callback)
     for i, item in ipairs(list) do
         local Opt = Instance.new("TextButton")
         Opt.Size = UDim2.new(1, -4, 0, 28)
-        Opt.Position = UDim2.new(0, 2, 0, 0)
+        Opt.Position = UDim2.new(0, 2, 0, (i - 1) * 30)
         Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = item
+        Opt.Text = tostring(item)
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.TextTransparency = 0
         Opt.AutoButtonColor = true
+        Opt.ZIndex = 3
         Opt.Parent = DropdownFrame
 
         Opt.MouseButton1Click:Connect(function()
@@ -294,6 +294,7 @@ function tab:AddDropdown(side, text, list, callback)
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
+        DropdownFrame.Size = open and UDim2.new(1, 0, 0, math.min(#list * 30, 150)) or UDim2.new(1, 0, 0, 0)
         Button.Text = open and (text .. " ▲") or (text .. " ▼")
     end)
 end
