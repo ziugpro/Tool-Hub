@@ -284,49 +284,60 @@ Tab:AddToggle("Left", "Aimbot Circle", false, function(v)
         Circle:Remove()
     end
 end)
-Tab:AddToggle("Left", "Kill Player (Testing)", false, function(v)
+Tab:AddToggle("Left", "Kill Player (Improved)", false, function(v)
     _G.AutoKill = v
 
     local Players = game:GetService("Players")
     local RunService = game:GetService("RunService")
     local lp = Players.LocalPlayer
-    local char = lp.Character or lp.CharacterAdded:Wait()
-    local hrp = char:WaitForChild("HumanoidRootPart")
+    local hrp = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") or nil
+
+    if not hrp then
+        lp.CharacterAdded:Wait()
+        hrp = lp.Character:WaitForChild("HumanoidRootPart")
+    end
 
     if not _G.AutoKillConnection then
         local bv = Instance.new("BodyVelocity")
         bv.MaxForce = Vector3.new(1, 1, 1) * 1e6
-        bv.P = 1e5
+        bv.P = 1e6
         bv.Velocity = Vector3.zero
         bv.Parent = hrp
 
         _G.AutoKillConnection = RunService.RenderStepped:Connect(function()
-            if not _G.AutoKill then
+            if not _G.AutoKill or not lp.Character or not hrp then
                 bv.Velocity = Vector3.zero
                 return
             end
-            local closest, min = nil, math.huge
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") then
-                    local d = (hrp.Position - p.Character.HumanoidRootPart.Position).Magnitude
-                    if d < min then
-                        min = d
-                        closest = p
+
+            local closest = nil
+            local min = math.huge
+            for _, p in ipairs(Players:GetPlayers()) do
+                local c = p.Character
+                if p ~= lp and c then
+                    local tHrp = c:FindFirstChild("HumanoidRootPart")
+                    local hum = c:FindFirstChild("Humanoid")
+                    if tHrp and hum and hum.Health > 0 then
+                        local d = (hrp.Position - tHrp.Position).Magnitude
+                        if d < min then
+                            min = d
+                            closest = {hrp = tHrp, hum = hum}
+                        end
                     end
                 end
             end
-            if closest and closest.Character then
-                local targetHRP = closest.Character:FindFirstChild("HumanoidRootPart")
-                local hum = closest.Character:FindFirstChild("Humanoid")
-                if targetHRP and hum and hum.Health > 0 then
-                    local goal = targetHRP.Position + Vector3.new(0, 3, 0)
-                    local dir = (goal - hrp.Position)
-                    local speed = math.clamp(dir.Magnitude * 5, 10, 120)
-                    bv.Velocity = dir.Unit * speed
-                    if dir.Magnitude < 4 then
-                        hum:TakeDamage(3)
-                    end
+
+            if closest then
+                local targetPos = closest.hrp.Position + Vector3.new(0, 3, 0)
+                local dir = targetPos - hrp.Position
+                local mag = dir.Magnitude
+                local speed = math.clamp(mag * 6, 20, 150)
+                bv.Velocity = dir.Unit * speed
+                if mag < 3.5 then
+                    closest.hum:TakeDamage(30)
                 end
+            else
+                bv.Velocity = Vector3.zero
             end
         end)
     end
