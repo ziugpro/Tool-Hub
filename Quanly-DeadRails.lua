@@ -99,27 +99,6 @@ Tab:AddToggle("Left", "Super Speed", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Auto Walk", false, function(v)
-    local runService = game:GetService("RunService")
-    local player = game.Players.LocalPlayer
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    local connection
-
-    if v then
-        connection = runService.RenderStepped:Connect(function()
-            local char = player.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                char:TranslateBy(char.HumanoidRootPart.CFrame.LookVector * 0.5)
-            end
-        end)
-        script:SetAttribute("AutoWalkConnection", connection)
-    else
-        local con = script:GetAttribute("AutoWalkConnection")
-        if typeof(con) == "RBXScriptConnection" then
-            con:Disconnect()
-        end
-    end
-end)
 Tab:AddToggle("Left", "Noclip", false, function(v)
     local player = game.Players.LocalPlayer
     local runService = game:GetService("RunService")
@@ -182,13 +161,24 @@ Tab:AddToggle("Left", "ESP Player", false, function(v)
         return
     end
 
+    local localPlayer = game.Players.LocalPlayer
+    local localChar = localPlayer.Character
+    local localHRP = localChar and localChar:FindFirstChild("HumanoidRootPart")
+
+    espFolder:ClearAllChildren()
+
+    if not localHRP then return end
+
     for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= game.Players.LocalPlayer then
+        if player ~= localPlayer then
             local char = player.Character
-            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+            local hrp = char and char:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local distance = math.floor((hrp.Position - localHRP.Position).Magnitude)
+
                 local billboard = Instance.new("BillboardGui")
                 billboard.Name = player.Name .. "_ESP"
-                billboard.Adornee = char.HumanoidRootPart
+                billboard.Adornee = hrp
                 billboard.Size = UDim2.new(0, 150, 0, 30)
                 billboard.StudsOffset = Vector3.new(0, 3, 0)
                 billboard.AlwaysOnTop = true
@@ -200,7 +190,7 @@ Tab:AddToggle("Left", "ESP Player", false, function(v)
                 text.BackgroundTransparency = 1
                 text.Size = UDim2.new(1, 0, 1, 0)
                 text.Position = UDim2.new(0, 0, 0, 0)
-                text.Text = player.Name .. " | " .. math.floor(char.Humanoid.Health)
+                text.Text = distance .. " | " .. player.Name
                 text.TextColor3 = Color3.fromRGB(255, 255, 255)
                 text.TextStrokeTransparency = 0.5
                 text.TextStrokeColor3 = Color3.new(0, 0, 0)
@@ -398,46 +388,85 @@ end)
 Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
     local rs = game:GetService("RunService")
     local cam = workspace.CurrentCamera
-    local circle = Drawing.new("Circle")
-    circle.Radius = 40
-    circle.Thickness = 2
-    circle.Filled = false
-    circle.Transparency = 1
-    circle.Color = Color3.fromRGB(255, 0, 0)
-    circle.Visible = state
-
+    local circle
     local conn
+
     if state then
+        circle = Drawing.new("Circle")
+        circle.Radius = 40
+        circle.Thickness = 2
+        circle.Filled = false
+        circle.Transparency = 0.7
+        circle.Color = Color3.fromRGB(255, 0, 0)
+        circle.Visible = true
+
         conn = rs.RenderStepped:Connect(function()
+            if not circle then return end
             circle.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
-            local closest, dist = nil, math.huge
-            for _, v in pairs(workspace:GetDescendants()) do
-                if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
-                    if not game.Players:GetPlayerFromCharacter(v) then
-                        local pos, vis = cam:WorldToViewportPoint(v.HumanoidRootPart.Position)
-                        local mag = (Vector2.new(pos.X, pos.Y) - circle.Position).Magnitude
-                        if vis and mag < dist and mag <= circle.Radius then
-                            closest = v
-                            dist = mag
+
+            local closest
+            local dist = circle.Radius
+            for _, mob in pairs(workspace:GetChildren()) do
+                if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    if mob.Humanoid.Health > 0 and not game.Players:GetPlayerFromCharacter(mob) then
+                        local pos, vis = cam:WorldToViewportPoint(mob.HumanoidRootPart.Position)
+                        if vis then
+                            local mag = (Vector2.new(pos.X, pos.Y) - circle.Position).Magnitude
+                            if mag <= dist then
+                                closest = mob
+                                dist = mag
+                            end
                         end
                     end
                 end
             end
+
             if closest then
                 cam.CFrame = CFrame.new(cam.CFrame.Position, closest.HumanoidRootPart.Position)
             end
         end)
     else
-        circle:Remove()
-        if conn then conn:Disconnect() end
+        if conn then
+            conn:Disconnect()
+            conn = nil
+        end
+        if circle then
+            circle.Visible = false
+            circle:Remove()
+            circle = nil
+        end
     end
 end)
 Tab:AddToggle("Right", "Auto Attack", false, function(v)
     _G.AutoClick = v
 
     if _G.AutoClick and not _G._AutoClickConnection then
-        _G._AutoClickConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            if _G.AutoClick then
+        local RunService = game:GetService("RunService")
+        local Players = game:GetService("Players")
+        local localPlayer = Players.LocalPlayer
+        local maxDistance = 10
+
+        _G._AutoClickConnection = RunService.RenderStepped:Connect(function()
+            if not _G.AutoClick then return end
+
+            local character = localPlayer.Character
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+
+            local canClick = false
+            for _, mob in pairs(workspace:GetChildren()) do
+                if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    if mob.Humanoid.Health > 0 and not Players:GetPlayerFromCharacter(mob) then
+                        local distance = (mob.HumanoidRootPart.Position - hrp.Position).Magnitude
+                        if distance <= maxDistance then
+                            canClick = true
+                            break
+                        end
+                    end
+                end
+            end
+
+            if canClick then
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
             end
@@ -457,11 +486,12 @@ local function formatTime(seconds)
     return string.format("%02d:%02d:%02d", hrs, mins, secs)
 end
 Misc:AddButton("Left", "Start Countdown: " .. formatTime(remainingTime), function(self)
+    local timeLeft = remainingTime
     task.spawn(function()
-        while remainingTime > 0 do
-            remainingTime -= 1
-            self:SetText("Start Countdown: " .. formatTime(remainingTime))
+        while timeLeft > 0 do
+            self:SetText("Start Countdown: " .. formatTime(timeLeft))
             task.wait(1)
+            timeLeft -= 1
         end
         self:SetText("Time's up")
     end)
