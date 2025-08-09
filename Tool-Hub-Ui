@@ -41,8 +41,8 @@ Holder.Draggable = true
 
 local Separator = Create("Frame", {
     Name = "Separator",
-    Size = UDim2.new(0, 7, 0, 325),
-    Position = UDim2.new(0.5, -3, 1, -298),
+    Size = UDim2.new(0, 8, 0, 317),
+    Position = UDim2.new(0.5, -3, 1, -317,
     BackgroundColor3 = Color3.fromRGB(50, 50, 50),
     BorderSizePixel = 0,
     Parent = Holder
