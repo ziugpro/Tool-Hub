@@ -41,7 +41,7 @@ Holder.Draggable = true
 
 local Separator = Create("Frame", {
     Name = "Separator",
-    Size = UDim2.new(0, 7, 0, 307),
+    Size = UDim2.new(0, 7, 0, 317),
     Position = UDim2.new(0.5, -3, 1, -298),
     BackgroundColor3 = Color3.fromRGB(50, 50, 50),
     BorderSizePixel = 0,
@@ -71,14 +71,14 @@ local TabsBackground = Create("Frame", {
     Position = UDim2.new(0, 0, 0, 35),
     BackgroundTransparency = 1,
     BorderColor3 = Color3.new(1, 1, 1),
-    BorderSizePixel = 1,
+    BorderSizePixel = 0,
     Parent = Holder
     })
     local TabsScroll = Create("ScrollingFrame", {
         Size = UDim2.new(1, 0, 0, 35),
         Position = UDim2.new(0, 0, 0, 0),
         BackgroundTransparency = 1,
-        BorderSizePixel = 0,
+        BorderSizePixel = 1,
         ScrollBarThickness = 0,
         CanvasSize = UDim2.new(0, 0, 0, 0),
         AutomaticCanvasSize = Enum.AutomaticSize.X,
