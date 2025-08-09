@@ -66,15 +66,14 @@ local Separator = Create("Frame", {
         TextSize = 16,
         Parent = Header
     })
-
-    local TabsBackground = Create("Frame", {
-        Size = UDim2.new(1, 0, 0, 35),
-        Position = UDim2.new(0, 0, 0, 35),
-        BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-        BorderSizePixel = 0,
-        Parent = Holder
+local TabsBackground = Create("Frame", {
+    Size = UDim2.new(1, 0, 0, 35),
+    Position = UDim2.new(0, 0, 0, 35),
+    BackgroundTransparency = 1,
+    BorderColor3 = Color3.new(1, 1, 1),
+    BorderSizePixel = 1,
+    Parent = Holder
     })
-
     local TabsScroll = Create("ScrollingFrame", {
         Size = UDim2.new(1, 0, 0, 35),
         Position = UDim2.new(0, 0, 0, 0),
