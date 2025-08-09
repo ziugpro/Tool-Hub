@@ -42,7 +42,19 @@ local UI = SkUI:CreateWindow("Dead Rails")
 local Tab = UI:Create("General")
 local Misc = UI:Create("Misc")
 local Web = UI:Create("Webhook")
+function ForceTeleport(cf, holdTime)
+    local player = game.Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local root = char:WaitForChild("HumanoidRootPart")
 
+    local t0 = tick()
+    while tick() - t0 < (holdTime or 0.75) do
+        root.CFrame = cf
+        root.Velocity = Vector3.zero
+        root.AssemblyLinearVelocity = Vector3.zero
+        task.wait()
+    end
+end
 
 Tab:AddTextLabel("Left", "Player")
 Tab:AddToggle("Left", "Full Bright", false, function(v)
@@ -477,6 +489,10 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
     end
 end)
 Tab:RealLine("Right")
+Tab:AddTextLabel("Right", "Teleport")
+Tab:AddButton("Right", "Teleport To End", function()
+ForceTeleport(CFrame.new(-428.74591064453125, 28.072837829589844, -49040.90625), 15)
+end)
 Misc:AddLabel("Left", "Time:")
 local remainingTime = 600
 local function formatTime(seconds)
