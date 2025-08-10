@@ -17,7 +17,7 @@ for step = 1, 5 do
     task.spawn(function()
         heavyLoadStep()
     end)
-    task.wait(1)
+    task.wait(2)
 end
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
