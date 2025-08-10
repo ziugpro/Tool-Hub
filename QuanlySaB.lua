@@ -60,12 +60,12 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Aura - Hub")
 
-local Tab = UI:Create("General")
-local Teleport = UI:Create("Teleport")
-local Esp = UI:Create("Esp")
-local Misc = UI:Create("Misc")
+local Tab = UI:Create(105, "General")
+local Teleport = UI:Create110, ("Teleport")
+local Esp = UI:Create(105, "Esp")
+local Misc = UI:Create(105, "Misc")
 local Steal = UI:Create(120, "Steal Brainrot")
-local Web = UI:Create("Webhook")
+local Web = UI:Create(110, "Webhook")
 
 function ForceTeleport(cf, holdTime)
     local player = game.Players.LocalPlayer
