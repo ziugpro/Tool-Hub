@@ -60,7 +60,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
 local Tab = UI:Create(105, "General")
-local Teleport = UI:Create(110, ("Teleport")
+local Teleport = UI:Create(110, "Teleport")
 local Esp = UI:Create(105, "Esp")
 local Misc = UI:Create(105, "Misc")
 local Steal = UI:Create(120, "Steal Brainrot")
@@ -577,3 +577,7 @@ end)
 Steal:AddToggle("Right", "Hide Steal You Hold", false, function(v)
 end)
 Steal:RealLine("Right")
+
+task.spawn(function()
+        print("Loader In Luarmor......"
+    end)
