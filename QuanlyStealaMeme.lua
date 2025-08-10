@@ -114,8 +114,8 @@ end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("Aura - Hub")
-local Tab = UI:Create("General")
-local Web = UI:Create("Webhook")
+local Tab = UI:Create(105, "General")
+local Web = UI:Create(110, "Webhook")
 
 Tab:AddTextLabel("Left", "Main")
 _G.Noclip = false
