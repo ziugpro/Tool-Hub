@@ -6,14 +6,14 @@ if not humanoid then return end
 local function heavyLoadStep()
     local sum = 0
     for i = 1, 1e6 do
-        for j = 1, 15 do
+        for j = 1, 10 do
             sum = sum + math.sin(i * j)
         end
     end
     return sum
 end
 
-for step = 1, 7 do
+for step = 1, 3 do
     task.spawn(function()
         heavyLoadStep()
     end)
@@ -599,7 +599,7 @@ Tab:AddButton("Right", "Teleport To Train", function()
 
     local function findTrain()
         for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("Model") and v.Name:lower():find("train") then
+            if v:IsA("Model") and v.Name:lower():find("default") then
                 local basePart = findBasePartRecursive(v)
                 if basePart then
                     return basePart
