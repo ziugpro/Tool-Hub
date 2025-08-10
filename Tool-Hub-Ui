@@ -132,7 +132,7 @@ function SkUI:CreateWindow(title)
             return scroll
         end
 
-        local LeftScroll = makeScroll(UDim2.new(0, 8, 0, 5))
+        local LeftScroll = makeScroll(UDim2.new(0, 6, 0, 5))
         local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
         local function AddElement(side, obj)
