@@ -558,30 +558,15 @@ end)
 Tab:AddButton("Right", "Teleport to Train", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
 
-    local function findBasePartRecursive(model)
-        if model:IsA("BasePart") then
-            return model
-        elseif model:IsA("Model" ) then
-            if model.PrimaryPart then
-                return model.PrimaryPart
-            end
-            for _, child in pairs(model:GetChildren()) do
-                local part = findBasePartRecursive(child)
-                if part then
-                    return part
-                end
-            end
-        end
-        return nil
-    end
-
-    local function findModelByName(names)
+    local function findModelByNameContains(keywords)
         for _, v in pairs(workspace:GetDescendants()) do
             if v:IsA("Model") then
                 local lname = v.Name:lower()
-                for _, name in pairs(names) do
-                    if lname == name:lower() then
+                for _, key in pairs(keywords) do
+                    if string.find(lname, key:lower()) then
                         return v
                     end
                 end
@@ -590,41 +575,45 @@ Tab:AddButton("Right", "Teleport to Train", function()
         return nil
     end
 
-    local function findNearestChairInModel(model)
+    local function findSeatInModelHierarchy(model)
+        local seats = {}
+        local function recurseSearch(m)
+            for _, child in pairs(m:GetChildren()) do
+                if child:IsA("Seat") or child:IsA("VehicleSeat") then
+                    table.insert(seats, child)
+                elseif child:IsA("Model") then
+                    recurseSearch(child)
+                end
+            end
+        end
+        recurseSearch(model)
+        if #seats == 0 then return nil end
+
         local nearestSeat = nil
         local nearestDist = math.huge
-        local basePart = findBasePartRecursive(model)
-        if not basePart then return nil end
-        local basePos = basePart.Position
-        for _, seat in pairs(model:GetDescendants()) do
-            if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
-                local dist = (seat.Position - basePos).Magnitude
-                if dist < nearestDist then
-                    nearestDist = dist
-                    nearestSeat = seat
-                end
+        local basePos = model.PrimaryPart and model.PrimaryPart.Position or model:GetModelCFrame().p
+        for _, seat in pairs(seats) do
+            local dist = (seat.Position - basePos).Magnitude
+            if dist < nearestDist then
+                nearestDist = dist
+                nearestSeat = seat
             end
         end
         return nearestSeat
     end
 
-    local targetModel = findModelByName({"Armor", "Train"})
+    local targetModel = findModelByNameContains({"armor", "train"})
     if targetModel then
-        local basePart = findBasePartRecursive(targetModel)
-        if basePart then
-            character:MoveTo(basePart.Position + Vector3.new(0, 5, 0))
-            wait(0.5)
-            local chair = findNearestChairInModel(targetModel)
-            if chair then
-                chair:Sit(character:FindFirstChildOfClass("Humanoid"))
-            else
-                warn("Không tìm thấy ghế trong model "..targetModel.Name)
-            end
+        local seat = findSeatInModelHierarchy(targetModel)
+        if seat then
+            character:MoveTo(seat.Position + Vector3.new(0, 5, 0))
+            task.wait(0.3)
+            seat:Sit(humanoid)
         else
-            warn("Không tìm thấy BasePart trong model "..targetModel.Name)
+            warn("Không tìm thấy ghế trong model "..targetModel.Name)
         end
     else
-        warn("Không tìm thấy model Armor hoặc Train trong server")
+        warn("Không tìm thấy model Armor hoặc Train")
     end
 end)
 Tab:RealLine("Right")
