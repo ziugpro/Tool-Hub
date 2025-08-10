@@ -686,7 +686,7 @@ Tab:AddButton("Right", "Teleport To Vampire Castle", function()
         return nearestSeat
     end
 
-    local targetPart = findTeslaLab()
+    local targetPart = findVampireCastle()
     if targetPart then
         character:MoveTo(targetPart.Position + Vector3.new(0, 5, 0))
         wait(0.5)
@@ -694,12 +694,13 @@ Tab:AddButton("Right", "Teleport To Vampire Castle", function()
         if chair then
             chair:Sit(character:FindFirstChildOfClass("Humanoid"))
         else
-            warn("Không tìm thấy ghế gần TeslaLab.")
+            warn("Không tìm thấy ghế gần VampireCastle.")
         end
     else
-        warn("Không tìm thấy BasePart trong model chứa 'TeslaLab'.")
+        warn("Không tìm thấy BasePart trong model chứa 'VampireCastle'.")
     end
 end)
+
 Tab:RealLine("Right")
 Misc:AddLabel("Left", "Time:")
 local remainingTime = 600
