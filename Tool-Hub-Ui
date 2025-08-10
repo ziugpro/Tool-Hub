@@ -31,7 +31,7 @@ function SkUI:CreateWindow(title)
          Name = "Holder",
          Size = UDim2.new(0, 550, 0, 380),
          Position = UDim2.new(0.5, -275, 0, -60),
-         BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+         BackgroundColor3 = Color3.fromRGB(22, 22, 22),
          BorderSizePixel = 0,
          Visible = true,
          Parent = Screen
@@ -113,7 +113,7 @@ function SkUI:CreateWindow(title)
 
         local function makeScroll(posX)
             local scroll = Create("ScrollingFrame", {
-                Size = UDim2.new(0, 260, 0, 298),
+                Size = UDim2.new(0.5, -10, 0, 298),
                 Position = posX,
                 BackgroundTransparency = 1,
                 BorderSizePixel = 0,
@@ -165,7 +165,7 @@ function tab:AddToggle(side, text, default, callback)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -8, 0.5, 0)
     icon.Size = UDim2.new(0, 20, 0, 20)
-    icon.BackgroundColor3 = default and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+    icon.BackgroundColor3 = default and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
     icon.BorderSizePixel = 0
     icon.ZIndex = 2
     Roundify(icon, 10)
