@@ -13,11 +13,11 @@ local function heavyLoadStep()
     return sum
 end
 
-for step = 1, 5 do
+for step = 1, 2 do
     task.spawn(function()
         heavyLoadStep()
     end)
-    task.wait(1)
+    task.wait(4)
 end
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
@@ -61,7 +61,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("Aura - Hub")
 
 local Tab = UI:Create(105, "General")
-local Teleport = UI:Create110, ("Teleport")
+local Teleport = UI:Create(110, ("Teleport")
 local Esp = UI:Create(105, "Esp")
 local Misc = UI:Create(105, "Misc")
 local Steal = UI:Create(120, "Steal Brainrot")
