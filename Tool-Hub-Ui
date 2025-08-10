@@ -89,51 +89,53 @@ function SkUI:CreateWindow(title)
     local Pages = {}
     local TabButtons = {}
 
-    function ui:Create(tabname)
-        local tab = {}
+function ui:Create(buttonWidth, tabname)
+    local tab = {}
 
-        local Button = Create("TextButton", {
-            Size = UDim2.new(0, 105, 1, 0),
-            BackgroundColor3 = Color3.fromRGB(50, 50, 50),
-            Text = tabname,
-            Font = Enum.Font.GothamBold,
-            TextSize = 14,
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            Parent = TabsScroll
-        })
-        Roundify(Button, 6)
+    buttonWidth = buttonWidth or 105
 
-        local Page = Create("Frame", {
-            Size = UDim2.new(1, 0, 1, -70),
-            Position = UDim2.new(0, 0, 0, 70),
+    local Button = Create("TextButton", {
+        Size = UDim2.new(0, buttonWidth, 1, 0),
+        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        Text = tabname,
+        Font = Enum.Font.GothamBold,
+        TextSize = 14,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        Parent = TabsScroll
+    })
+    Roundify(Button, 6)
+
+    local Page = Create("Frame", {
+        Size = UDim2.new(1, 0, 1, -70),
+        Position = UDim2.new(0, 0, 0, 70),
+        BackgroundTransparency = 1,
+        Visible = false,
+        Parent = Holder
+    })
+
+    local function makeScroll(posX)
+        local scroll = Create("ScrollingFrame", {
+            Size = UDim2.new(0.5, -10, 0, 298),
+            Position = posX,
             BackgroundTransparency = 1,
-            Visible = false,
-            Parent = Holder
+            BorderSizePixel = 0,
+            ScrollBarThickness = 0,
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            ScrollingDirection = Enum.ScrollingDirection.Y,
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            LayoutOrder = 1,
+            Parent = Page
         })
+        Roundify(scroll, 6)
+        local layout = Instance.new("UIListLayout")
+        layout.Padding = UDim.new(0, 6)
+        layout.SortOrder = Enum.SortOrder.LayoutOrder
+        layout.Parent = scroll
+        return scroll
+    end
 
-        local function makeScroll(posX)
-            local scroll = Create("ScrollingFrame", {
-                Size = UDim2.new(0.5, -10, 0, 298),
-                Position = posX,
-                BackgroundTransparency = 1,
-                BorderSizePixel = 0,
-                ScrollBarThickness = 0,
-                AutomaticCanvasSize = Enum.AutomaticSize.Y,
-                ScrollingDirection = Enum.ScrollingDirection.Y,
-                CanvasSize = UDim2.new(0, 0, 0, 0),
-                LayoutOrder = 1,
-                Parent = Page
-            })
-            Roundify(scroll, 6)
-            local layout = Instance.new("UIListLayout")
-            layout.Padding = UDim.new(0, 6)
-            layout.SortOrder = Enum.SortOrder.LayoutOrder
-            layout.Parent = scroll
-            return scroll
-        end
-
-        local LeftScroll = makeScroll(UDim2.new(0, 6, 0, 5))
-        local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
+    local LeftScroll = makeScroll(UDim2.new(0, 6, 0, 5))
+    local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
         local function AddElement(side, obj)
             obj.Size = UDim2.new(1, -10, 0, 44)
