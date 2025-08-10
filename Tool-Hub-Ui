@@ -98,12 +98,21 @@ function ui:Create(buttonWidth, tabname)
         Size = UDim2.new(0, buttonWidth, 1, 0),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
         Text = tabname,
-        Font = Enum.Font.GothamBold,
+        Font = Enum.Font.Gotham,
         TextSize = 14,
         TextColor3 = Color3.fromRGB(255, 255, 255),
+        LayoutOrder = #TabsScroll:GetChildren() + 1,
         Parent = TabsScroll
     })
     Roundify(Button, 6)
+
+    if not TabsScroll:FindFirstChild("UIListLayout") then
+        local layout = Instance.new("UIListLayout")
+        layout.Padding = UDim.new(0, 6)
+        layout.FillDirection = Enum.FillDirection.Horizontal
+        layout.SortOrder = Enum.SortOrder.LayoutOrder
+        layout.Parent = TabsScroll
+    end
 
     local Page = Create("Frame", {
         Size = UDim2.new(1, 0, 1, -70),
@@ -137,7 +146,7 @@ function ui:Create(buttonWidth, tabname)
     local LeftScroll = makeScroll(UDim2.new(0, 6, 0, 5))
     local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
 
-        local function AddElement(side, obj)
+    local function AddElement(side, obj)
             obj.Size = UDim2.new(1, -10, 0, 44)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
