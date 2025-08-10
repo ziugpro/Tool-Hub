@@ -6,7 +6,7 @@ if not humanoid then return end
 local function heavyLoadStep()
     local sum = 0
     for i = 1, 1e6 do
-        for j = 1, 10 do
+        for j = 1, 2 do
             sum = sum + math.sin(i * j)
         end
     end
@@ -60,9 +60,9 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Dead Rails")
 
-local Tab = UI:Create("General")
-local Misc = UI:Create("Misc")
-local Web = UI:Create("Webhook")
+local Tab = UI:Create(105, "General")
+local Misc = UI:Create(105, "Misc")
+local Web = UI:Create(110, "Webhook")
 function ForceTeleport(cf, holdTime)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
