@@ -31,7 +31,7 @@ local Holder = Create("Frame", {
      Name = "Holder",
      Size = UDim2.new(0, 550, 0, 380),
      Position = UDim2.new(0.5, -275, 0, -60),
-     BackgroundColor3 = Color3.fromRGB(22, 22, 22),
+     BackgroundColor3 = Color3.fromRGB(30, 30, 30),
      BorderSizePixel = 0,
      Visible = true,
      Parent = Screen
@@ -111,24 +111,32 @@ local TabsBackground = Create("Frame", {
         })
 
         local function makeScroll(posX)
-            local scroll = Create("ScrollingFrame", {
-                Size = UDim2.new(0.5, -10, 0, 298),
-                Position = posX,
-                BackgroundTransparency = 1,
-                BorderSizePixel = 0,
-                ScrollBarThickness = 0,
-                AutomaticCanvasSize = Enum.AutomaticSize.Y,
-                ScrollingDirection = Enum.ScrollingDirection.Y,
-                CanvasSize = UDim2.new(0, 0, 0, 0),
-                LayoutOrder = 1,
-                Parent = Page
-            })
-            local layout = Instance.new("UIListLayout")
-            layout.Padding = UDim.new(0, 6)
-            layout.SortOrder = Enum.SortOrder.LayoutOrder
-            layout.Parent = scroll
-            return scroll
-        end
+        local function makeScroll(posX)
+        local scroll = Create("ScrollingFrame", {
+        Size = UDim2.new(0.5, -10, 0, 298),
+        Position = posX,
+        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+        BackgroundTransparency = 0,
+        BorderSizePixel = 0,
+        ScrollBarThickness = 0,
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        ScrollingDirection = Enum.ScrollingDirection.Y,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        LayoutOrder = 1,
+        Parent = Page
+    })
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 5)
+    corner.Parent = scroll
+
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 6)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = scroll
+
+    return scroll
+    end
 
         local LeftScroll = makeScroll(UDim2.new(0, 8, 0, 5))
         local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
