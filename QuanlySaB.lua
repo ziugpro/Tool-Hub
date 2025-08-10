@@ -1,3 +1,11 @@
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Aura Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:FindFirstChildOfClass("Humanoid")
@@ -13,22 +21,13 @@ local function heavyLoadStep()
     return sum
 end
 
-for step = 1, 2 do
+for step = 1, 5 do
     task.spawn(function()
         heavyLoadStep()
     end)
-    task.wait(4)
+    task.wait(1)
 end
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Aura Hub",
-    Text = "Success Loading",
-    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
-    Duration = 5,
-    Callback = function()
-    end
-})
-repeat wait(5) until game:IsLoaded() and game.Players.LocalPlayer
-
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
 getgenv().Image = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420"
 getgenv().ToggleUI = "LeftControl"
 
@@ -56,10 +55,10 @@ task.spawn(function()
         end)
     end
 end)
+
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
-local UI = SkUI:CreateWindow("Aura - Hub")
-
+local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
 local Tab = UI:Create(105, "General")
 local Teleport = UI:Create(110, ("Teleport")
 local Esp = UI:Create(105, "Esp")
