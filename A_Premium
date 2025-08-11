@@ -3,8 +3,6 @@ local PremiumKeys = {
 }  
   
 local BlacklistKeys = {  
-    ["abc123"] = "Hành vi gian lận bị phát hiện",  
-    ["badkey456"] = "Vi phạm điều khoản sử dụng",  
     ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
 }  
   
@@ -22,11 +20,22 @@ local function getBlacklistReason(key)
 end  
   
 if not script_key or getBlacklistReason(script_key) then  
-    local reason = getBlacklistReason(script_key) or "🖕🏻con cặc đĩ mẹ mày bỏ tiền mua key đi cu em🖕🏻"  
+    local reason = getBlacklistReason(script_key) or "Key bị chặn"  
     game:GetService("Players").LocalPlayer:Kick(reason)  
     return  
 end  
-  
+
+if script_language == "Thai" then
+local Scripts = {
+   [1234567890] = "link",
+}
+local url = Scripts[game.PlaceId] or Scripts[game.GameId]
+if url then
+    loadstring(game:HttpGetAsync(url))()
+end    
+return
+end
+
 if isPremiumKey(script_key) then  
 local Scripts = {
    [7709344486] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlySaB.lua",
@@ -38,5 +47,5 @@ if url then
     loadstring(game:HttpGetAsync(url))()
 end  
 else  
-    game:GetService("Players").LocalPlayer:Kick("🖕🏻đụ mẹ mày sai key kìa cu, con mẹ mày hay mày đéo có tiền mua key nên cố tình nhập sai🖕🏻")  
+    game:GetService("Players").LocalPlayer:Kick("Invalid Key")  
 end
