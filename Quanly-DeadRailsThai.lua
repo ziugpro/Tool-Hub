@@ -21,7 +21,7 @@ for step = 1, 3 do
 end
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
-    Text = "Success Loading",
+    Text = "การโหลดสำเร็จ",
     Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
     Duration = 5,
     Callback = function()
@@ -60,10 +60,9 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Dead Rails")
 
-local Tab = UI:Create(105, "General")
-local Misc = UI:Create(105, "Misc")
-local Web = UI:Create(110, "Webhook")
-local Setting = UI:Create(125, "Settings Ui")
+local Tab = UI:Create(105, "ทั่วไป")
+local Misc = UI:Create(105, "เบ็ดเตล็ด")
+local Web = UI:Create(110, "เว็บฮุก")
 function ForceTeleport(cf, holdTime)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
@@ -78,8 +77,8 @@ function ForceTeleport(cf, holdTime)
     end
 end
 
-Tab:AddTextLabel("Left", "Player")
-Tab:AddToggle("Left", "Full Bright", false, function(v)
+Tab:AddTextLabel("Left", "ผู้เล่น")
+Tab:AddToggle("Left", "สว่างเต็มที่", false, function(v)
     if v then
         if not game.Lighting:FindFirstChild("FullBrightEffect") then
             local effect = Instance.new("ColorCorrectionEffect")
@@ -109,11 +108,11 @@ end)
 local currentSpeed = 50
 _G.SuperSpeed = false
 
-Tab:AddSlider("Left", "Speed", 1, 100, currentSpeed, function(val)
+Tab:AddSlider("Left", "ความเร็ว", 1, 100, currentSpeed, function(val)
     currentSpeed = val
 end)
 
-Tab:AddToggle("Left", "Super Speed", false, function(v)
+Tab:AddToggle("Left", "ซูเปอร์สปีด", false, function(v)
     _G.SuperSpeed = v
 
     if _G.SuperSpeed and not _G._SuperSpeedConnection then
@@ -133,7 +132,7 @@ Tab:AddToggle("Left", "Super Speed", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "Noclip", false, function(v)
+Tab:AddToggle("Left", "โนคลิป", false, function(v)
     local player = game.Players.LocalPlayer
     local runService = game:GetService("RunService")
     local connection
@@ -166,12 +165,12 @@ Tab:AddToggle("Left", "Noclip", false, function(v)
         end
     end
 end)
-Tab:AddButton("Left", "Unlock Zoom", function()
+Tab:AddButton("Left", "ปลดล็อคซูม", function()
     local player = game.Players.LocalPlayer
     player.CameraMaxZoomDistance = 10000
     player.CameraMinZoomDistance = 0.5
 end)
-Tab:AddButton("Left", "Bring Bond", function()
+Tab:AddButton("Left", "นำพันธบัตรมา", function()
     local player = game.Players.LocalPlayer
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if not root then return end
@@ -185,8 +184,8 @@ Tab:AddButton("Left", "Bring Bond", function()
     end
 end)
 Tab:RealLine("Left")
-Tab:AddTextLabel("Left", "Esp")
-Tab:AddToggle("Left", "ESP Player", false, function(v)
+Tab:AddTextLabel("Left", "เอสพี")
+Tab:AddToggle("Left", "เครื่องเล่น ESP", false, function(v)
     local espFolder = game.CoreGui:FindFirstChild("PlayerESP") or Instance.new("Folder", game.CoreGui)
     espFolder.Name = "PlayerESP"
 
@@ -235,7 +234,7 @@ Tab:AddToggle("Left", "ESP Player", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "ESP Mob", false, function(v)
+Tab:AddToggle("Left", "ฝูงชน ESP", false, function(v)
     local espFolder = game.CoreGui:FindFirstChild("MobESP") or Instance.new("Folder", game.CoreGui)
     espFolder.Name = "MobESP"
 
@@ -273,7 +272,7 @@ Tab:AddToggle("Left", "ESP Mob", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "ESP Item", false, function(v)
+Tab:AddToggle("Left", "รายการ ESP", false, function(v)
     local espFolder = game.CoreGui:FindFirstChild("ItemESP") or Instance.new("Folder", game.CoreGui)
     espFolder.Name = "ItemESP"
 
@@ -347,7 +346,7 @@ Tab:AddToggle("Left", "ESP Item", false, function(v)
         end
     end
 end)
-Tab:AddToggle("Left", "ESP Unicorn", false, function(v)
+Tab:AddToggle("Left", "ยูนิคอร์น ESP", false, function(v)
     local espFolder = game.CoreGui:FindFirstChild("UnicornESP") or Instance.new("Folder", game.CoreGui)
     espFolder.Name = "UnicornESP"
 
@@ -405,8 +404,8 @@ Tab:AddToggle("Left", "ESP Unicorn", false, function(v)
     end
 end)
 Tab:RealLine("Left")
-Tab:AddTextLabel("Right", "Misc")
-Tab:AddButton("Right", "Unlock Camera (Fixed)", function()
+Tab:AddTextLabel("Right", "เบ็ดเตล็ด")
+Tab:AddButton("Right", "ปลดล็อคกล้อง (แก้ไขแล้ว)", function()
     local player = game.Players.LocalPlayer
     local cam = workspace.CurrentCamera
 
@@ -419,7 +418,7 @@ Tab:AddButton("Right", "Unlock Camera (Fixed)", function()
         end)
     end)
 end)
-Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
+Tab:AddToggle("Right", "เอมบอท ม็อบ", false, function(state)
     local rs = game:GetService("RunService")
     local cam = workspace.CurrentCamera
     local circle
@@ -471,7 +470,7 @@ Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
         end
     end
 end)
-Tab:AddToggle("Right", "Auto Attack", false, function(v)
+Tab:AddToggle("Right", "การโจมตีอัตโนมัติ", false, function(v)
     _G.AutoClick = v
 
     if _G.AutoClick and not _G._AutoClickConnection then
@@ -511,11 +510,11 @@ Tab:AddToggle("Right", "Auto Attack", false, function(v)
     end
 end)
 Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Teleport")
-Tab:AddButton("Right", "Teleport To End", function()
+Tab:AddTextLabel("Right", "เทเลพอร์ต")
+Tab:AddButton("Right", "เทเลพอร์ตไปยังจุดสิ้นสุด", function()
 ForceTeleport(CFrame.new(-428.74591064453125, 28.072837829589844, -49040.90625), 15)
 end)
-Tab:AddButton("Right", "Teleport To Teslalab", function()
+Tab:AddButton("Right", "เทเลพอร์ตไปยัง Teslalab", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
 
@@ -577,7 +576,7 @@ Tab:AddButton("Right", "Teleport To Teslalab", function()
         warn("Không tìm thấy BasePart trong model chứa 'TeslaLab'.")
     end
 end)
-Tab:AddButton("Right", "Teleport To Train", function()
+Tab:AddButton("Right", "เทเลพอร์ตไปยังรถไฟ", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
 
@@ -639,7 +638,7 @@ Tab:AddButton("Right", "Teleport To Train", function()
         warn("Không tìm thấy BasePart trong model chứa 'Train'.")
     end
 end)
-Tab:AddButton("Right", "Teleport To Vampire Castle", function()
+Tab:AddButton("Right", "เทเลพอร์ตไปยังปราสาทแวมไพร์", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
 
@@ -703,7 +702,7 @@ Tab:AddButton("Right", "Teleport To Vampire Castle", function()
 end)
 
 Tab:RealLine("Right")
-Misc:AddLabel("Left", "Time:")
+Misc:AddLabel("Left", "เวลา:")
 local remainingTime = 600
 local function formatTime(seconds)
     local hrs = math.floor(seconds / 3600)
@@ -711,7 +710,7 @@ local function formatTime(seconds)
     local secs = seconds % 60
     return string.format("%02d:%02d:%02d", hrs, mins, secs)
 end
-Misc:AddButton("Left", "Start Countdown: " .. formatTime(remainingTime), function(self)
+Misc:AddButton("Left", "เริ่มนับถอยหลัง: " .. formatTime(remainingTime), function(self)
     local timeLeft = remainingTime
     task.spawn(function()
         while timeLeft > 0 do
@@ -723,90 +722,23 @@ Misc:AddButton("Left", "Start Countdown: " .. formatTime(remainingTime), functio
     end)
 end)
 Misc:RealLine("Left")
-Web:AddTextLabel("Left", "Main")
-Web:AddTextbox("Left", "Webhook Url", "", function(text)
+Web:AddTextLabel("Left", "หลัก")
+Web:AddTextbox("Left", "URL เว็บฮุก", "", function(text)
 end)
-Web:AddToggle("Left", "Tag Everyone", false, function(v)
+Web:AddToggle("Left", "แท็กทุกคน"", false, function(v)
 end)
-Web:AddToggle("Left", "Start Webhook", false, function(v)
+Web:AddToggle("Left", "เริ่มเว็บฮุก", false, function(v)
 end)
-Web:AddText("Left", "Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance")
-Web:AddLabel("Left", "Status : 🔴")
+Web:AddText("Left", "โปรดดูสถานะกิจกรรมของเว็บฮุกด้านล่างหาก 🔴 ไม่ได้ใช้งาน 🟢 ใช้งานอยู่ 🟡 กำลังบำรุงรักษา")
+Web:AddLabel("Left", "สถานะ : 🔴")
 Web:RealLine("Left")
-Web:AddTextLabel("Right", "Setting")
-Web:AddToggle("Right", "When Win Game", false, function(v)
+Web:AddTextLabel("Right", "การตั้งค่า")
+Web:AddToggle("Right", "เมื่อชนะเกม", false, function(v)
 end)
-Web:AddToggle("Right", "When You Die", false, function(v)
+Web:AddToggle("Right", "เมื่อคุณตาย", false, function(v)
 end)
-Web:AddToggle("Right", "When Pick Up Item", false, function(v)
+Web:AddToggle("Right", "เมื่อรับสินค้า", false, function(v)
 end)
-Web:AddToggle("Right", "When Comlect Bond", false, function(v)
+Web:AddToggle("Right", "เมื่อพันธะเสร็จสมบูรณ์", false, function(v)
 end)
 Web:RealLine("Right")
-
-Setting:AddTextLabel("Left", "Language")
-local currentLang = "English"
-local translations = {
-  ["Language"] = { Thailand = "ภาษา" },
-  ["Esp Player"] = { Thailand = "ผู้เล่น Esp" },
-  ["Esp Mob"] = { Thailand = "ฝูงชน Esp" },
-  ["Esp Item"] = { Thailand = "รายการ Esp" },
-  ["When Pick Up Item"] = { Thailand = "เมื่อรับสินค้า" },  
-  ["When Comlect Bond"] = { Thailand = "เมื่อพันธะเสร็จสมบูรณ์" },  
-  ["When You Die"] = { Thailand = "เมื่อคุณตาย" },  
-  ["When Win Game"] = { Thailand = "เมื่อชนะเกม" },
-  ["Settings Ui"] = { Thailand = "การตั้งค่า UI" },  
-  ["Setting"] = { Thailand = "การตั้งค่า" },  
-  ["Webhook"] = { Thailand = "เว็บฮุก" }, 
-  ["Player"] = { Thailand = "ผู้เล่น" },  
-  ["Status"] = { Thailand = "สถานะ" },
-  ["Esp Unicorn"] = { Thailand = "ยูนิคอร์น Esp" },
-  ["Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance"] = { Thailand = "โปรดดูสถานะกิจกรรมของเว็บฮุกด้านล่างหาก 🔴 ไม่ได้ใช้งาน 🟢 ใช้งานอยู่ 🟡 กำลังบำรุงรักษา" },  
-  ["Start Webhook"] = { Thailand = "เริ่มเว็บฮุก" },  
-  ["Tag Everyone"] = { Thailand = "แท็กทุกคน" },  
-  ["Webhook Url"] = { Thailand = "URL เว็บฮุก" }, 
-  ["Main"] = { Thailand = "หลัก" },
-    ["Start Countdown"] = { Thailand = "เริ่มนับถอยหลัง" },  
-    ["Time"] = { Thailand = "เวลา" }, 
-    ["Teleport To Vampire Castle"] = { Thailand = "เทเลพอร์ตไปยังปราสาทแวมไพร์" },  
-    ["Teleport To Train"] = { Thailand = "เทเลพอร์ตไปยังรถไฟ" },  
-    ["Teleport To End"] = { Thailand = "เทเลพอร์ตไปยังจุดสิ้นสุด" },  
-    ["Teleport To Teslalab"] = { Thailand = "เทเลพอร์ตไปยัง Teslalab" },   
-    ["Teleport"] = { Thailand = "เทเลพอร์ต" },  
-    ["Auto Attack"] = { Thailand = "การโจมตีอัตโนมัติ" },  
-    ["Esp"] = { Thailand = "เอสพี" },  
-    ["Noclip"] = { Thailand = "โนคลิป" }, 
-    ["Super Speed"] = { Thailand = "ซูเปอร์สปีด" },  
-    ["Speed"] = { Thailand = "ความเร็ว" },  
-    ["Misc"] = { Thailand = "เบ็ดเตล็ด" }, 
-    ["Aimbot Mob"] = { Thailand = "เอมบอท ม็อบ" }, 
-    ["Unlock Camera (Fixed)"] = { Thailand = "ปลดล็อคกล้อง (แก้ไขแล้ว)" },
-      ["Full Bright"] = { Thailand = "สว่างเต็มที่" },  
-    ["General"] = { Thailand = "ทั่วไป" }, 
-      ["Version Script"] = { Thailand = "เวอร์ชันสคริปต์" }, 
-      ["Version"] = { Thailand = "เวอร์ชัน" },
-}
-
-function translate(text)
-  if currentLang == "Thailand" and translations[text] and translations[text].Thailand then
-    return translations[text].Thailand
-  end
-  return text
-end
-
-function translateAllUI()
-  for _, ui in pairs(allUIElements) do
-    if ui.Text then
-      ui.Text = translate(ui.Text)
-    end
-  end
-end
-Setting:AddDropdown("Left", "Language", {"English", "Thailand"}, "English", function(choice)
-  currentLang = choice
-  translateAllUI()
-end)
-Setting:RealLine("Left")
-Setting:AddTextLabel("Right", "Version Script")
-Setting:AddDropdown("Right", "Version", {"SkUI v1.62", "SkUI v1.73", "SkUI v1.57"}, "SkUI v1.73", function(choice)
-end)
-Setting:RealLine("Right")
