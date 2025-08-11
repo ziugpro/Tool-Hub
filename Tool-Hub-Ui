@@ -261,8 +261,8 @@ function tab:AddDropdown(side, text, list, callback)
     DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
     DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     DropdownFrame.BorderSizePixel = 0
-    DropdownFrame.ClipsDescendants = false
-    DropdownFrame.ZIndex = 10
+    DropdownFrame.ClipsDescendants = true
+    DropdownFrame.ZIndex = 200
     DropdownFrame.Parent = Container
 
     local Scrolling = Instance.new("ScrollingFrame")
@@ -272,8 +272,9 @@ function tab:AddDropdown(side, text, list, callback)
     Scrolling.BorderSizePixel = 0
     Scrolling.CanvasSize = UDim2.new(0, 0, 0, #list * 30)
     Scrolling.ScrollBarThickness = 4
-    Scrolling.Parent = DropdownFrame
     Scrolling.Visible = false
+    Scrolling.ZIndex = 21
+    Scrolling.Parent = DropdownFrame
 
     local UIList = Instance.new("UIListLayout", Scrolling)
     UIList.Padding = UDim.new(0, 2)
