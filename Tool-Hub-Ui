@@ -552,6 +552,135 @@ function tab:AddText(side, text)
     Label.TextWrapped = true
     Label.Parent = parent
 end
+function tab:AddDropToggle(side, text, default, options, callback)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Toggle = Create("TextButton", {
+        BackgroundColor3 = Color3.fromRGB(45, 45, 45),
+        Text = "",
+        Font = Enum.Font.Gotham,
+        TextSize = 14,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Size = UDim2.new(1, 0, 0, 30),
+        ClipsDescendants = true,
+    })
+    Roundify(Toggle, 6)
+    Toggle.Parent = parent
+
+    local label = Instance.new("TextLabel", Toggle)
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Size = UDim2.new(1, -40, 1, 0)
+    label.Font = Enum.Font.Gotham
+    label.Text = text
+    label.TextSize = 14
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local icon = Instance.new("Frame", Toggle)
+    icon.AnchorPoint = Vector2.new(1, 0.5)
+    icon.Position = UDim2.new(1, -8, 0.5, 0)
+    icon.Size = UDim2.new(0, 20, 0, 20)
+    icon.BackgroundColor3 = default and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+    icon.BorderSizePixel = 0
+    icon.ZIndex = 2
+    Roundify(icon, 10)
+
+    local tick = Instance.new("TextLabel", icon)
+    tick.Size = UDim2.new(1, 0, 1, 0)
+    tick.BackgroundTransparency = 1
+    tick.Text = "✓"
+    tick.Font = Enum.Font.GothamBold
+    tick.TextSize = 14
+    tick.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tick.TextTransparency = default and 0 or 1
+    tick.ZIndex = 3
+
+    local state = default or false
+
+    local container = Instance.new("ScrollingFrame", Toggle)
+    container.BackgroundTransparency = 1
+    container.Size = UDim2.new(1, 0, 0, 0)
+    container.Position = UDim2.new(0, 0, 1, 0)
+    container.ClipsDescendants = true
+    container.CanvasSize = UDim2.new(0, 0, 0, 0)
+    container.ScrollBarThickness = 6
+    container.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+    container.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+
+    local layout = Instance.new("UIListLayout", container)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0, 5)
+
+    local toggles = {}
+    local toggleHeight = 25
+    for i, option in ipairs(options) do
+        local subToggle = Instance.new("TextButton", container)
+        subToggle.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        subToggle.Size = UDim2.new(1, -20, 0, toggleHeight)
+        subToggle.Position = UDim2.new(0, 10, 0, 0)
+        Roundify(subToggle, 6)
+        subToggle.AutoButtonColor = false
+
+        local subLabel = Instance.new("TextLabel", subToggle)
+        subLabel.BackgroundTransparency = 1
+        subLabel.Position = UDim2.new(0, 10, 0, 0)
+        subLabel.Size = UDim2.new(1, -40, 1, 0)
+        subLabel.Font = Enum.Font.Gotham
+        subLabel.Text = option.name
+        subLabel.TextSize = 14
+        subLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        subLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+        local subIcon = Instance.new("Frame", subToggle)
+        subIcon.AnchorPoint = Vector2.new(1, 0.5)
+        subIcon.Position = UDim2.new(1, -8, 0.5, 0)
+        subIcon.Size = UDim2.new(0, 20, 0, 20)
+        subIcon.BackgroundColor3 = option.default and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+        subIcon.BorderSizePixel = 0
+        Roundify(subIcon, 10)
+
+        local subTick = Instance.new("TextLabel", subIcon)
+        subTick.Size = UDim2.new(1, 0, 1, 0)
+        subTick.BackgroundTransparency = 1
+        subTick.Text = "✓"
+        subTick.Font = Enum.Font.GothamBold
+        subTick.TextSize = 14
+        subTick.TextColor3 = Color3.fromRGB(255, 255, 255)
+        subTick.TextTransparency = option.default and 0 or 1
+
+        local subState = option.default or false
+
+        subToggle.MouseButton1Click:Connect(function()
+            subState = not subState
+            subIcon.BackgroundColor3 = subState and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+            subTick.TextTransparency = subState and 0 or 1
+            callback(text, option.name, subState)
+        end)
+
+        table.insert(toggles, {button = subToggle, state = subState})
+    end
+
+    local expanded = false
+    Toggle.MouseButton1Click:Connect(function()
+        expanded = not expanded
+        if expanded then
+            local height = math.min(#options * (toggleHeight + 5) - 5, 150)
+            Toggle:TweenSize(UDim2.new(1, 0, 0, 30 + height), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+            container:TweenSize(UDim2.new(1, 0, 0, height), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+            container.CanvasSize = UDim2.new(0, 0, 0, #options * (toggleHeight + 5) - 5)
+            icon.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+            tick.TextTransparency = 0
+        else
+            Toggle:TweenSize(UDim2.new(1, 0, 0, 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+            container:TweenSize(UDim2.new(1, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+            container.CanvasSize = UDim2.new(0, 0, 0, 0)
+            icon.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+            tick.TextTransparency = state and 0 or 1
+        end
+    end)
+end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
