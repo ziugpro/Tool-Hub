@@ -26,13 +26,7 @@ if not script_key or getBlacklistReason(script_key) then
 end  
 
 if script_language == "Thai" then
-local Scripts = {
-   [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRailsThai.lua",
-}
-local url = Scripts[game.PlaceId] or Scripts[game.GameId]
-if url then
-    loadstring(game:HttpGetAsync(url))()
-end    
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRailsThai.lua"))()
 return
 end
 
