@@ -49,7 +49,7 @@ local Window = Rayfield:CreateWindow({
       Subtitle = "Key System",
       Note = "Aura Hub | Version 1.32",
       FileName = "SiriusKey",
-      SaveKey = true,
+      SaveKey = false,
       GrabKeyFromSite = false,
       Key = "AuraHub"
    }
