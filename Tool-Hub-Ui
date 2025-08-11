@@ -96,7 +96,7 @@ function ui:Create(buttonWidth, tabname)
 
     local Button = Create("TextButton", {
         Size = UDim2.new(0, buttonWidth, 1, 0),
-        BackgroundColor3 = Color3.fromRGB(50, 50, 50),
+        BackgroundColor3 = Color3.fromRGB(70, 70, 70),
         Text = tabname,
         Font = Enum.Font.GothamBold,
         TextSize = 14,
@@ -156,7 +156,7 @@ function tab:AddToggle(side, text, default, callback)
         BackgroundColor3 = Color3.fromRGB(45, 45, 45),
         Text = "",
         Font = Enum.Font.Gotham,
-        TextSize = 13,
+        TextSize = 14,
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextXAlignment = Enum.TextXAlignment.Left
     })
@@ -168,7 +168,7 @@ function tab:AddToggle(side, text, default, callback)
     label.Size = UDim2.new(1, -40, 1, 0)
     label.Font = Enum.Font.Gotham
     label.Text = text
-    label.TextSize = 13
+    label.TextSize = 14
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -221,26 +221,16 @@ function tab:AddButton(side, text, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(1, -10, 0, 30)
+    Button.Size = UDim2.new(1, -10, 0, 25)
     Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
+    Button.TextSize = 13
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Text = text
     Button.ClipsDescendants = true
     Button.Parent = parent
 
     Roundify(Button, 6)
-
-    local Emoji = Instance.new("TextLabel")
-    Emoji.Text = "🖱️"
-    Emoji.Size = UDim2.new(0, 20, 0, 20)
-    Emoji.Position = UDim2.new(1, -24, 0.5, -10)
-    Emoji.BackgroundTransparency = 1
-    Emoji.TextSize = 18
-    Emoji.Font = Enum.Font.Gotham
-    Emoji.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Emoji.Parent = Button
 
     Button.MouseButton1Click:Connect(callback)
 end        
