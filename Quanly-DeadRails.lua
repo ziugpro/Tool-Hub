@@ -63,6 +63,7 @@ local UI = SkUI:CreateWindow("Dead Rails")
 local Tab = UI:Create(105, "General")
 local Misc = UI:Create(105, "Misc")
 local Web = UI:Create(110, "Webhook")
+local Setting = UI:Create(125, "Settings Ui")
 function ForceTeleport(cf, holdTime)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
@@ -742,3 +743,70 @@ end)
 Web:AddToggle("Right", "When Comlect Bond", false, function(v)
 end)
 Web:RealLine("Right")
+
+Setting:AddTextLabel("Left", "Language")
+local currentLang = "English"
+local translations = {
+  ["Language"] = { Thailand = "ภาษา" },
+  ["Esp Player"] = { Thailand = "ผู้เล่น Esp" },
+  ["Esp Mob"] = { Thailand = "ฝูงชน Esp" },
+  ["Esp Item"] = { Thailand = "รายการ Esp" },
+  ["When Pick Up Item"] = { Thailand = "เมื่อรับสินค้า" },  
+  ["When Comlect Bond"] = { Thailand = "เมื่อพันธะเสร็จสมบูรณ์" },  
+  ["When You Die"] = { Thailand = "เมื่อคุณตาย" },  
+  ["When Win Game"] = { Thailand = "เมื่อชนะเกม" },
+  ["Settings Ui"] = { Thailand = "การตั้งค่า UI" },  
+  ["Setting"] = { Thailand = "การตั้งค่า" },  
+  ["Webhook"] = { Thailand = "เว็บฮุก" }, 
+  ["Player"] = { Thailand = "ผู้เล่น" },  
+  ["Status"] = { Thailand = "สถานะ" },
+  ["Esp Unicorn"] = { Thailand = "ยูนิคอร์น Esp" },
+  ["Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance"] = { Thailand = "โปรดดูสถานะกิจกรรมของเว็บฮุกด้านล่างหาก 🔴 ไม่ได้ใช้งาน 🟢 ใช้งานอยู่ 🟡 กำลังบำรุงรักษา" },  
+  ["Start Webhook"] = { Thailand = "เริ่มเว็บฮุก" },  
+  ["Tag Everyone"] = { Thailand = "แท็กทุกคน" },  
+  ["Webhook Url"] = { Thailand = "URL เว็บฮุก" }, 
+  ["Main"] = { Thailand = "หลัก" },
+    ["Start Countdown"] = { Thailand = "เริ่มนับถอยหลัง" },  
+    ["Time"] = { Thailand = "เวลา" }, 
+    ["Teleport To Vampire Castle"] = { Thailand = "เทเลพอร์ตไปยังปราสาทแวมไพร์" },  
+    ["Teleport To Train"] = { Thailand = "เทเลพอร์ตไปยังรถไฟ" },  
+    ["Teleport To End"] = { Thailand = "เทเลพอร์ตไปยังจุดสิ้นสุด" },  
+    ["Teleport To Teslalab"] = { Thailand = "เทเลพอร์ตไปยัง Teslalab" },   
+    ["Teleport"] = { Thailand = "เทเลพอร์ต" },  
+    ["Auto Attack"] = { Thailand = "การโจมตีอัตโนมัติ" },  
+    ["Esp"] = { Thailand = "เอสพี" },  
+    ["Noclip"] = { Thailand = "โนคลิป" }, 
+    ["Super Speed"] = { Thailand = "ซูเปอร์สปีด" },  
+    ["Speed"] = { Thailand = "ความเร็ว" },  
+    ["Misc"] = { Thailand = "เบ็ดเตล็ด" }, 
+    ["Aimbot Mob"] = { Thailand = "เอมบอท ม็อบ" }, 
+    ["Unlock Camera (Fixed)"] = { Thailand = "ปลดล็อคกล้อง (แก้ไขแล้ว)" },
+      ["Full Bright"] = { Thailand = "สว่างเต็มที่" },  
+    ["General"] = { Thailand = "ทั่วไป" }, 
+      ["Version Script"] = { Thailand = "เวอร์ชันสคริปต์" }, 
+      ["Version"] = { Thailand = "เวอร์ชัน" },
+}
+
+function translate(text)
+  if currentLang == "Thailand" and translations[text] and translations[text].Thailand then
+    return translations[text].Thailand
+  end
+  return text
+end
+
+function translateAllUI()
+  for _, ui in pairs(allUIElements) do
+    if ui.Text then
+      ui.Text = translate(ui.Text)
+    end
+  end
+end
+Setting:AddDropdown("Left", "Language", {"English", "Thailand"}, "English", function(choice)
+  currentLang = choice
+  translateAllUI()
+end)
+Setting:RealLine("Left")
+Setting:AddTextLabel("Right", "Version Script")
+Setting:AddDropdown("Right", "Version", {"SkUI v1.62", "SkUI v1.73", "SkUI v1.57"}, "SkUI v1.73", function(choice)
+end)
+Setting:RealLine("Right")
