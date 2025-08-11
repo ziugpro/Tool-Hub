@@ -27,7 +27,7 @@ end
 
 if script_language == "Thai" then
 local Scripts = {
-   [1234567890] = "link",
+   [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRailsThai.lua",
 }
 local url = Scripts[game.PlaceId] or Scripts[game.GameId]
 if url then
