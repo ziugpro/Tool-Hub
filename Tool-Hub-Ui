@@ -243,8 +243,9 @@ function tab:AddDropdown(side, text, list, callback)
     Container.ClipsDescendants = false
     Container.Parent = parent
 
-    local UICorner = Instance.new("UICorner", Container)
+    local UICorner = Instance.new("UICorner")
     UICorner.CornerRadius = UDim.new(0, 6)
+    UICorner.Parent = Container
 
     local Button = Instance.new("TextButton")
     Button.Size = UDim2.new(1, 0, 1, 0)
@@ -259,8 +260,8 @@ function tab:AddDropdown(side, text, list, callback)
     DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
     DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
     DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    DropdownFrame.ClipsDescendants = true
     DropdownFrame.BorderSizePixel = 0
+    DropdownFrame.ClipsDescendants = true
     DropdownFrame.ZIndex = 10
     DropdownFrame.Parent = Container
 
@@ -275,27 +276,27 @@ function tab:AddDropdown(side, text, list, callback)
     Scrolling.ZIndex = 11
     Scrolling.Parent = DropdownFrame
 
-    local UIList = Instance.new("UIListLayout", Scrolling)
+    local UIList = Instance.new("UIListLayout")
     UIList.Padding = UDim.new(0, 2)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
+    UIList.Parent = Scrolling
 
     local open = false
 
-    local function closeDropdown()
-        open = false
-        Scrolling.Visible = false
-        DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-        Button.Text = text .. " ▼"
-    end
-
-    local function openDropdown()
-        open = true
-        local height = math.min(#list * 30, 150)
-        DropdownFrame.Size = UDim2.new(1, 0, 0, height)
-        Scrolling.Size = UDim2.new(1, 0, 0, height)
-        Scrolling.Visible = true
-        Button.Text = text .. " ▲"
-    end
+    Button.MouseButton1Click:Connect(function()
+        open = not open
+        if open then
+            local height = math.min(#list * 30, 150)
+            DropdownFrame.Size = UDim2.new(1, 0, 0, height)
+            Scrolling.Size = UDim2.new(1, 0, 0, height)
+            Scrolling.Visible = true
+            Button.Text = text .. " ▲"
+        else
+            Scrolling.Visible = false
+            DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
+            Button.Text = text .. " ▼"
+        end
+    end)
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton")
@@ -310,18 +311,12 @@ function tab:AddDropdown(side, text, list, callback)
 
         Opt.MouseButton1Click:Connect(function()
             Button.Text = text .. ": " .. item .. " ▼"
+            Scrolling.Visible = false
+            DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
+            open = false
             callback(item)
-            closeDropdown()
         end)
     end
-
-    Button.MouseButton1Click:Connect(function()
-        if open then
-            closeDropdown()
-        else
-            openDropdown()
-        end
-    end)
 end
 function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
