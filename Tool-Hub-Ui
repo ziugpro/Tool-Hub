@@ -492,7 +492,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
         local Opt = Instance.new("TextButton", DropdownFrame)
         Opt.Size = UDim2.new(1, -4, 0, 28)
         Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = "☐ " .. item
+        Opt.Text = "❌ " .. item
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -502,10 +502,10 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
-                Opt.Text = "☐ " .. item
+                Opt.Text = "❌ " .. item
             else
                 selectedItems[item] = true
-                Opt.Text = "☑ " .. item
+                Opt.Text = "✔️ " .. item
             end
 
             local names = {}
