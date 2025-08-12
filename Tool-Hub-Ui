@@ -273,7 +273,7 @@ function tab:AddDropdown(side, text, list, callback)
     Scrolling.CanvasSize = UDim2.new(0, 0, 0, #list * 30)
     Scrolling.ScrollBarThickness = 4
     Scrolling.Visible = false
-    Scrolling.ZIndex = 0
+    Scrolling.ZIndex = 20
     Scrolling.Parent = DropdownFrame
 
     local UIList = Instance.new("UIListLayout")
@@ -305,6 +305,7 @@ function tab:AddDropdown(side, text, list, callback)
         Opt.Text = item
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
+        Opt.ZIndex = 30
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.AutoButtonColor = true
         Opt.Parent = Scrolling
@@ -496,6 +497,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.LayoutOrder = i
+        Opt.ZIndex = 15
 
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
