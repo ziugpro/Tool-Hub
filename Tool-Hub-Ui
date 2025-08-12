@@ -492,20 +492,37 @@ function tab:AddMultiDropdown(side, text, list, callback)
         local Opt = Instance.new("TextButton", DropdownFrame)
         Opt.Size = UDim2.new(1, -4, 0, 28)
         Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = "❌ | " .. item
-        Opt.Font = Enum.Font.Gotham
-        Opt.TextSize = 13
-        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Opt.Text = ""
+        Opt.AutoButtonColor = false
         Opt.LayoutOrder = i
         Opt.ZIndex = 15
+
+        local Icon = Instance.new("TextLabel", Opt)
+        Icon.Size = UDim2.new(0, 20, 1, 0)
+        Icon.Position = UDim2.new(0, 4, 0, 0)
+        Icon.BackgroundTransparency = 1
+        Icon.Font = Enum.Font.Gotham
+        Icon.TextSize = 13
+        Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Icon.Text = "❌"
+
+        local Label = Instance.new("TextLabel", Opt)
+        Label.Size = UDim2.new(1, -28, 1, 0)
+        Label.Position = UDim2.new(0, 28, 0, 0)
+        Label.BackgroundTransparency = 1
+        Label.Font = Enum.Font.Gotham
+        Label.TextSize = 13
+        Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Label.TextXAlignment = Enum.TextXAlignment.Left
+        Label.Text = item
 
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
-                Opt.Text = "❌ | " .. item
+                Icon.Text = "❌"
             else
                 selectedItems[item] = true
-                Opt.Text = "✅ | " .. item
+                Icon.Text = "✅"
             end
 
             local names = {}
