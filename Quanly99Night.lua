@@ -62,10 +62,14 @@ local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
 
 local Tab = UI:Create(105, "General")
 
-Tab:AddTextLabel("Left", "Main")
+Tab:AddTextLabel("Left", "Chest")
 Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
 end)
-Tab:AddSlider("Left", "Kill Range", 1, 50, 10, function(val)
+Tab:AddTextLabel("Left", "Kill")
+_G.killRange = _G.killRange or 10
+_G.killAuraConn = _G.killAuraConn or nil
+
+Tab:AddSlider("Left", "Kill Range", 1, 50, _G.killRange, function(val)
     _G.killRange = val
 end)
 
@@ -76,37 +80,55 @@ Tab:AddToggle("Left", "Kill Aura", false, function(enabled)
     end
 
     if enabled then
+        local player = game.Players.LocalPlayer
+        if not player then return end
         _G.killAuraConn = game:GetService("RunService").Heartbeat:Connect(function()
-            local player = game.Players.LocalPlayer
-            if not player or not player.Character or not player.Character:FindFirstChildOfClass("Humanoid") then return end
-            local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
+            local char = player.Character
+            if not char then return end
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if not humanoid or not hrp then return end
 
-            for _, target in pairs(game.Players:GetPlayers()) do
-                if target ~= player and target.Character and target.Character:FindFirstChildOfClass("Humanoid") and target.Character:FindFirstChild("HumanoidRootPart") then
-                    local targetHrp = target.Character.HumanoidRootPart
-                    local distance = (hrp.Position - targetHrp.Position).Magnitude
-                    if distance <= (_G.killRange or 10) then
-                        target.Character.Humanoid.Health = 0
+            local range = _G.killRange or 10
+            local players = game.Players:GetPlayers()
+
+            for i = 1, #players do
+                local target = players[i]
+                if target ~= player then
+                    local targetChar = target.Character
+                    if targetChar then
+                        local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+                        local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+                        if targetHum and targetHrp then
+                            if (hrp.Position - targetHrp.Position).Magnitude <= range then
+                                targetHum.Health = 0
+                            end
+                        end
                     end
                 end
             end
         end)
     end
 end)
-Tab:AddToggle("Left", "Fly Up", false, function(v)
+Tab:AddTextLabel("Left", "Fly Up")
+local flyUpLoop = false
+local flyUpNightLoop = false
+Tab:AddToggle("Left", "Fly Up (All Time)", false, function(v)
     local player = game.Players.LocalPlayer
     if not player or not player.Character then return end
     local hrp = player.Character:FindFirstChild("HumanoidRootPart")
     local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
     if not hrp or not humanoid then return end
 
-    if v then
-        hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
-        humanoid.PlatformStand = true
-    else
-        humanoid.PlatformStand = false
-    end
+    flyUpLoop = v
+    humanoid.PlatformStand = v
+
+    spawn(function()
+        while flyUpLoop and hrp.Parent do
+            hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.5, 0)
+            wait(0.03)
+        end
+    end)
 end)
 Tab:AddToggle("Left", "Fly Up (Night Only)", false, function(v)
     local player = game.Players.LocalPlayer
@@ -120,15 +142,24 @@ Tab:AddToggle("Left", "Fly Up (Night Only)", false, function(v)
 
     if v then
         if currentTime >= 18 or currentTime < 6 then
-            hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
+            flyUpNightLoop = true
             humanoid.PlatformStand = true
+
+            spawn(function()
+                while flyUpNightLoop and hrp.Parent do
+                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.5, 0)
+                    wait(0.03)
+                end
+            end)
         else
             Tab:SetValue("Fly Up (Night Only)", false)
         end
     else
+        flyUpNightLoop = false
         humanoid.PlatformStand = false
     end
 end)
+Tab:AddTextLabel("Left", "Misc")
 local noclipEnabled = false
 
 Tab:AddToggle("Left", "Noclip", false, function(v)
