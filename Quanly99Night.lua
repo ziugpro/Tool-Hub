@@ -88,7 +88,7 @@ Tab:AddToggle("Left", "Fly Up (All Time)", false, function(v)
 
     spawn(function()
         while flyUpLoop and hrp.Parent do
-            hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.5, 0)
+            hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
             wait(0.03)
         end
     end)
@@ -110,7 +110,7 @@ Tab:AddToggle("Left", "Fly Up (Night Only)", false, function(v)
 
             spawn(function()
                 while flyUpNightLoop and hrp.Parent do
-                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.5, 0)
+                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
                     wait(0.03)
                 end
             end)
