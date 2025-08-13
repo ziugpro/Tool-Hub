@@ -19,43 +19,7 @@ for step = 1, 3 do
     end)
     task.wait(2)
 end
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Aura Hub",
-    Text = "Success Loading",
-    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
-    Duration = 5,
-    Callback = function()
-    end
-})
-repeat task.wait() until game:IsLoaded()
 
-getgenv().Image = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420"
-getgenv().ToggleUI = "LeftControl"
-
-task.spawn(function()
-    if not getgenv().LoadedMobileUI then
-        getgenv().LoadedMobileUI = true
-        local OpenUI = Instance.new("ScreenGui")
-        local ImageButton = Instance.new("ImageButton")
-        local UICorner = Instance.new("UICorner")
-        OpenUI.Name = "OpenUI"
-        OpenUI.Parent = game:GetService("CoreGui")
-        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        ImageButton.Parent = OpenUI
-        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
-        ImageButton.BackgroundTransparency = 0.8
-        ImageButton.Position = UDim2.new(0, 5, 0, 5)
-        ImageButton.Size = UDim2.new(0, 55, 0, 55)
-        ImageButton.Image = getgenv().Image
-        ImageButton.Draggable = true
-        ImageButton.Transparency = 1
-        UICorner.CornerRadius = UDim.new(0,10)
-        UICorner.Parent = ImageButton
-        ImageButton.MouseButton1Click:Connect(function()
-            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
-        end)
-    end
-end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("Dead Rails")
