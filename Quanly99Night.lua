@@ -218,7 +218,7 @@ Tab:AddButton("Right", "Set Speed", function()
     end
 end)
 Tab:RealLine("Right")
-Tab:AddTextlabel("Right", "Esp")
+Tab:AddTextLabel("Right", "Esp")
 local rs = game:GetService("RunService")
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
