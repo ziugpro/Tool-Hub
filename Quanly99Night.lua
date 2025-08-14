@@ -74,51 +74,67 @@ Tab:AddToggle("Left", "Kill Aura", false, function(enabled)
     end
 end)
 Tab:AddTextLabel("Left", "Fly Up")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local player = game.Players.LocalPlayer
+
 local flyUpLoop = false
 local flyUpNightLoop = false
+local connAllTime
+local connNightOnly
+
 Tab:AddToggle("Left", "Fly Up (All Time)", false, function(v)
-    local player = game.Players.LocalPlayer
-    if not player or not player.Character then return end
-    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+    local character = player.Character
+    if not character then return end
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
     if not hrp or not humanoid then return end
 
     flyUpLoop = v
     humanoid.PlatformStand = v
 
-    spawn(function()
-        while flyUpLoop and hrp.Parent do
-            hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
-            wait(0.03)
-        end
-    end)
+    if v then
+        local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+        local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+        local targetY = (part and pos.Y or hrp.Position.Y) + 30
+        connAllTime = RunService.Heartbeat:Connect(function()
+            if not flyUpLoop or not hrp.Parent then return end
+            hrp.Velocity = Vector3.new(0, 0, 0)
+            hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
+        end)
+    else
+        if connAllTime then connAllTime:Disconnect() end
+    end
 end)
+
 Tab:AddToggle("Left", "Fly Up (Night Only)", false, function(v)
-    local player = game.Players.LocalPlayer
-    if not player or not player.Character then return end
-    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+    local character = player.Character
+    if not character then return end
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
     if not hrp or not humanoid then return end
 
-    local Lighting = game:GetService("Lighting")
-    local currentTime = Lighting.ClockTime
-
+    flyUpNightLoop = v
     if v then
+        local currentTime = Lighting.ClockTime
         if currentTime >= 18 or currentTime < 6 then
-            flyUpNightLoop = true
             humanoid.PlatformStand = true
-
-            spawn(function()
-                while flyUpNightLoop and hrp.Parent do
-                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 30, 0)
-                    wait(0.03)
+            local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+            local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+            local targetY = (part and pos.Y or hrp.Position.Y) + 30
+            connNightOnly = RunService.Heartbeat:Connect(function()
+                if not flyUpNightLoop or not hrp.Parent then return end
+                local t = Lighting.ClockTime
+                if t >= 18 or t < 6 then
+                    hrp.Velocity = Vector3.new(0, 0, 0)
+                    hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
                 end
             end)
         else
             Tab:SetValue("Fly Up (Night Only)", false)
         end
     else
-        flyUpNightLoop = false
+        if connNightOnly then connNightOnly:Disconnect() end
         humanoid.PlatformStand = false
     end
 end)
