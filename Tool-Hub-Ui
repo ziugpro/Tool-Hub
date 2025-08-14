@@ -1,7 +1,7 @@
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
     Text = "Success Loading",
-    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
+    Icon = "rbxthumb://type=Asset&id=83230952715744&w=420&h=420",
     Duration = 5,
     Callback = function()
     end
@@ -9,13 +9,13 @@ game.StarterGui:SetCore("SendNotification", {
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
     Text = "Keybind: RightShift",
-    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
+    Icon = "rbxthumb://type=Asset&id=83230952715744&w=420&h=420",
     Duration = 5,
     Callback = function()
     end
 })
 repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-getgenv().Image = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420"
+getgenv().Image = "rbxthumb://type=Asset&id=83230952715744&w=420&h=420"
 getgenv().ToggleUI = "RightShift"
 
 task.spawn(function()
