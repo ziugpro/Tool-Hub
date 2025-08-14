@@ -209,7 +209,7 @@ local LeftScroll = makeScroll(UDim2.new(0, 5, 0, 5), 0.5)
 local RightScroll = makeScroll(UDim2.new(0.5, 5, 0, 5), 0.5)
 
     local function AddElement(side, obj)
-            obj.Size = UDim2.new(0.95, 0, 0, 44)
+            obj.Size = UDim2.new(1, 0, 0, 44)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
@@ -285,7 +285,7 @@ function tab:AddButton(side, text, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(0.95, 0, 0, 25)
+    Button.Size = UDim2.new(1, 0, 0, 25)
     Button.AnchorPoint = Vector2.new(0.5, 0)
     Button.Position = UDim2.new(0.5, 0, 0, 0)
     Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -305,7 +305,7 @@ function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(0.95, 0, 0, 30)
+    Container.Size = UDim2.new(1, 0, 0, 30)
     Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -391,7 +391,7 @@ end
 function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0.95, 0, 0, 26)
+    Label.Size = UDim2.new(1, 0, 0, 26)
     Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -407,7 +407,7 @@ end
 function tab:AddTextbox(side, text, placeholder, callback)
     local Box = Instance.new("Frame")
     Box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Box.Size = UDim2.new(0.95, 0, 0, 38)
+    Box.Size = UDim2.new(1, 0, 0, 38)
     Box.AnchorPoint = Vector2.new(0.5, 0)
     Box.Position = UDim2.new(0.5, 0, 0, 0)
     Box.ClipsDescendants = true
@@ -453,7 +453,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     local value = default or min
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(0.95, 0, 0, 60)
+    Container.Size = UDim2.new(1, 0, 0, 60)
     Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -536,7 +536,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(0.95, 0, 0, 30)
+    Container.Size = UDim2.new(1, 0, 0, 30)
     Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -610,7 +610,7 @@ function tab:RealLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(0.95, 0, 0, 9)
+    Line.Size = UDim2.new(1, 0, 0, 9)
     Line.AnchorPoint = Vector2.new(0.5, 0)
     Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -626,7 +626,7 @@ end
 function tab:AddText(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0.95, 0, 0, 30)
+    Label.Size = UDim2.new(1, 0, 0, 30)
     Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.BackgroundTransparency = 1
     Label.Text = text
@@ -644,7 +644,7 @@ function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(0.95, 0, 0, 2)
+    Line.Size = UDim2.new(1, 0, 0, 2)
     Line.AnchorPoint = Vector2.new(0.5, 0)
     Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
