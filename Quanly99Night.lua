@@ -13,7 +13,7 @@ local function heavyLoadStep()
     return sum
 end
 
-for step = 1, 3 do
+for step = 1, 1 do
     task.spawn(function()
         heavyLoadStep()
     end)
