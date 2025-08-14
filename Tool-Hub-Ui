@@ -178,32 +178,38 @@ local topMask = Create("Frame", {
     BackgroundTransparency = 1,
     Parent = Page
 })
-    local function makeScroll(posX)
-        local scroll = Create("ScrollingFrame", {
-            Size = UDim2.new(0.5, -10, 0, 298),
-            Position = posX,
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            ScrollBarThickness = 0,
-            AutomaticCanvasSize = Enum.AutomaticSize.Y,
-            ScrollingDirection = Enum.ScrollingDirection.Y,
-            CanvasSize = UDim2.new(0, 0, 0, 0),
-            LayoutOrder = 1,
-            Parent = Page
-        })
-        Roundify(scroll, 6)
-        local layout = Instance.new("UIListLayout")
-        layout.Padding = UDim.new(0, 6)
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-        layout.Parent = scroll
-        return scroll
-    end
+local function makeScroll(posX, widthScale)
+    local scroll = Create("ScrollingFrame", {
+        Size = UDim2.new(widthScale, -10, 0, 298),
+        Position = posX,
+        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+        BackgroundTransparency = 0,
+        BorderSizePixel = 0,
+        ScrollBarThickness = 0,
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        ScrollingDirection = Enum.ScrollingDirection.Y,
+        CanvasSize = UDim2.new(0, 0, 0, 0),
+        LayoutOrder = 1,
+        Parent = Page
+    })
 
-    local LeftScroll = makeScroll(UDim2.new(0, 7, 0, 5))
-    local RightScroll = makeScroll(UDim2.new(0.5, 13, 0, 5))
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = scroll
+
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 6)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = scroll
+
+    return scroll
+end
+
+local LeftScroll = makeScroll(UDim2.new(0, 5, 0, 5), 0.5)
+local RightScroll = makeScroll(UDim2.new(0.5, 5, 0, 5), 0.5)
 
     local function AddElement(side, obj)
-            obj.Size = UDim2.new(1, -10, 0, 44)
+            obj.Size = UDim2.new(1, 0, 0, 44)
             local parent = (side == "Left") and LeftScroll or RightScroll
             obj.Parent = parent
         end
