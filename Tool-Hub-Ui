@@ -219,6 +219,7 @@ function tab:AddToggle(side, text, default, callback)
         Text = "",
         Font = Enum.Font.Gotham,
         TextSize = 14,
+        AnchorPoint = Vector2.new(0.5, 0),
         Position = UDim2.new(0.5, 0, 0, 0),
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextXAlignment = Enum.TextXAlignment.Left
@@ -285,12 +286,13 @@ function tab:AddButton(side, text, callback)
 
     local Button = Instance.new("TextButton")
     Button.Size = UDim2.new(0.95, 0, 0, 25)
+    Button.AnchorPoint = Vector2.new(0.5, 0)
+    Button.Position = UDim2.new(0.5, 0, 0, 0)
     Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 13
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Text = text
-    Button.Position = UDim2.new(0.5, 0, 0, 0)
     Button.ClipsDescendants = true
     Button.Parent = parent
 
@@ -298,13 +300,15 @@ function tab:AddButton(side, text, callback)
 
     Button.MouseButton1Click:Connect(callback)
 end        
+
 function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 30)
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
+    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.ClipsDescendants = false
     Container.Parent = parent
 
@@ -388,20 +392,23 @@ function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(0.95, 0, 0, 26)
+    Label.AnchorPoint = Vector2.new(0.5, 0)
+    Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Label.Font = Enum.Font.Gotham
     Label.TextSize = 14
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.Text = text
-    Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.ClipsDescendants = true
     Label.Parent = parent
     Roundify(Label, 6)
 end
+
 function tab:AddTextbox(side, text, placeholder, callback)
     local Box = Instance.new("Frame")
     Box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Box.Size = UDim2.new(0.95, 0, 0, 38)
+    Box.AnchorPoint = Vector2.new(0.5, 0)
     Box.Position = UDim2.new(0.5, 0, 0, 0)
     Box.ClipsDescendants = true
 
@@ -447,10 +454,12 @@ function tab:AddSlider(side, text, min, max, default, callback)
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 60)
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
+    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.BorderSizePixel = 0
     Container.Parent = parent
+
     local UICorner = Instance.new("UICorner", Container)
     UICorner.CornerRadius = UDim.new(0, 6)
 
@@ -474,6 +483,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     ValueButton.TextSize = 13
     ValueButton.TextColor3 = Color3.new(1, 1, 1)
     ValueButton.Parent = Container
+
     local ValueCorner = Instance.new("UICorner", ValueButton)
     ValueCorner.CornerRadius = UDim.new(0, 4)
 
@@ -483,6 +493,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     Bar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Bar.BorderSizePixel = 0
     Bar.Parent = Container
+
     local BarCorner = Instance.new("UICorner", Bar)
     BarCorner.CornerRadius = UDim.new(0, 5)
 
@@ -491,6 +502,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     Fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
     Fill.BorderSizePixel = 0
     Fill.Parent = Bar
+
     local FillCorner = Instance.new("UICorner", Fill)
     FillCorner.CornerRadius = UDim.new(0, 5)
 
@@ -525,6 +537,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 30)
+    Container.AnchorPoint = Vector2.new(0.5, 0)
     Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.ClipsDescendants = false
@@ -598,6 +611,7 @@ function tab:RealLine(side)
 
     local Line = Instance.new("Frame")
     Line.Size = UDim2.new(0.95, 0, 0, 9)
+    Line.AnchorPoint = Vector2.new(0.5, 0)
     Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Line.BackgroundTransparency = 0
@@ -608,10 +622,12 @@ function tab:RealLine(side)
     Corner.CornerRadius = UDim.new(0, 3)
     Corner.Parent = Line
 end
+
 function tab:AddText(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(0.95, 0, 0, 30)
+    Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Position = UDim2.new(0.5, 0, 0, 0)
@@ -620,22 +636,22 @@ function tab:AddText(side, text)
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
-    Label.AnchorPoint = Vector2.new(0.5, 0)
-    Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.TextWrapped = true
     Label.Parent = parent
 end
+
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
     Line.Size = UDim2.new(0.95, 0, 0, 2)
+    Line.AnchorPoint = Vector2.new(0.5, 0)
     Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Line.BackgroundTransparency = 0.4
     Line.BorderSizePixel = 0
     Line.Parent = parent
-end        
+end 
         Button.MouseButton1Click:Connect(function()
             for _, p in pairs(Pages) do
                 p.Visible = false
