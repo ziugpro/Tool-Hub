@@ -219,156 +219,112 @@ Tab:AddButton("Right", "Set Speed", function()
 end)
 Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Esp")
-local rs = game:GetService("RunService")
-local players = game:GetService("Players")
-local localPlayer = players.LocalPlayer
+Tab:AddToggle("Right", "🧍 Player ESP", false, function(v)
+    _G.ToggleESPPlayers = v
 
-Tab:AddToggle("Right", "ESP Player", false, function(v)
-    local folder = game.CoreGui:FindFirstChild("PlayerESP") or Instance.new("Folder", game.CoreGui)
-    folder.Name = "PlayerESP"
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            local char = player.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local existingESP = char:FindFirstChild("SUPER_ESP_GUI")
 
-    if _G.PlayerESPConn then
-        _G.PlayerESPConn:Disconnect()
-        _G.PlayerESPConn = nil
-    end
-    folder:ClearAllChildren()
+                if v and not existingESP then
+                    local ESPGui = Instance.new("BillboardGui")
+                    ESPGui.Name = "SUPER_ESP_GUI"
+                    ESPGui.Adornee = char:FindFirstChild("HumanoidRootPart")
+                    ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                    ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                    ESPGui.AlwaysOnTop = true
+                    ESPGui.ResetOnSpawn = false
+                    ESPGui.Parent = char
 
-    if not v then return end
+                    local BackgroundFrame = Instance.new("Frame")
+                    BackgroundFrame.Name = "BackgroundFrame"
+                    BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                    BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                    BackgroundFrame.BackgroundTransparency = 0.5
+                    BackgroundFrame.BorderSizePixel = 0
+                    BackgroundFrame.Parent = ESPGui
 
-    _G.PlayerESPConn = rs.RenderStepped:Connect(function()
-        folder:ClearAllChildren()
-        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if not localHRP then return end
+                    local StrokeFrame = Instance.new("UIStroke")
+                    StrokeFrame.Color = Color3.fromRGB(255, 85, 85)
+                    StrokeFrame.Thickness = 2
+                    StrokeFrame.Transparency = 0.1
+                    StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                    StrokeFrame.Parent = BackgroundFrame
 
-        for _, player in pairs(players:GetPlayers()) do
-            if player ~= localPlayer and player.Character then
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    local distance = math.floor((hrp.Position - localHRP.Position).Magnitude)
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = player.Name .. "_ESP"
-                    billboard.Adornee = hrp
-                    billboard.Size = UDim2.new(0, 150, 0, 30)
-                    billboard.StudsOffset = Vector3.new(0, 3, 0)
-                    billboard.AlwaysOnTop = true
-                    billboard.LightInfluence = 0
-                    billboard.MaxDistance = 10000
-                    billboard.Parent = folder
-
-                    local text = Instance.new("TextLabel")
-                    text.BackgroundTransparency = 1
-                    text.Size = UDim2.new(1, 0, 1, 0)
-                    text.Text = distance .. " | " .. player.Name
-                    text.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    text.TextStrokeTransparency = 0.5
-                    text.TextStrokeColor3 = Color3.new(0, 0, 0)
-                    text.TextScaled = true
-                    text.Font = Enum.Font.GothamBold
-                    text.Parent = billboard
+                    local Label = Instance.new("TextLabel")
+                    Label.Name = "PlayerName"
+                    Label.Size = UDim2.new(1, 0, 1, 0)
+                    Label.Position = UDim2.new(0, 0, 0, 0)
+                    Label.BackgroundTransparency = 1
+                    Label.Text = "🧍 " .. player.DisplayName
+                    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    Label.TextStrokeTransparency = 0
+                    Label.TextScaled = true
+                    Label.Font = Enum.Font.GothamBold
+                    Label.Parent = BackgroundFrame
+                elseif not v and existingESP then
+                    existingESP:Destroy()
                 end
             end
         end
-    end)
+    end
 end)
+Tab:AddToggle("Right", "🤖 NPC ESP", false, function(v)
+    _G.ToggleESPNPCs = v
 
-Tab:AddToggle("Right", "ESP Mob", false, function(v)
-    local folder = game.CoreGui:FindFirstChild("MobESP") or Instance.new("Folder", game.CoreGui)
-    folder.Name = "MobESP"
-
-    if _G.MobESPConn then
-        _G.MobESPConn:Disconnect()
-        _G.MobESPConn = nil
-    end
-    folder:ClearAllChildren()
-
-    if not v then return end
-
-    _G.MobESPConn = rs.RenderStepped:Connect(function()
-        folder:ClearAllChildren()
-        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if not localHRP then return end
-
-        for _, mob in pairs(workspace:GetDescendants()) do
-            if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChildOfClass("Humanoid") and not players:GetPlayerFromCharacter(mob) then
-                local hrp = mob.HumanoidRootPart
-                local distance = math.floor((localHRP.Position - hrp.Position).Magnitude)
-
-                local billboard = Instance.new("BillboardGui")
-                billboard.Name = mob.Name .. "_ESP"
-                billboard.Adornee = hrp
-                billboard.Size = UDim2.new(0, 150, 0, 30)
-                billboard.StudsOffset = Vector3.new(0, 3, 0)
-                billboard.AlwaysOnTop = true
-                billboard.LightInfluence = 0
-                billboard.MaxDistance = 10000
-                billboard.Parent = folder
-
-                local text = Instance.new("TextLabel")
-                text.BackgroundTransparency = 1
-                text.Size = UDim2.new(1, 0, 1, 0)
-                text.Text = mob.Name .. " | " .. tostring(distance) .. "m"
-                text.TextColor3 = Color3.fromRGB(255, 255, 0)
-                text.TextStrokeTransparency = 0.5
-                text.TextStrokeColor3 = Color3.new(0, 0, 0)
-                text.TextScaled = true
-                text.Font = Enum.Font.GothamBold
-                text.Parent = billboard
-            end
-        end
-    end)
-end)
-
-Tab:AddToggle("Right", "ESP Item", false, function(v)
-    local folder = game.CoreGui:FindFirstChild("ItemESP") or Instance.new("Folder", game.CoreGui)
-    folder.Name = "ItemESP"
-
-    if _G.ItemESPConn then
-        _G.ItemESPConn:Disconnect()
-        _G.ItemESPConn = nil
-    end
-    folder:ClearAllChildren()
-
-    if not v then return end
-
-    _G.ItemESPConn = rs.RenderStepped:Connect(function()
-        folder:ClearAllChildren()
-        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if not localHRP then return end
-
-        for _, item in pairs(workspace:GetDescendants()) do
-            if item:IsA("Tool") or item.Name:lower():find("item") or item.Name:lower():find("loot") then
-                local targetPart
-                if item:IsA("Model") and item.PrimaryPart then
-                    targetPart = item.PrimaryPart
-                elseif item:IsA("BasePart") then
-                    targetPart = item
-                end
-
-                if targetPart then
-                    local distance = math.floor((localHRP.Position - targetPart.Position).Magnitude)
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = item.Name .. "_ESP"
-                    billboard.Adornee = targetPart
-                    billboard.Size = UDim2.new(0, 150, 0, 30)
-                    billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-                    billboard.AlwaysOnTop = true
-                    billboard.LightInfluence = 0
-                    billboard.MaxDistance = 10000
-                    billboard.Parent = folder
-
-                    local label = Instance.new("TextLabel")
-                    label.BackgroundTransparency = 1
-                    label.Size = UDim2.new(1, 0, 1, 0)
-                    label.Text = item.Name .. " | " .. distance .. "m"
-                    label.TextColor3 = Color3.fromRGB(0, 255, 255)
-                    label.TextStrokeTransparency = 0.5
-                    label.TextStrokeColor3 = Color3.new(0, 0, 0)
-                    label.TextScaled = true
-                    label.Font = Enum.Font.Gotham
-                    label.Parent = billboard
+    for _, model in pairs(workspace:GetDescendants()) do
+        if model:IsA("Model") and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+            local isPlayerChar = false
+            for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+                if player.Character == model then
+                    isPlayerChar = true
+                    break
                 end
             end
+
+            local existingESP = model:FindFirstChild("SUPER_ESP_GUI")
+
+            if v and not isPlayerChar and not existingESP then
+                local ESPGui = Instance.new("BillboardGui")
+                ESPGui.Name = "SUPER_ESP_GUI"
+                ESPGui.Adornee = model:FindFirstChild("HumanoidRootPart")
+                ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                ESPGui.AlwaysOnTop = true
+                ESPGui.ResetOnSpawn = false
+                ESPGui.Parent = model
+
+                local BackgroundFrame = Instance.new("Frame")
+                BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                BackgroundFrame.BackgroundTransparency = 0.5
+                BackgroundFrame.BorderSizePixel = 0
+                BackgroundFrame.Parent = ESPGui
+
+                local StrokeFrame = Instance.new("UIStroke")
+                StrokeFrame.Color = Color3.fromRGB(255, 255, 0)
+                StrokeFrame.Thickness = 2
+                StrokeFrame.Transparency = 0.1
+                StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                StrokeFrame.Parent = BackgroundFrame
+
+                local Label = Instance.new("TextLabel")
+                Label.Size = UDim2.new(1, 0, 1, 0)
+                Label.Position = UDim2.new(0, 0, 0, 0)
+                Label.BackgroundTransparency = 1
+                Label.Text = "🤖 " .. model.Name
+                Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                Label.TextStrokeTransparency = 0
+                Label.TextScaled = true
+                Label.Font = Enum.Font.GothamBold
+                Label.Parent = BackgroundFrame
+
+            elseif not v and existingESP then
+                existingESP:Destroy()
+            end
         end
-    end)
+    end
 end)
 Tab:RealLine("Right")
