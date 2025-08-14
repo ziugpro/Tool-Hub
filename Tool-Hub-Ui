@@ -304,7 +304,7 @@ function tab:AddDropdown(side, text, list, callback)
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0, 95, 0, 30)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Container.Position = UDim2.new(0.5, 0, 0, 0),
+    Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.ClipsDescendants = false
     Container.Parent = parent
 
@@ -448,7 +448,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0, 95, 0, 60)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Container.Position = UDim2.new(0.5, 0, 0, 0),
+    Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BorderSizePixel = 0
     Container.Parent = parent
     local UICorner = Instance.new("UICorner", Container)
@@ -598,7 +598,7 @@ function tab:RealLine(side)
 
     local Line = Instance.new("Frame")
     Line.Size = UDim2.new(0, 95, 0, 9)
-    Line.Position = UDim2.new(0.5, 0, 0, 0),
+    Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Line.BackgroundTransparency = 0
     Line.BorderSizePixel = 0
@@ -614,7 +614,7 @@ function tab:AddText(side, text)
     Label.Size = UDim2.new(0, 95, 0, 30)
     Label.BackgroundTransparency = 1
     Label.Text = text
-    Label.Position = UDim2.new(0.5, 0, 0, 0),
+    Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.Font = Enum.Font.Gotham
     Label.TextSize = 12
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -630,7 +630,7 @@ function tab:Line(side)
 
     local Line = Instance.new("Frame")
     Line.Size = UDim2.new(0, 95, 0, 2)
-    Line.Position = UDim2.new(0.5, 0, 0, 0),
+    Line.Position = UDim2.new(0.5, 0, 0, 0)
     Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Line.BackgroundTransparency = 0.4
     Line.BorderSizePixel = 0
