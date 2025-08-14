@@ -382,57 +382,57 @@ Tab:AddButton("Right", "Unlock Camera (Fixed)", function()
         end)
     end)
 end)
-Tab:AddToggle("Right", "Aimbot Mob", false, function(state)
-    local rs = game:GetService("RunService")
-    local cam = workspace.CurrentCamera
-    local circle
-    local conn
+Tab:AddToggle("Right", "Aimbot Mob", false, function(state)  
+    local rs = game:GetService("RunService")  
+    local cam = workspace.CurrentCamera  
+    if not _G.AimbotCircle then _G.AimbotCircle = nil end  
+    if not _G.AimbotConn then _G.AimbotConn = nil end  
 
-    if state then
-        circle = Drawing.new("Circle")
-        circle.Radius = 40
-        circle.Thickness = 2
-        circle.Filled = false
-        circle.Transparency = 0.7
-        circle.Color = Color3.fromRGB(255, 0, 0)
-        circle.Visible = true
-
-        conn = rs.RenderStepped:Connect(function()
-            if not circle then return end
-            circle.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
-
-            local closest
-            local dist = circle.Radius
-            for _, mob in pairs(workspace:GetChildren()) do
-                if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    if mob.Humanoid.Health > 0 and not game.Players:GetPlayerFromCharacter(mob) then
-                        local pos, vis = cam:WorldToViewportPoint(mob.HumanoidRootPart.Position)
-                        if vis then
-                            local mag = (Vector2.new(pos.X, pos.Y) - circle.Position).Magnitude
-                            if mag <= dist then
-                                closest = mob
-                                dist = mag
-                            end
-                        end
-                    end
-                end
-            end
-
-            if closest then
-                cam.CFrame = CFrame.new(cam.CFrame.Position, closest.HumanoidRootPart.Position)
-            end
-        end)
-    else
-        if conn then
-            conn:Disconnect()
-            conn = nil
-        end
-        if circle then
-            circle.Visible = false
-            circle:Remove()
-            circle = nil
-        end
-    end
+    if state then  
+        _G.AimbotCircle = Drawing.new("Circle")  
+        _G.AimbotCircle.Radius = 40  
+        _G.AimbotCircle.Thickness = 2  
+        _G.AimbotCircle.Filled = false  
+        _G.AimbotCircle.Transparency = 0.7  
+        _G.AimbotCircle.Color = Color3.fromRGB(255, 0, 0)  
+        _G.AimbotCircle.Visible = true  
+  
+        _G.AimbotConn = rs.RenderStepped:Connect(function()  
+            if not _G.AimbotCircle then return end  
+            _G.AimbotCircle.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)  
+  
+            local closest  
+            local dist = _G.AimbotCircle.Radius  
+            for _, mob in pairs(workspace:GetChildren()) do  
+                if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then  
+                    if mob.Humanoid.Health > 0 and not game.Players:GetPlayerFromCharacter(mob) then  
+                        local pos, vis = cam:WorldToViewportPoint(mob.HumanoidRootPart.Position)  
+                        if vis then  
+                            local mag = (Vector2.new(pos.X, pos.Y) - _G.AimbotCircle.Position).Magnitude  
+                            if mag <= dist then  
+                                closest = mob  
+                                dist = mag  
+                            end  
+                        end  
+                    end  
+                end  
+            end  
+  
+            if closest then  
+                cam.CFrame = CFrame.new(cam.CFrame.Position, closest.HumanoidRootPart.Position)  
+            end  
+        end)  
+    else  
+        if _G.AimbotConn then  
+            _G.AimbotConn:Disconnect()  
+            _G.AimbotConn = nil  
+        end  
+        if _G.AimbotCircle then  
+            _G.AimbotCircle.Visible = false  
+            _G.AimbotCircle:Remove()  
+            _G.AimbotCircle = nil  
+        end  
+    end  
 end)
 Tab:AddToggle("Right", "Auto Attack", false, function(v)
     _G.AutoClick = v
