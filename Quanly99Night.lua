@@ -6,14 +6,14 @@ if not humanoid then return end
 local function heavyLoadStep()
     local sum = 0
     for i = 1, 1e6 do
-        for j = 1, 10 do
+        for j = 1, 20  do
             sum = sum + math.sin(i * j)
         end
     end
     return sum
 end
 
-for step = 1, 5 do
+for step = 1, 3 do
     task.spawn(function()
         heavyLoadStep()
     end)
@@ -216,5 +216,159 @@ Tab:AddButton("Right", "Set Speed", function()
     if humanoid then
         humanoid.WalkSpeed = speed
     end
+end)
+Tab:RealLine("Right")
+Tab:Textlabel("Right", "Esp")
+local rs = game:GetService("RunService")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+
+Tab:AddToggle("Right", "ESP Player", false, function(v)
+    local folder = game.CoreGui:FindFirstChild("PlayerESP") or Instance.new("Folder", game.CoreGui)
+    folder.Name = "PlayerESP"
+
+    if _G.PlayerESPConn then
+        _G.PlayerESPConn:Disconnect()
+        _G.PlayerESPConn = nil
+    end
+    folder:ClearAllChildren()
+
+    if not v then return end
+
+    _G.PlayerESPConn = rs.RenderStepped:Connect(function()
+        folder:ClearAllChildren()
+        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if not localHRP then return end
+
+        for _, player in pairs(players:GetPlayers()) do
+            if player ~= localPlayer and player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local distance = math.floor((hrp.Position - localHRP.Position).Magnitude)
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = player.Name .. "_ESP"
+                    billboard.Adornee = hrp
+                    billboard.Size = UDim2.new(0, 150, 0, 30)
+                    billboard.StudsOffset = Vector3.new(0, 3, 0)
+                    billboard.AlwaysOnTop = true
+                    billboard.LightInfluence = 0
+                    billboard.MaxDistance = 10000
+                    billboard.Parent = folder
+
+                    local text = Instance.new("TextLabel")
+                    text.BackgroundTransparency = 1
+                    text.Size = UDim2.new(1, 0, 1, 0)
+                    text.Text = distance .. " | " .. player.Name
+                    text.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    text.TextStrokeTransparency = 0.5
+                    text.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    text.TextScaled = true
+                    text.Font = Enum.Font.GothamBold
+                    text.Parent = billboard
+                end
+            end
+        end
+    end)
+end)
+
+Tab:AddToggle("Right", "ESP Mob", false, function(v)
+    local folder = game.CoreGui:FindFirstChild("MobESP") or Instance.new("Folder", game.CoreGui)
+    folder.Name = "MobESP"
+
+    if _G.MobESPConn then
+        _G.MobESPConn:Disconnect()
+        _G.MobESPConn = nil
+    end
+    folder:ClearAllChildren()
+
+    if not v then return end
+
+    _G.MobESPConn = rs.RenderStepped:Connect(function()
+        folder:ClearAllChildren()
+        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if not localHRP then return end
+
+        for _, mob in pairs(workspace:GetDescendants()) do
+            if mob:IsA("Model") and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChildOfClass("Humanoid") and not players:GetPlayerFromCharacter(mob) then
+                local hrp = mob.HumanoidRootPart
+                local distance = math.floor((localHRP.Position - hrp.Position).Magnitude)
+
+                local billboard = Instance.new("BillboardGui")
+                billboard.Name = mob.Name .. "_ESP"
+                billboard.Adornee = hrp
+                billboard.Size = UDim2.new(0, 150, 0, 30)
+                billboard.StudsOffset = Vector3.new(0, 3, 0)
+                billboard.AlwaysOnTop = true
+                billboard.LightInfluence = 0
+                billboard.MaxDistance = 10000
+                billboard.Parent = folder
+
+                local text = Instance.new("TextLabel")
+                text.BackgroundTransparency = 1
+                text.Size = UDim2.new(1, 0, 1, 0)
+                text.Text = mob.Name .. " | " .. tostring(distance) .. "m"
+                text.TextColor3 = Color3.fromRGB(255, 255, 0)
+                text.TextStrokeTransparency = 0.5
+                text.TextStrokeColor3 = Color3.new(0, 0, 0)
+                text.TextScaled = true
+                text.Font = Enum.Font.GothamBold
+                text.Parent = billboard
+            end
+        end
+    end)
+end)
+
+Tab:AddToggle("Right", "ESP Item", false, function(v)
+    local folder = game.CoreGui:FindFirstChild("ItemESP") or Instance.new("Folder", game.CoreGui)
+    folder.Name = "ItemESP"
+
+    if _G.ItemESPConn then
+        _G.ItemESPConn:Disconnect()
+        _G.ItemESPConn = nil
+    end
+    folder:ClearAllChildren()
+
+    if not v then return end
+
+    _G.ItemESPConn = rs.RenderStepped:Connect(function()
+        folder:ClearAllChildren()
+        local localHRP = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if not localHRP then return end
+
+        for _, item in pairs(workspace:GetDescendants()) do
+            if item:IsA("Tool") or item.Name:lower():find("item") or item.Name:lower():find("loot") then
+                local targetPart
+                if item:IsA("Model") and item.PrimaryPart then
+                    targetPart = item.PrimaryPart
+                elseif item:IsA("BasePart") then
+                    targetPart = item
+                end
+
+                if targetPart then
+                    local distance = math.floor((localHRP.Position - targetPart.Position).Magnitude)
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = item.Name .. "_ESP"
+                    billboard.Adornee = targetPart
+                    billboard.Size = UDim2.new(0, 150, 0, 30)
+                    billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+                    billboard.AlwaysOnTop = true
+                    billboard.LightInfluence = 0
+                    billboard.MaxDistance = 10000
+                    billboard.Parent = folder
+
+                    local label = Instance.new("TextLabel")
+                    label.BackgroundTransparency = 1
+                    label.Size = UDim2.new(1, 0, 1, 0)
+                    label.Text = item.Name .. " | " .. distance .. "m"
+                    label.TextColor3 = Color3.fromRGB(0, 255, 255)
+                    label.TextStrokeTransparency = 0.5
+                    label.TextStrokeColor3 = Color3.new(0, 0, 0)
+                    label.TextScaled = true
+                    label.Font = Enum.Font.Gotham
+                    label.Parent = billboard
+                end
+            end
+        end
+    end)
 end)
 Tab:RealLine("Right")
