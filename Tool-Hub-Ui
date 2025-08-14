@@ -161,7 +161,7 @@ function ui:Create(buttonWidth, tabname)
 local Page = Create("Frame", {
     Size = UDim2.new(1, 0, 1, -70),
     Position = UDim2.new(0, 0, 0, 70),
-    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+    BackgroundColor3 = Color3.fromRGB(50, 50, 50),
     BackgroundTransparency = 0,
     Visible = false,
     Parent = Holder,
@@ -194,7 +194,7 @@ local function makeScroll(posX, widthScale)
     })
 
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
+    corner.CornerRadius = UDim.new(0, 10)
     corner.Parent = scroll
 
     local layout = Instance.new("UIListLayout")
@@ -283,7 +283,7 @@ function tab:AddButton(side, text, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(1, -10, 0, 25)
+    Button.Size = UDim2.new(1, 0, 0, 25)
     Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 13
@@ -384,7 +384,7 @@ end
 function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, -10, 0, 26)
+    Label.Size = UDim2.new(1, 0, 0, 26)
     Label.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Label.Font = Enum.Font.Gotham
     Label.TextSize = 14
@@ -441,7 +441,7 @@ function tab:AddSlider(side, text, min, max, default, callback)
     local value = default or min
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 60)
+    Container.Size = UDim2.new(1, 0, 0, 60)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.BorderSizePixel = 0
     Container.Parent = parent
@@ -590,7 +590,7 @@ function tab:RealLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(1, -10, 0, 9)
+    Line.Size = UDim2.new(1, 0, 0, 9)
     Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Line.BackgroundTransparency = 0
     Line.BorderSizePixel = 0
@@ -603,7 +603,7 @@ end
 function tab:AddText(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0, 255, 0, 30)
+    Label.Size = UDim2.new(1, 0, 0, 30)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.Gotham
@@ -813,7 +813,7 @@ function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(1, -10, 0, 2)
+    Line.Size = UDim2.new(1, 0, 0, 2)
     Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Line.BackgroundTransparency = 0.4
     Line.BorderSizePixel = 0
