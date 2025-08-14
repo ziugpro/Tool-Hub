@@ -158,14 +158,26 @@ function ui:Create(buttonWidth, tabname)
         layout.Parent = TabsScroll
     end
 
-    local Page = Create("Frame", {
-        Size = UDim2.new(1, 0, 1, -70),
-        Position = UDim2.new(0, 0, 0, 70),
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-        BackgroundTransparency = 0,
-        Visible = false,
-        Parent = Holder
-    })
+local Page = Create("Frame", {
+    Size = UDim2.new(1, 0, 1, -70),
+    Position = UDim2.new(0, 0, 0, 70),
+    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+    BackgroundTransparency = 0,
+    Visible = false,
+    Parent = Holder,
+    ClipsDescendants = true
+})
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = Page
+
+local topMask = Create("Frame", {
+    Size = UDim2.new(1, 0, 0.8, 0),
+    Position = UDim2.new(0, 0, 0, 0),
+    BackgroundTransparency = 1,
+    Parent = Page
+})
     local function makeScroll(posX)
         local scroll = Create("ScrollingFrame", {
             Size = UDim2.new(0.5, -10, 0, 298),
