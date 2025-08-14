@@ -269,7 +269,7 @@ end
 function tab:AddTextLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0.5, 0, 0, 30)
+    Label.Size = UDim2.new(0, 255, 0, 30)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.GothamBold
@@ -277,7 +277,6 @@ function tab:AddTextLabel(side, text)
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
-    Label.AnchorPoint = Vector2.new(0.5, 0)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.Parent = parent
 end
