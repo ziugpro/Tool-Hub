@@ -161,7 +161,7 @@ function ui:Create(buttonWidth, tabname)
 local Page = Create("Frame", {
     Size = UDim2.new(1, 0, 1, -70),
     Position = UDim2.new(0, 0, 0, 70),
-    BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
     BackgroundTransparency = 0,
     Visible = false,
     Parent = Holder,
