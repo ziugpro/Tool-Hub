@@ -161,12 +161,11 @@ function ui:Create(buttonWidth, tabname)
     local Page = Create("Frame", {
         Size = UDim2.new(1, 0, 1, -70),
         Position = UDim2.new(0, 0, 0, 70),
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         BackgroundTransparency = 0,
         Visible = false,
         Parent = Holder
     })
-
     local function makeScroll(posX)
         local scroll = Create("ScrollingFrame", {
             Size = UDim2.new(0.5, -10, 0, 298),
