@@ -525,7 +525,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0, 95, 0, 30)
-    Container.Position = UDim2.new(0.5, 0, 0, 0),
+    Container.Position = UDim2.new(0.5, 0, 0, 0)
     Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.ClipsDescendants = false
     Container.Parent = parent
