@@ -33,7 +33,9 @@ if type(_G.Language) == "string" and _G.Language == "Thai" then
         loadstring(luaScript)()
     end)
     if not success then
-        game:GetService("Players").LocalPlayer:Kick("ข้อผิดพลาดไม่สามารถโหลดได้")
+    print("[Luarmor] Failed to load script: Connection timed out.")
+    print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
+    print("[Luarmor] Unable to connect to API. Please check your internet connection.")    
     end
     return
 end
@@ -52,8 +54,10 @@ if isPremiumKey(script_key) then
             loadstring(luaScript)()
         end)
         if not success then
-            game:GetService("Players").LocalPlayer:Kick("Error loading script")
-        end
+        print("[Luarmor] Failed to load script: Connection timed out.")
+        print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
+        print("[Luarmor] Unable to connect to API. Please check your internet connection.")      
+      end
     end  
 else  
     game:GetService("Players").LocalPlayer:Kick("คีย์ไม่ถูกต้อง")  
