@@ -231,6 +231,26 @@ Tab:AddToggle("Left", "Infinity Jump", false, function(v)
         end)
     end
 end)
+Tab:AddToggle("Left", "No Shadows", false, function(v)
+    _G.NoShadows = v
+    if v then
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("SpotLight") or obj:IsA("PointLight") or obj:IsA("SurfaceLight") then
+                obj.Enabled = false
+            end
+        end
+        if workspace:FindFirstChildOfClass("Terrain") then
+            workspace.Terrain.CastShadow = false
+        end
+        local lighting = game:GetService("Lighting")
+        lighting.GlobalShadows = false
+        lighting.ShadowSoftness = 0
+    else
+        local lighting = game:GetService("Lighting")
+        lighting.GlobalShadows = true
+        lighting.ShadowSoftness = 0.5
+    end
+end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Right", "Item")
 local selectedModel = "Carrot"
