@@ -661,7 +661,7 @@ Fire:AddToggle("Left", "Auto Fire (Bring)", false, function(v)
             for _, m in pairs(workspace:GetDescendants()) do
                 if not _G.BringLogs then break end
                 if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
-                    m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                    m:SetPrimaryPartCFrame(CFrame.new(-0.5468149185180664, 7.632332801818848, 0.11174965649843216))
                     task.wait(0.2)
                 end
             end
@@ -679,7 +679,7 @@ Fire:AddToggle("Left", "Auto Cooked (Bring)", false, function(v)
             for _, m in pairs(workspace:GetDescendants()) do
                 if not _G.BringMorsels then break end
                 if m:IsA("Model") and m.Name == "Morsel" and m.PrimaryPart then
-                    m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                    m:SetPrimaryPartCFrame(CFrame.new(-0.5468149185180664, 7.632332801818848, 0.11174965649843216))
                     task.wait(0.2)
                 end
             end
