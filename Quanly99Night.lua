@@ -201,6 +201,32 @@ Tab:AddButton("Right", "Bring Model", function()
         end
     end
 end)
+Tab:AddTextLabel("Right", "Camp Fire")
+Tab:AddToggle("Right", "Auto Fire", false, function(v)
+    if v then
+        _G.AutoLog = true
+        local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoLog do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.AutoLog then break end
+                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
+                    if hrp then
+                        hrp.CFrame = m.PrimaryPart.CFrame
+                        m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                        task.wait(0.2)
+                    end
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoLog = false
+    end
+end)
 Tab:AddTextLabel("Right", "Local")
 local speed = 50
 
@@ -321,6 +347,55 @@ Tab:AddToggle("Right", "🤖 NPC ESP", false, function(v)
                 Label.Font = Enum.Font.GothamBold
                 Label.Parent = BackgroundFrame
 
+            elseif not v and existingESP then
+                existingESP:Destroy()
+            end
+        end
+    end
+end)
+Tab:AddToggle("Right", "ESP Mob/Animal", false, function(v)
+    _G.ToggleESPMobs = v
+    for _, model in pairs(workspace:GetDescendants()) do
+        if model:IsA("Model") and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+            local isPlayerChar = false
+            for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+                if player.Character == model then
+                    isPlayerChar = true
+                    break
+                end
+            end
+            local existingESP = model:FindFirstChild("SUPER_ESP_GUI")
+            if v and not isPlayerChar and not existingESP then
+                local ESPGui = Instance.new("BillboardGui")
+                ESPGui.Name = "SUPER_ESP_GUI"
+                ESPGui.Adornee = model:FindFirstChild("HumanoidRootPart")
+                ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                ESPGui.AlwaysOnTop = true
+                ESPGui.ResetOnSpawn = false
+                ESPGui.Parent = model
+                local BackgroundFrame = Instance.new("Frame")
+                BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                BackgroundFrame.BackgroundTransparency = 0.5
+                BackgroundFrame.BorderSizePixel = 0
+                BackgroundFrame.Parent = ESPGui
+                local StrokeFrame = Instance.new("UIStroke")
+                StrokeFrame.Color = Color3.fromRGB(255, 255, 0)
+                StrokeFrame.Thickness = 2
+                StrokeFrame.Transparency = 0.1
+                StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                StrokeFrame.Parent = BackgroundFrame
+                local Label = Instance.new("TextLabel")
+                Label.Size = UDim2.new(1, 0, 1, 0)
+                Label.Position = UDim2.new(0, 0, 0, 0)
+                Label.BackgroundTransparency = 1
+                Label.Text = "🐾 " .. model.Name
+                Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                Label.TextStrokeTransparency = 0
+                Label.TextScaled = true
+                Label.Font = Enum.Font.GothamBold
+                Label.Parent = BackgroundFrame
             elseif not v and existingESP then
                 existingESP:Destroy()
             end
