@@ -461,6 +461,98 @@ Tab:AddToggle("Right", "ESP Mob/Animal", false, function(v)
         end
     end
 end)
+Tab:AddToggle("Right", "ESP Bolt", false, function(v)
+    _G.ESPBolt = v
+    for _, model in pairs(workspace:GetDescendants()) do
+        if model:IsA("Model") and model:FindFirstChild("HumanoidRootPart") and model.Name == "Bolt" then
+            local existingESP = model:FindFirstChild("SUPER_ESP_GUI")
+            if v and not existingESP then
+                local ESPGui = Instance.new("BillboardGui")
+                ESPGui.Name = "SUPER_ESP_GUI"
+                ESPGui.Adornee = model.HumanoidRootPart
+                ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                ESPGui.AlwaysOnTop = true
+                ESPGui.ResetOnSpawn = false
+                ESPGui.Parent = model
+
+                local BackgroundFrame = Instance.new("Frame")
+                BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                BackgroundFrame.BackgroundTransparency = 0.5
+                BackgroundFrame.BorderSizePixel = 0
+                BackgroundFrame.Parent = ESPGui
+
+                local StrokeFrame = Instance.new("UIStroke")
+                StrokeFrame.Color = Color3.fromRGB(255, 255, 0)
+                StrokeFrame.Thickness = 2
+                StrokeFrame.Transparency = 0.1
+                StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                StrokeFrame.Parent = BackgroundFrame
+
+                local Label = Instance.new("TextLabel")
+                Label.Size = UDim2.new(1, 0, 1, 0)
+                Label.Position = UDim2.new(0, 0, 0, 0)
+                Label.BackgroundTransparency = 1
+                Label.Text = "⚡ " .. model.Name
+                Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                Label.TextStrokeTransparency = 0
+                Label.TextScaled = true
+                Label.Font = Enum.Font.GothamBold
+                Label.Parent = BackgroundFrame
+
+            elseif not v and existingESP then
+                existingESP:Destroy()
+            end
+        end
+    end
+end)
+Tab:AddToggle("Right", "ESP Log", false, function(v)
+    _G.ESPLog = v
+    for _, model in pairs(workspace:GetDescendants()) do
+        if model:IsA("Model") and model:FindFirstChild("HumanoidRootPart") and model.Name == "Log" then
+            local existingESP = model:FindFirstChild("SUPER_ESP_GUI")
+            if v and not existingESP then
+                local ESPGui = Instance.new("BillboardGui")
+                ESPGui.Name = "SUPER_ESP_GUI"
+                ESPGui.Adornee = model.HumanoidRootPart
+                ESPGui.Size = UDim2.new(0, 200, 0, 50)
+                ESPGui.StudsOffset = Vector3.new(0, 5, 0)
+                ESPGui.AlwaysOnTop = true
+                ESPGui.ResetOnSpawn = false
+                ESPGui.Parent = model
+
+                local BackgroundFrame = Instance.new("Frame")
+                BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+                BackgroundFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+                BackgroundFrame.BackgroundTransparency = 0.5
+                BackgroundFrame.BorderSizePixel = 0
+                BackgroundFrame.Parent = ESPGui
+
+                local StrokeFrame = Instance.new("UIStroke")
+                StrokeFrame.Color = Color3.fromRGB(0, 255, 0)
+                StrokeFrame.Thickness = 2
+                StrokeFrame.Transparency = 0.1
+                StrokeFrame.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                StrokeFrame.Parent = BackgroundFrame
+
+                local Label = Instance.new("TextLabel")
+                Label.Size = UDim2.new(1, 0, 1, 0)
+                Label.Position = UDim2.new(0, 0, 0, 0)
+                Label.BackgroundTransparency = 1
+                Label.Text = "🌲 " .. model.Name
+                Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                Label.TextStrokeTransparency = 0
+                Label.TextScaled = true
+                Label.Font = Enum.Font.GothamBold
+                Label.Parent = BackgroundFrame
+
+            elseif not v and existingESP then
+                existingESP:Destroy()
+            end
+        end
+    end
+end)
 Tab:RealLine("Right")
 
 --{ Tab Khác }--
