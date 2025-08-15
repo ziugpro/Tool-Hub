@@ -1,34 +1,434 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Aura Hub | Premium | By Ziugpro",
+    SubTitle = "NO FREE",
+    TabWidth = 150,
+    Size = UDim2.fromOffset(540, 375),
+    Acrylic = true, 
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+local Tabs = {
+    Esp = Window:AddTab({ Title = "Tab Esp and Shop", Icon = "" }),
+    Player = Window:AddTab({ Title = "Tab Player and Misc", Icon = "" }),
+    Web = Window:AddTab({ Title = "Tab Webhook", Icon = "" }),
+    Sv = Window:AddTab({ Title = "Tab Setting Ui", Icon = "" }),
+}
+
+--{ Phần Này Cũng Đéo Lỗi }--
+local EspPlayer = Tabs.Esp:AddToggle("ESP_Player", {Title = "ESP Player", Default = false })
+EspPlayer:OnChanged(function(Value)
+    _G.ESP_Player = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ESP_Player then
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer then
+                    if player.Character and player.Character:FindFirstChild("Head") and not player.Character.Head:FindFirstChild("NameESP") then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "NameESP"
+                        billboard.AlwaysOnTop = true
+                        billboard.Size = UDim2.new(0, 200, 0, 50) -- Không auto zoom
+                        billboard.StudsOffset = Vector3.new(0, 2, 0)
+                        billboard.Parent = player.Character.Head
+
+                        local nameLabel = Instance.new("TextLabel")
+                        nameLabel.BackgroundTransparency = 1
+                        nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                        nameLabel.Text = player.Name
+                        nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        nameLabel.TextStrokeTransparency = 0
+                        nameLabel.TextScaled = true
+                        nameLabel.Parent = billboard
+                    end
+                end
+            end
+        else
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+                    local esp = player.Character.Head:FindFirstChild("NameESP")
+                    if esp then esp:Destroy() end
+                end
+            end
+        end
+    end
+end)
+local ESPNPC = Tabs.Esp:AddToggle("ESP_NPC", {Title = "ESP NPC", Default = false })
+ESPNPC:OnChanged(function(Value)
+    _G.ESP_NPC = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ESP_NPC then
+            for _, npc in pairs(workspace.NPCs:GetChildren()) do
+                if npc:FindFirstChild("Head") and not npc.Head:FindFirstChild("NameESP") then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "NameESP"
+                    billboard.AlwaysOnTop = true
+                    billboard.Size = UDim2.new(0, 200, 0, 50) -- Không auto zoom
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.Parent = npc.Head
+
+                    local nameLabel = Instance.new("TextLabel")
+                    nameLabel.BackgroundTransparency = 1
+                    nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                    nameLabel.Text = npc.Name
+                    nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    nameLabel.TextStrokeTransparency = 0
+                    nameLabel.TextScaled = true
+                    nameLabel.Parent = billboard
+                end
+            end
+        else
+            for _, npc in pairs(workspace.NPCs:GetChildren()) do
+                if npc:FindFirstChild("Head") then
+                    local esp = npc.Head:FindFirstChild("NameESP")
+                    if esp then esp:Destroy() end
+                end
+            end
+        end
+    end
+end)
+local EspMob = Tabs.Esp:AddToggle("ESP_Mob", {Title = "ESP Brainrot", Default = false })
+EspMob:OnChanged(function(Value)
+    _G.ESP_Mob = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.ESP_Mob then
+            for _, mob in pairs(workspace.Mobs:GetChildren()) do
+                if mob:FindFirstChild("Head") and not mob.Head:FindFirstChild("NameESP") then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Name = "NameESP"
+                    billboard.AlwaysOnTop = true
+                    billboard.Size = UDim2.new(0, 200, 0, 50) -- Không auto zoom
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.Parent = mob.Head
+
+                    local nameLabel = Instance.new("TextLabel")
+                    nameLabel.BackgroundTransparency = 1
+                    nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                    nameLabel.Text = mob.Name
+                    nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    nameLabel.TextStrokeTransparency = 0
+                    nameLabel.TextScaled = true
+                    nameLabel.Parent = billboard
+                end
+            end
+        else
+            for _, mob in pairs(workspace.Mobs:GetChildren()) do
+                if mob:FindFirstChild("Head") then
+                    local esp = mob.Head:FindFirstChild("NameESP")
+                    if esp then esp:Destroy() end
+                end
+            end
+        end
+    end
+end)
+local ESPHitboxTimer = Tabs.Esp:AddToggle("ESP_HitboxTimer", {Title = "ESP LockBase", Default = false })
+ESPHitboxTimer:OnChanged(function(Value)
+    _G.ESP_HitboxTimer = Value
+end)
+
+spawn(function()
+    local timers = {}
+
+    while wait(1) do
+        if _G.ESP_HitboxTimer then
+            for _, hitbox in pairs(workspace:GetChildren()) do
+                if hitbox.Name == "Hitbox" and hitbox:FindFirstChild("Head") then
+                    if not timers[hitbox] then
+                        timers[hitbox] = math.random(60, 200)
+                    end
+                    if not hitbox.Head:FindFirstChild("TimerESP") then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Name = "TimerESP"
+                        billboard.AlwaysOnTop = true
+                        billboard.Size = UDim2.new(0, 200, 0, 50)
+                        billboard.StudsOffset = Vector3.new(0, 2, 0)
+                        billboard.Parent = hitbox.Head
+
+                        local label = Instance.new("TextLabel")
+                        label.BackgroundTransparency = 1
+                        label.Size = UDim2.new(1, 0, 1, 0)
+                        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        label.TextStrokeTransparency = 0
+                        label.TextScaled = true
+                        label.Parent = billboard
+                    end
+
+                    local espLabel = hitbox.Head.TimerESP:FindFirstChildOfClass("TextLabel")
+                    if espLabel then
+                        espLabel.Text = tostring(timers[hitbox])
+                    end
+
+                    timers[hitbox] = timers[hitbox] - 1
+                    if timers[hitbox] < 0 then
+                        wait(3)
+                        timers[hitbox] = math.random(60, 200)
+                    end
+                end
+            end
+        else
+            for _, hitbox in pairs(workspace:GetChildren()) do
+                if hitbox.Name == "Hitbox" and hitbox:FindFirstChild("Head") then
+                    local esp = hitbox.Head:FindFirstChild("TimerESP")
+                    if esp then esp:Destroy() end
+                end
+            end
+            timers = {}
+        end
+    end
+end)
+
+local Main = Tabs.Esp:AddSection("Shop")
+local Pet = {
+  "All",
+  "Noobini Pizzanini",
+  "Tim Cheese",
+  "Lirili Larila",
+  "Tung Tung Tung Sahur",
+  "Fluriflura",
+  "Trippi Troppi",
+  "Capachino Assassino",
+  "Boneca Ambalabu",
+  "Gangster Footera",
+  "Svinina Bombardino",
+  "Brr.Brr. Patapim", 
+  "Bananita Dolphinita",  
+  "Trulimero Trulicinea",  
+  "Ta Ta Ta Ta Sahur",  
+  "Frigo Camelo",
+  "Chef Crabracadebra",
+  "Burbaloni Loliloli",
+  "Tralalero Tralala",
+  "Frigo Camelo",
+}
+local MultiDropdown = Tabs.Esp:AddDropdown("MultiDropdown", {
+        Title = "Select Pet",
+        Description = "",
+        Values = Pet,
+        Multi = true,
+        Default = {"one", "two"},
+        Callback = function(Value)
+        end
+    })
+local Type = {
+  "Rare",
+  "Common",
+  "Epic",
+  "Legendary",
+  "Mythic",
+  "Brainrot God", 
+}
+local MultiDropdown = Tabs.Esp:AddDropdown("MultiDropdown", {
+        Title = "Select Type",
+        Description = "",
+        Values = Type,
+        Multi = true,
+        Default = {"one", "two"},
+        Callback = function(Value)
+        end
+    })
+local Toggle = Tabs.Esp:AddToggle("Toggle", {Title = "Auto Buy", Default = false })
+local Toggle = Tabs.Esp:AddToggle("Toggle", {Title = "Auto Buy All [Good]", Default = false })
+--{ Từ Đây Lên Trên Đéo Có Lỗi }--
+
+--{ Phần Này Đéo Có Lỗi }--
+
+local Input = Tabs.Web:AddInput("Input", {
+        Title = "Webhook",
+        Default = "",
+        Placeholder = "Url",
+        Numeric = false,
+        Finished = false, 
+        Callback = function(Value)
+        end
+    })
+
+local Toggle = Tabs.Web:AddToggle("Toggle", {Title = "Tag Everyone", Default = false })
+local Toggle = Tabs.Web:AddToggle("Toggle", {Title = "Start Webhook", Default = false })
+
+local Main = Tabs.Web:AddSection("Setting")
+
+local Toggle = Tabs.Web:AddToggle("Toggle", {Title = "When You Steal Brainrot", Default = false })
+local Toggle = Tabs.Web:AddToggle("Toggle", {Title = "When Buy Brainrot", Default = false })
+local Toggle = Tabs.Web:AddToggle("Toggle", {Title = "When You Is Attack", Default = false })
+
+--{ Phần Player Này Đéo Có Lỗi }--
+local SpeedValue = 16
+
+local Speedslider = Tabs.Player:AddSlider("Speed_Slider", {
+    Title = "Character Speed",
+    Default = 16,
+    Min = 16,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(Value)
+        SpeedValue = Value
+    end
+})
+
+local SpeedToggle = Tabs.Player:AddToggle("Speed_Toggle", {Title = "Enable Speed", Default = false })
+SpeedToggle:OnChanged(function(Value)
+    _G.Speed_Toggle = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.Speed_Toggle then
+            local char = game.Players.LocalPlayer.Character
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid").WalkSpeed = SpeedValue
+            end
+        else
+            local char = game.Players.LocalPlayer.Character
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+            end
+        end
+    end
+end)
+local JumpValue = 50
+
+local JumpSlider = Tabs.Player:AddSlider("Jump_Slider_ID", {
+    Title = "Character Jump",
+    Default = 50,
+    Min = 50,
+    Max = 200,
+    Rounding = 1,
+    Callback = function(Value)
+        JumpValue = Value
+    end
+})
+
+local JumpToggle = Tabs.Player:AddToggle("Jump_Toggle_ID", {Title = "Enable Jump", Default = false })
+JumpToggle:OnChanged(function(Value)
+    _G.Jump_Toggle = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.Jump_Toggle then
+            local char = game.Players.LocalPlayer.Character
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid").JumpPower = JumpValue
+            end
+        else
+            local char = game.Players.LocalPlayer.Character
+            if char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid").JumpPower = 50
+            end
+        end
+    end
+end)
+local AuraRange = 10
+
+local AuraSlider = Tabs.Player:AddSlider("KillAura_Range_ID", {
+    Title = "Kill Aura Range",
+    Default = 10,
+    Min = 5,
+    Max = 50,
+    Rounding = 1,
+    Callback = function(Value)
+        AuraRange = Value
+    end
+})
+
+local AuraToggle = Tabs.Player:AddToggle("KillAura_Toggle_ID", {Title = "Enable Kill Aura", Default = false })
+AuraToggle:OnChanged(function(Value)
+    _G.KillAura_Enabled = Value
+end)
+
+spawn(function()
+    while wait(0.1) do
+        if _G.KillAura_Enabled then
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                for _, v in pairs(game.Workspace:GetDescendants()) do
+                    if v:IsA("Model") and v:FindFirstChild("Humanoid") and v ~= char then
+                        local hrp = v:FindFirstChild("HumanoidRootPart")
+                        if hrp and (hrp.Position - char.HumanoidRootPart.Position).Magnitude <= AuraRange then
+                            v.Humanoid.Health = 0
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+local NoClipToggle = Tabs.Player:AddToggle("NoClip_Toggle_ID", {Title = "NoClip", Default = false })
+NoClipToggle:OnChanged(function(Value)
+    _G.NoClip_Enabled = Value
+end)
+
+spawn(function()
+    while wait() do
+        local char = game.Players.LocalPlayer.Character
+        if char then
+            for _, v in pairs(char:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide ~= nil then
+                    v.CanCollide = not _G.NoClip_Enabled
+                end
+            end
+        end
+    end
+end)
+local Main = Tabs.Player:AddSection("Misc")
+local AntibanToggle = Tabs.Player:AddToggle("Antiban_Toggle_ID", {Title = "Antiban", Default = false })
+AntibanToggle:OnChanged(function(Value)
+    _G.Antiban_Enabled = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.Antiban_Enabled then
+            pcall(function()
+                game:GetService("ReplicatedStorage").Events.AntiCheat:Destroy()
+            end)
+        end
+    end
+end)
+local AntiKickToggle = Tabs.Player:AddToggle("AntiKick_Toggle_ID", {Title = "AntiKick", Default = false })
+AntiKickToggle:OnChanged(function(Value)
+    _G.AntiKick_Enabled = Value
+    if Value then
+        local mt = getrawmetatable(game)
+        local oldNamecall = mt.__namecall
+        setreadonly(mt, false)
+        mt.__namecall = newcclosure(function(self, ...)
+            local method = getnamecallmethod()
+            if method == "Kick" or method == "kick" then
+                return nil
+            end
+            return oldNamecall(self, ...)
+        end)
+        setreadonly(mt, true)
+    end
+end)
+
+
+
+
+--{ Cái Nút Bật Tắt Ui Xác Nhận Không Lỗi }--
 game.StarterGui:SetCore("SendNotification", {
     Title = "Aura Hub",
     Text = "Success Loading",
-    Icon = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420",
+    Icon = "rbxthumb://type=Asset&id=83230952715744&w=420&h=420",
     Duration = 5,
     Callback = function()
     end
 })
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not humanoid then return end
-
-local function heavyLoadStep()
-    local sum = 0
-    for i = 1, 1e6 do
-        for j = 1, 10 do
-            sum = sum + math.sin(i * j)
-        end
-    end
-    return sum
-end
-
-for step = 1, 5 do
-    task.spawn(function()
-        heavyLoadStep()
-    end)
-    task.wait(1)
-end
 repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-getgenv().Image = "rbxthumb://type=Asset&id=111167393120231&w=420&h=420"
+getgenv().Image = "rbxthumb://type=Asset&id=83230952715744&w=420&h=420"
 getgenv().ToggleUI = "LeftControl"
 
 task.spawn(function()
@@ -56,524 +456,14 @@ task.spawn(function()
     end
 end)
 
-local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
-local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
-local Tab = UI:Create(105, "General")
-local Teleport = UI:Create(110, "Teleport")
-local Esp = UI:Create(105, "Esp")
-local Misc = UI:Create(105, "Misc")
-local Steal = UI:Create(120, "Steal Brainrot")
-local Web = UI:Create(110, "Webhook")
-
-function ForceTeleport(cf, holdTime)
-    local player = game.Players.LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local root = char:WaitForChild("HumanoidRootPart")
-
-    local t0 = tick()
-    while tick() - t0 < (holdTime or 0.75) do
-        root.CFrame = cf
-        root.Velocity = Vector3.zero
-        root.AssemblyLinearVelocity = Vector3.zero
-        task.wait()
-    end
-end
-Tab:AddTextLabel("Left", "Main")
-Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
-    _G.AutoWalkToTargetActive = v
-
-    local x1 = -411.5451354980469
-    local y1 = -6.275163173675537
-    local z1 = -128.6896209716797
-
-    local x2 = 0.0 + x1
-    local y2 = 0.0 + y1
-    local z2 = 0.0 + z1
-
-    local vecX = x2 * 1
-    local vecY = y2 * 1
-    local vecZ = z2 * 1
-
-    local finalTargetPosition = Vector3.new(vecX, vecY, vecZ)
-
-    local playersService = game:GetService("Players")
-    local runService = game:GetService("RunService")
-    local workspaceService = game:GetService("Workspace")
-    local lightingService = game:GetService("Lighting")
-
-    local currentPlayer = playersService.LocalPlayer
-
-    if v and _G._AutoWalkToTargetConnection == nil then
-        _G._AutoWalkToTargetConnection = runService.RenderStepped:Connect(function()
-            local getPlayer = playersService.LocalPlayer
-            if getPlayer == nil then
-                return
-            end
-
-            local getChar = getPlayer.Character
-            if getChar == nil then
-                return
-            end
-
-            local getHRP = getChar:FindFirstChild("HumanoidRootPart")
-            if getHRP == nil then
-                return
-            end
-
-            local getHumanoid = getChar:FindFirstChildOfClass("Humanoid")
-            if getHumanoid == nil then
-                return
-            end
-
-            local currentPosX = getHRP.Position.X
-            local currentPosY = getHRP.Position.Y
-            local currentPosZ = getHRP.Position.Z
-
-            local currentVector = Vector3.new(currentPosX, currentPosY, currentPosZ)
-
-            local diffVector = currentVector - finalTargetPosition
-
-            local distX = diffVector.X * diffVector.X
-            local distY = diffVector.Y * diffVector.Y
-            local distZ = diffVector.Z * diffVector.Z
-
-            local distSqr = distX + distY + distZ
-            local distance = math.sqrt(distSqr)
-
-            local shouldMove = false
-            if distance > 3.0 then
-                shouldMove = true
-            end
-
-            if shouldMove == true then
-                getHumanoid:MoveTo(finalTargetPosition)
-            end
-        end)
-    elseif not v and _G._AutoWalkToTargetConnection ~= nil then
-        local disconnectConn = _G._AutoWalkToTargetConnection
-        disconnectConn:Disconnect()
-        _G._AutoWalkToTargetConnection = nil
-    end
-end)
-Tab:AddToggle("Left", "Lock Base (Coming Soon)", false, function(v)
-end)
-Tab:AddToggle("Left", "Anti Hit", false, function(v)
-    local player = game.Players.LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-
-    if hrp == nil then return end
-
-    if v then
-        if not char:FindFirstChild("FakeRoot") then
-            local fake = hrp:Clone()
-            fake.Name = "FakeRoot"
-            fake.Parent = char
-            fake.Anchored = true
-            fake.CanCollide = false
-            fake.Transparency = 1
-        end
-        hrp.Position = Vector3.new(9999, 9999, 9999)
-    else
-        hrp.Position = char:FindFirstChild("FakeRoot") and char.FakeRoot.Position or char:GetPivot().Position
-        if char:FindFirstChild("FakeRoot") then
-            char.FakeRoot:Destroy()
-        end
-    end
-end)
-Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
-    local player = game.Players.LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    if v then
-        if not char:FindFirstChild("OriginalRootPosition") then
-            local value = Instance.new("Vector3Value")
-            value.Name = "OriginalRootPosition"
-            value.Value = hrp.Position
-            value.Parent = char
-        end
-        hrp.Anchored = true
-        hrp.Position = Vector3.new(99999, 99999, 99999)
-    else
-        local saved = char:FindFirstChild("OriginalRootPosition")
-        if saved then
-            hrp.Position = saved.Value
-            saved:Destroy()
-        else
-            hrp.Position = char:GetPivot().Position
-        end
-        task.wait(0.1)
-        hrp.Anchored = false
-    end
-end)
-Tab:AddButton("Left", "Dash Through Wall", function()
-    local Players = game:GetService("Players")
-    local Workspace = game:GetService("Workspace")
-    local RunService = game:GetService("RunService")
-
-    local LocalPlayer = Players.LocalPlayer
-    if not LocalPlayer then
-        return
-    end
-
-    local Character = LocalPlayer.Character
-    if not Character then
-        Character = LocalPlayer.CharacterAdded:Wait()
-    end
-
-    local RootPart = Character:FindFirstChild("HumanoidRootPart")
-    if not RootPart then
-        return
-    end
-
-    local CurrentPosition = RootPart.Position
-    local CurrentCFrame = RootPart.CFrame
-    local FacingDirection = CurrentCFrame.LookVector
-
-    local DashMagnitude = 30
-    local DashOffset = Vector3.new(0, 1.25, 0)
-
-    local DashVector = FacingDirection * DashMagnitude
-    local Destination = CurrentPosition + DashVector + DashOffset
-
-    local BodyPosition = Instance.new("BodyPosition")
-    BodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-    BodyPosition.P = 1e5
-    BodyPosition.D = 2000
-    BodyPosition.Position = Destination
-    BodyPosition.Parent = RootPart
-
-    local DashDuration = 0.2
-    local Connection = nil
-    local StartTime = tick()
-
-    Connection = RunService.RenderStepped:Connect(function()
-        if tick() - StartTime >= DashDuration then
-            BodyPosition:Destroy()
-            if Connection then
-                Connection:Disconnect()
-            end
-        end
-    end)
-end)
-Tab:RealLine("Left")
-local currentSpeed = 50
-_G.SuperSpeed = false
-
-Tab:AddSlider("Right", "Speed", 1, 100, currentSpeed, function(val)
-    currentSpeed = val
-end)
-
-Tab:AddToggle("Right", "Super Speed", false, function(v)
-    _G.SuperSpeed = v
-
-    if _G.SuperSpeed and not _G._SuperSpeedConnection then
-        _G._SuperSpeedConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if human and _G.SuperSpeed then
-                human.WalkSpeed = currentSpeed
-            end
-        end)
-    elseif not _G.SuperSpeed and _G._SuperSpeedConnection then
-        _G._SuperSpeedConnection:Disconnect()
-        _G._SuperSpeedConnection = nil
-
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if human then
-            human.WalkSpeed = 16
-        end
-    end
-end)
-Tab:AddToggle("Right", "Super Jump", false, function(v)
-    _G.SuperJump = v
-
-    if _G.SuperJump and not _G._SuperJumpConnection then
-        _G._SuperJumpConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if human and _G.SuperJump then
-                human.JumpPower = 150
-            end
-        end)
-    elseif not _G.SuperJump and _G._SuperJumpConnection then
-        _G._SuperJumpConnection:Disconnect()
-        _G._SuperJumpConnection = nil
-
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if human then
-            human.JumpPower = 50
-        end
-    end
-end)
-Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Bug Game")
-Tab:AddToggle("Right", "Spam Remotes", false, function(v)
-    _G.SpamRemotes = v
-
-    while _G.SpamRemotes do
-        for _, obj in ipairs(game:GetDescendants()) do
-            if obj:IsA("RemoteEvent") then
-                pcall(function()
-                    obj:FireServer()
-                end)
-            elseif obj:IsA("RemoteFunction") then
-                pcall(function()
-                    obj:InvokeServer()
-                end)
-            end
-        end
-        wait(1)
-    end
-end)
-Tab:RealLine("Right")
-Tab:AddTextLabel("Right", "Misc")
-Tab:AddButton("Right", "Become Black", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(15, 15, 15)
-        end
-    end
-end)
-Tab:AddButton("Right", "Become While ", function()
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Color = Color3.fromRGB(255, 255, 255)
-        end
-    end
-end)
-Tab:RealLine("Right")
-Web:AddTextLabel("Left", "Main")
-Web:AddTextbox("Left", "Webhook Url", "", function(text)
-end)
-Web:AddToggle("Left", "Tag Everyone", false, function(v)
-end)
-Web:AddToggle("Left", "Start Webhook", false, function(v)
-end)
-Web:AddText("Left", "Please see webhook activity status below if 🔴 is inactive 🟢 is active 🟡 is maintenance")
-Web:AddLabel("Left", "Status : 🔴")
-Web:RealLine("Left")
-Web:AddTextLabel("Right", "Setting")
-Web:AddToggle("Right", "When Steal Brainrot", false, function(v)
-end)
-Web:AddToggle("Right", "When Brainrot Lost", false, function(v)
-end)
-Web:AddToggle("Right", "When Buy Brainrot", false, function(v)
-end)
-Web:RealLine("Right")
-Teleport:AddTextLabel("Left", "Teleport")
-Teleport:AddButton("Left", "TP To Sky", function()
-ForceTeleport(CFrame.new(-412.1122741699219, 133.4999957084656, 120.07735443115234), 5)
-end)
-Teleport:AddButton("Left", "TP To Down", function()
-ForceTeleport(CFrame.new(-412.1122741699219, 6.4999957084656, 120.07735443115234), 1)
-end)
-Teleport:AddButton("Left", "TP To Center", function()
-ForceTeleport(CFrame.new(-410.9408874511719, -5.56812047958374, -129.55369567871094), 3)
-end)
-Teleport:RealLine("Left")
-Esp:AddTextLabel("Right", "Esp")
-Esp:AddToggle("Right", "ESP Player", false, function(v)
-    _G.PlayerESP = v
-
-    local Players = game:GetService("Players")
-    local RunService = game:GetService("RunService")
-    local LocalPlayer = Players.LocalPlayer
-
-    if v and not _G._PlayerESPConnection then
-        _G._PlayerESPConnection = RunService.RenderStepped:Connect(function()
-            for _, plr in ipairs(Players:GetPlayers()) do
-                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                    if not plr.Character:FindFirstChild("ESPTag") then
-                        local billboard = Instance.new("BillboardGui")
-                        billboard.Name = "ESPTag"
-                        billboard.Adornee = plr.Character:FindFirstChild("Head") or plr.Character:FindFirstChild("HumanoidRootPart")
-                        billboard.Size = UDim2.new(0, 200, 0, 50)
-                        billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-                        billboard.AlwaysOnTop = true
-                        billboard.LightInfluence = 0
-                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-                        local label = Instance.new("TextLabel")
-                        label.Name = "Text"
-                        label.Size = UDim2.new(1, 0, 1, 0)
-                        label.BackgroundTransparency = 1
-                        label.TextStrokeTransparency = 0.5
-                        label.TextScaled = true
-                        label.Font = Enum.Font.GothamBold
-                        label.TextXAlignment = Enum.TextXAlignment.Center
-
-                        local function getTeamColor(p)
-                            return p.Team and p.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
-                        end
-
-                        label.TextColor3 = getTeamColor(plr)
-                        local health = math.floor((plr.Character:FindFirstChildOfClass("Humanoid") or {}).Health or 0)
-                        label.Text = plr.Name .. " | HP: " .. health
-
-                        label.Parent = billboard
-                        billboard.Parent = plr.Character
-                    else
-                        local tag = plr.Character:FindFirstChild("ESPTag")
-                        local label = tag:FindFirstChild("Text")
-                        local humanoid = plr.Character:FindFirstChildOfClass("Humanoid")
-
-                        if tag and label and humanoid then
-                            label.Text = plr.Name .. " | HP: " .. math.floor(humanoid.Health)
-                            label.TextColor3 = plr.Team and plr.Team.TeamColor.Color or Color3.fromRGB(255, 255, 255)
-                        end
-                    end
-                end
-            end
-        end)
-    elseif not v and _G._PlayerESPConnection then
-        for _, plr in ipairs(Players:GetPlayers()) do
-            if plr.Character and plr.Character:FindFirstChild("ESPTag") then
-                plr.Character.ESPTag:Destroy()
-            end
-        end
-        _G._PlayerESPConnection:Disconnect()
-        _G._PlayerESPConnection = nil
-    end
-end)
-Esp:AddToggle("Right", "ESP Brainrot", false, function(v)
-    _G.ModelESP = v
-
-    local RunService = game:GetService("RunService")
-    local Workspace = game:GetService("Workspace")
-
-    if v and not _G._ModelESPConnection then
-        _G._ModelESPConnection = RunService.RenderStepped:Connect(function()
-            for _, obj in ipairs(Workspace:GetDescendants()) do
-                if obj:IsA("Model") and not obj:FindFirstChildOfClass("Humanoid") and not obj:FindFirstChild("ESPTag") then
-                    local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-                    if primary then
-                        local billboard = Instance.new("BillboardGui")
-                        billboard.Name = "ESPTag"
-                        billboard.Adornee = primary
-                        billboard.Size = UDim2.new(0, 200, 0, 50)
-                        billboard.StudsOffset = Vector3.new(0, 3, 0)
-                        billboard.AlwaysOnTop = true
-                        billboard.LightInfluence = 0
-                        billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-                        local label = Instance.new("TextLabel")
-                        label.Size = UDim2.new(1, 0, 1, 0)
-                        label.BackgroundTransparency = 1
-                        label.TextColor3 = Color3.fromRGB(0, 255, 0)
-                        label.TextStrokeTransparency = 0
-                        label.Text = obj.Name
-                        label.TextScaled = true
-                        label.Font = Enum.Font.Gotham
-                        label.Parent = billboard
-
-                        billboard.Parent = obj
-                    end
-                elseif obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
-                    local tag = obj:FindFirstChild("ESPTag")
-                    if tag and tag:FindFirstChildOfClass("TextLabel") then
-                        tag.TextLabel.Text = obj.Name
-                    end
-                end
-            end
-        end)
-    elseif not v and _G._ModelESPConnection then
-        for _, obj in ipairs(Workspace:GetDescendants()) do
-            if obj:IsA("Model") and obj:FindFirstChild("ESPTag") then
-                obj.ESPTag:Destroy()
-            end
-        end
-        _G._ModelESPConnection:Disconnect()
-        _G._ModelESPConnection = nil
-    end
-end)
-Esp:AddToggle("Right", "ESP NPC", false, function(v)
-    _G.NPCEspEnabled = v
-
-    local RunService = game:GetService("RunService")
-    local NPCFolder = workspace:FindFirstChild("NPCs") or workspace -- sửa nếu NPC ở folder khác
-
-    if v and not _G._NPCEspConnection then
-        _G._NPCEspConnection = RunService.RenderStepped:Connect(function()
-            for _, npc in ipairs(NPCFolder:GetChildren()) do
-                if npc:IsA("Model") and not npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") and npc:FindFirstChild("HumanoidRootPart") then
-                    local name = npc.Name
-                    local hp = npc.Humanoid and math.floor(npc.Humanoid.Health) or "?"
-
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = "ESPTag"
-                    billboard.Adornee = npc:FindFirstChild("Head") or npc:FindFirstChild("HumanoidRootPart")
-                    billboard.Size = UDim2.new(0, 200, 0, 50)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-                    billboard.LightInfluence = 0
-                    billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-                    local label = Instance.new("TextLabel")
-                    label.Size = UDim2.new(1, 0, 1, 0)
-                    label.BackgroundTransparency = 1
-                    label.TextColor3 = Color3.fromRGB(255, 255, 0)
-                    label.TextStrokeTransparency = 0
-                    label.Text = name .. " | HP: " .. tostring(hp)
-                    label.TextScaled = true
-                    label.Font = Enum.Font.Gotham
-                    label.Parent = billboard
-
-                    billboard.Parent = npc
-                elseif npc:FindFirstChild("ESPTag") and npc:FindFirstChild("Humanoid") then
-                    local label = npc.ESPTag:FindFirstChildOfClass("TextLabel")
-                    if label then
-                        label.Text = npc.Name .. " | HP: " .. math.floor(npc.Humanoid.Health)
-                    end
-                end
-            end
-        end)
-    elseif not v and _G._NPCEspConnection then
-        for _, npc in ipairs(NPCFolder:GetChildren()) do
-            if npc:IsA("Model") and npc:FindFirstChild("ESPTag") then
-                npc.ESPTag:Destroy()
-            end
-        end
-        _G._NPCEspConnection:Disconnect()
-        _G._NPCEspConnection = nil
-    end
-end)
-Esp:RealLine("Right")
-Misc:AddTextLabel("Left", "Shop")
-Misc:AddMultiDropdown("Left", "Pet", {"Nah"}, "Nah", function(choice)
-end)
-Misc:AddToggle("Left", "Auto Buy (All)", false, function(v)
-end)
-Misc:AddToggle("Left", "Auto Buy (Bug)", false, function(v)
-end)
-Misc:RealLine("Left")
-Misc:AddTextLabel("Right", "Anti-Player")
-Misc:AddToggle("Right", "Anti-Ban", false, function(v)
-end)
-Misc:AddToggle("Right", "Anti-Steal", false, function(v)
-end)
-Misc:AddToggle("Right", "Anti-Kick", false, function(v)
-end)
-Misc:RealLine("Right")
-Steal:AddTextLabel("Left", "Steal")
-Steal:AddDropdown("Left", "Select Player", {"nil value"}, "Easy", function(choice)
-end)
-Steal:AddToggle("Left", "Start Steal", false, function(v)
-end)
-Steal:AddLabel("Left", "Status: 🔴")
-Steal:RealLine("Left")
-Steal:AddTextLabel("Right", "Setting")
-Steal:AddTextbox("Right", "Speed", "45", function(text)
-end)
-Steal:AddToggle("Right", "Hide Steal Notify", true, function(v)
-end)
-Steal:AddToggle("Right", "Hide Steal You Hold", false, function(v)
-end)
-Steal:RealLine("Right")
+--{ Phần Lưu Setting Đéo Có Lỗi }--
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("FluentScriptHub")
+SaveManager:SetFolder("FluentScriptHub/specific-game")
+InterfaceManager:BuildInterfaceSection(Tabs.Sv)
+SaveManager:BuildConfigSection(Tabs.Sv)
+SaveManager:LoadAutoloadConfig()
