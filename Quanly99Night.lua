@@ -260,7 +260,7 @@ end)
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 
-Tab:AddToggle("Left", "Auto Chop Tree", false, function(v)
+Tab:AddToggle("Right", "Auto Chop Tree", false, function(v)
     _G.AutoChop = v
     if v then
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
