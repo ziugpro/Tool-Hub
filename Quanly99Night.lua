@@ -288,7 +288,7 @@ Tab:AddToggle("Right", "Auto Cooked (Bring)", false, function(v)
         _G.BringMorsels = false
     end
 end)
-Tab:AddLabel("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
+Tab:AddText("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
 Tab:AddTextLabel("Right", "Tree")
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
