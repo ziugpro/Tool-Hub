@@ -202,21 +202,19 @@ Tab:AddButton("Right", "Bring Model", function()
     end
 end)
 Tab:AddTextLabel("Right", "Camp Fire")
-Tab:AddToggle("Right", "Auto Fire", false, function(v)
+Tab:AddToggle("Right", "Auto Fire (Teleport)", false, function(v)
     if v then
         _G.AutoLog = true
         local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         local originalPos = hrp and hrp.CFrame
-        local brought = {}
         while _G.AutoLog do
             task.wait()
             for _, m in pairs(workspace:GetDescendants()) do
                 if not _G.AutoLog then break end
-                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart and not brought[m] then
+                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
                     if hrp then
                         hrp.CFrame = m.PrimaryPart.CFrame
                         m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
-                        brought[m] = true
                         task.wait(0.2)
                     end
                 end
@@ -230,21 +228,19 @@ Tab:AddToggle("Right", "Auto Fire", false, function(v)
     end
 end)
 
-Tab:AddToggle("Right", "Auto Cooked", false, function(v)
+Tab:AddToggle("Right", "Auto Cooked (Teleport)", false, function(v)
     if v then
         _G.AutoMorsel = true
         local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         local originalPos = hrp and hrp.CFrame
-        local brought = {}
         while _G.AutoMorsel do
             task.wait()
             for _, m in pairs(workspace:GetDescendants()) do
                 if not _G.AutoMorsel then break end
-                if m:IsA("Model") and m.Name == "Morsel" and m.PrimaryPart and not brought[m] then
+                if m:IsA("Model") and m.Name == "Morsel" and m.PrimaryPart then
                     if hrp then
                         hrp.CFrame = m.PrimaryPart.CFrame
                         m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
-                        brought[m] = true
                         task.wait(0.2)
                     end
                 end
@@ -257,6 +253,43 @@ Tab:AddToggle("Right", "Auto Cooked", false, function(v)
         _G.AutoMorsel = false
     end
 end)
+Tab:AddToggle("Right", "Auto Fire (Bring)", false, function(v)
+    if v then
+        _G.BringLogs = true
+        while _G.BringLogs do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.BringLogs then break end
+                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
+                    m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                    task.wait(0.2)
+                end
+            end
+        end
+    else
+        _G.BringLogs = false
+    end
+end)
+
+Tab:AddToggle("Right", "Auto Cooked (Bring)", false, function(v)
+    if v then
+        _G.BringMorsels = true
+        while _G.BringMorsels do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.BringMorsels then break end
+                if m:IsA("Model") and m.Name == "Morsel" and m.PrimaryPart then
+                    m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                    task.wait(0.2)
+                end
+            end
+        end
+    else
+        _G.BringMorsels = false
+    end
+end)
+Tab:AddLabel("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
+Tab:AddTextLabel("Right", "Tree")
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 
