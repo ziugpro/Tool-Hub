@@ -277,7 +277,32 @@ Tab:AddToggle("Right", "Auto Fire (Teleport)", false, function(v)
         _G.AutoLog = false
     end
 end)
-
+Tab:AddToggle("Right", "Auto Fire (Teleport - Coal)", false, function(v)
+    if v then
+        _G.AutoCoal = true
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoCoal do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.AutoCoal then break end
+                if m:IsA("Model") and m.Name == "Coal" and m.PrimaryPart then
+                    if hrp then
+                        hrp.CFrame = m.PrimaryPart.CFrame
+                        m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                        task.wait(0.2)
+                    end
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoCoal = false
+    end
+end)
 Tab:AddToggle("Right", "Auto Cooked (Teleport)", false, function(v)
     if v then
         _G.AutoMorsel = true
@@ -347,6 +372,95 @@ Tab:AddButton("Right", "Teleport To Camp", function()
 end)
 Tab:AddText("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
 Tab:AddTextLabel("Right", "Tree")
+Tab:AddTextLabel("Right", "Create")
+Tab:AddToggle("Right", "Auto Log (Bring)", false, function(v)
+    if v then
+        _G.CollectLogs = true
+        while _G.CollectLogs do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.CollectLogs then break end
+                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
+                    m:SetPrimaryPartCFrame(CFrame.new(20.82342529296875, 7.753311634063721, -5.534992694854736))
+                    task.wait(0.2)
+                end
+            end
+        end
+    else
+        _G.CollectLogs = false
+    end
+end)
+
+Tab:AddToggle("Right", "Auto Bolt (Bring)", false, function(v)
+    if v then
+        _G.CollectBolt = true
+        while _G.CollectBolt do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.CollectBolt then break end
+                if m:IsA("Model") and m.Name == "Bolt" and m.PrimaryPart then
+                    m:SetPrimaryPartCFrame(CFrame.new(20.82342529296875, 7.753311634063721, -5.534992694854736))
+                    task.wait(0.2)
+                end
+            end
+        end
+    else
+        _G.CollectMorsels = false
+    end
+end)
+Tab:AddToggle("Right", "Auto Log (Teleport)", false, function(v)
+    if v then
+        _G.AutoLogs = true
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoLogs do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.AutoLogs then break end
+                if m:IsA("Model") and m.Name == "Log" and m.PrimaryPart then
+                    if hrp then
+                        hrp.CFrame = m.PrimaryPart.CFrame
+                        m:SetPrimaryPartCFrame(CFrame.new(20.82342529296875, 7.753311634063721, -5.534992694854736))
+                        task.wait(0.2)
+                    end
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoLogs = false
+    end
+end)
+
+Tab:AddToggle("Right", "Auto Bolt (Teleport)", false, function(v)
+    if v then
+        _G.AutoBolts = true
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoBolts do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.AutoBolts then break end
+                if m:IsA("Model") and m.Name == "Bolt" and m.PrimaryPart then
+                    if hrp then
+                        hrp.CFrame = m.PrimaryPart.CFrame
+                        m:SetPrimaryPartCFrame(CFrame.new(20.82342529296875, 7.753311634063721, -5.534992694854736))
+                        task.wait(0.2)
+                    end
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoBolts = false
+    end
+end)
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 
