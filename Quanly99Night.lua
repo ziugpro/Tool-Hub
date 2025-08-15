@@ -252,6 +252,39 @@ Tab:AddToggle("Right", "Auto Cooked", false, function(v)
         _G.AutoMorsel = false
     end
 end)
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+Tab:AddToggle("Right", "Auto Chop Tree", false, function(v)
+    _G.AutoChop = v
+    if v then
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoChop do
+            task.wait()
+            local trees = {}
+            for _, m in pairs(workspace:GetDescendants()) do
+                if m:IsA("Model") and m.Name == "Tree" and m.PrimaryPart then
+                    table.insert(trees, m)
+                end
+            end
+            if #trees == 0 then break end
+            for _, tree in ipairs(trees) do
+                if not _G.AutoChop then break end
+                if hrp and tree.PrimaryPart then
+                    hrp.CFrame = tree.PrimaryPart.CFrame + Vector3.new(0, 0, -3)
+                    UIS.InputBegan:Fire({UserInputType = Enum.UserInputType.MouseButton1}, false)
+                    task.wait(1)
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoChop = false
+    end
+end)
 Tab:AddTextLabel("Right", "Local")
 local speed = 50
 
