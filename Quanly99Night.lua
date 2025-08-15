@@ -338,6 +338,13 @@ Tab:AddToggle("Right", "Auto Cooked (Bring)", false, function(v)
         _G.BringMorsels = false
     end
 end)
+Tab:AddButton("Right", "Teleport To Camp", function()
+    local player = game.Players.LocalPlayer
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        hrp.CFrame = CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207)
+    end
+end)
 Tab:AddText("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
 Tab:AddTextLabel("Right", "Tree")
 local UIS = game:GetService("UserInputService")
