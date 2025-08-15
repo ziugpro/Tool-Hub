@@ -371,7 +371,6 @@ Tab:AddButton("Right", "Teleport To Camp", function()
     end
 end)
 Tab:AddText("Right", "Using Auto Fire and Auto Cooked Teleport will be more effective than Bring and Bring may be buggy")
-Tab:AddTextLabel("Right", "Tree")
 Tab:AddTextLabel("Right", "Create")
 Tab:AddToggle("Right", "Auto Log (Bring)", false, function(v)
     if v then
@@ -461,6 +460,7 @@ Tab:AddToggle("Right", "Auto Bolt (Teleport)", false, function(v)
         _G.AutoBolts = false
     end
 end)
+Tab:AddTextLabel("Right", "Tree")
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 
