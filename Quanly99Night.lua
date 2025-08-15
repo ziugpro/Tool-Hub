@@ -227,6 +227,31 @@ Tab:AddToggle("Right", "Auto Fire", false, function(v)
         _G.AutoLog = false
     end
 end)
+Tab:AddToggle("Left", "Auto Cooked", false, function(v)
+    if v then
+        _G.AutoMorsel = true
+        local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoMorsel do
+            task.wait()
+            for _, m in pairs(workspace:GetDescendants()) do
+                if not _G.AutoMorsel then break end
+                if m:IsA("Model") and m.Name == "Morsel" and m.PrimaryPart then
+                    if hrp then
+                        hrp.CFrame = m.PrimaryPart.CFrame
+                        m:SetPrimaryPartCFrame(CFrame.new(0.5406733155250549, 12.499372482299805, -0.718663215637207))
+                        task.wait(0.2)
+                    end
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoMorsel = false
+    end
+end)
 Tab:AddTextLabel("Right", "Local")
 local speed = 50
 
