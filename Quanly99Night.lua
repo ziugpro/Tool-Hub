@@ -227,7 +227,7 @@ Tab:AddToggle("Right", "Auto Fire", false, function(v)
         _G.AutoLog = false
     end
 end)
-Tab:AddToggle("Left", "Auto Cooked", false, function(v)
+Tab:AddToggle("Right", "Auto Cooked", false, function(v)
     if v then
         _G.AutoMorsel = true
         local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
