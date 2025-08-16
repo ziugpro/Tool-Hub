@@ -2,21 +2,19 @@ local PremiumKeys = {
     "jhy4chtoc8po4v8ei71m1law2unf9l2t", 
     "HFmFnVAv3n0Lu8sOynboDODYLVN0kCXy",
 }  
-  
+
 local BlacklistKeys = {  
     ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
 }  
-  
+
 local function isPremiumKey(key)  
     if type(key) ~= "string" then return false end
     for _, v in ipairs(PremiumKeys) do  
-        if v == key then  
-            return true  
-        end  
+        if v == key then return true end  
     end  
     return false  
 end  
-  
+
 local function getBlacklistReason(key)  
     if type(key) ~= "string" then return nil end
     return BlacklistKeys[key]  
@@ -29,42 +27,61 @@ if type(script_key) ~= "string" or getBlacklistReason(script_key) then
 end  
 
 if type(_G.Language) == "string" and _G.Language == "Thai" then
-    local Scripts = {
+    local ScriptsThai = {
        [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRailsThai.lua",
     }
-    local url = Scripts[game.PlaceId] or Scripts[game.GameId]
+    local url = ScriptsThai[game.PlaceId] or ScriptsThai[game.GameId]
     if url then
         local success, err = pcall(function()
-            local luaScript = game:HttpGetAsync(url)
-            loadstring(luaScript)()
-    end)
-    if not success then
-    print("[Luarmor] Failed to load script: Connection timed out.")
-    print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
-    print("[Luarmor] Unable to connect to API. Please check your internet connection.")    
-    end
-    return
-end
-
-if isPremiumKey(script_key) then  
-    local Scripts = {
-       [7326934954] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly99Night.lua",
-       [7709344486] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlySaB.lua",
-       [7851663243] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyStealaMeme.lua",
-       [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRails.lua",
-    }
-    local url = Scripts[game.PlaceId] or Scripts[game.GameId]
-    if url then
-        local success, err = pcall(function()
-            local luaScript = game:HttpGetAsync(url)
-            loadstring(luaScript)()
+            loadstring(game:HttpGetAsync(url))()
         end)
         if not success then
-        print("[Luarmor] Failed to load script: Connection timed out.")
-        print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
-        print("[Luarmor] Unable to connect to API. Please check your internet connection.")      
-      end
-    end  
-else  
-    game:GetService("Players").LocalPlayer:Kick("คีย์ไม่ถูกต้อง")  
+            print("[Luarmor] Failed to load script: Connection timed out.")
+            print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
+            print("[Luarmor] Unable to connect to API. Please check your internet connection.")    
+        end
+        return
+    end
+end
+
+if _G.NewUI == true then
+    if isPremiumKey(script_key) then
+        local ScriptsNewUI = {
+        }
+        local url = ScriptsNewUI[game.PlaceId] or ScriptsNewUI[game.GameId]
+        if url then
+            local success, err = pcall(function()
+                loadstring(game:HttpGetAsync(url))()
+            end)
+            if not success then
+                print("[Luarmor] Failed to load NewUI script: Connection timed out.")
+                print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
+                print("[Luarmor] Unable to connect to API. Please check your internet connection.")  
+            end
+        end
+    else
+        game:GetService("Players").LocalPlayer:Kick("คีย์ไม่ถูกต้อง")
+    end
+else
+    if isPremiumKey(script_key) then
+        local ScriptsPremium = {
+           [7326934954] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly99Night.lua",
+           [7709344486] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlySaB.lua",
+           [7851663243] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyStealaMeme.lua",
+           [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRails.lua",
+        }
+        local url = ScriptsPremium[game.PlaceId] or ScriptsPremium[game.GameId]
+        if url then
+            local success, err = pcall(function()
+                loadstring(game:HttpGetAsync(url))()
+            end)
+            if not success then
+                print("[Luarmor] Failed to load script: Connection timed out.")
+                print("[Luarmor] Error: Invalid authentication key. Script execution halted.")
+                print("[Luarmor] Unable to connect to API. Please check your internet connection.")  
+            end
+        end
+    else
+        game:GetService("Players").LocalPlayer:Kick("คีย์ไม่ถูกต้อง")
+    end
 end
