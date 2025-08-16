@@ -536,95 +536,80 @@ function tab:AddMultiDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, 0, 0, 36)
+    Container.Size = UDim2.new(1, 0, 0, 0)
     Container.BackgroundTransparency = 1
     Container.AutomaticSize = Enum.AutomaticSize.Y
     Container.Parent = parent
+
+    local Layout = Instance.new("UIListLayout", Container)
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local Button = Instance.new("TextButton", Container)
     Button.Size = UDim2.new(1, 0, 0, 36)
     Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     Button.AutoButtonColor = false
-    Button.Font = Enum.Font.GothamBold
+    Button.Font = Enum.Font.Gotham
     Button.TextSize = 14
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text
-    Button.TextXAlignment = Enum.TextXAlignment.Left
+    Button.Text = text .. " ▼"
+    Button.TextXAlignment = Enum.TextXAlignment.Center
 
     local UICorner = Instance.new("UICorner", Button)
     UICorner.CornerRadius = UDim.new(0, 8)
 
-    local Arrow = Instance.new("TextLabel", Button)
-    Arrow.Size = UDim2.new(0, 20, 1, 0)
-    Arrow.Position = UDim2.new(1, -22, 0, 0)
-    Arrow.BackgroundTransparency = 1
-    Arrow.Font = Enum.Font.GothamBold
-    Arrow.TextSize = 14
-    Arrow.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Arrow.Text = "▼"
-
-    Button.MouseEnter:Connect(function()
-        Button.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-    end)
-    Button.MouseLeave:Connect(function()
-        Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    end)
-
     local DropdownFrame = Instance.new("Frame", Container)
-    DropdownFrame.Position = UDim2.new(0, 0, 0, 38)
     DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
     DropdownFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     DropdownFrame.Visible = false
     DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
     DropdownFrame.ZIndex = 10
 
-    local UICorner2 = Instance.new("UICorner", DropdownFrame)
-    UICorner2.CornerRadius = UDim.new(0, 8)
-
     local UIList = Instance.new("UIListLayout", DropdownFrame)
-    UIList.Padding = UDim.new(0, 4)
+    UIList.Padding = UDim.new(0, 2)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
 
     local selectedItems = {}
-    local open = false
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", DropdownFrame)
-        Opt.Size = UDim2.new(1, -8, 0, 30)
-        Opt.Position = UDim2.new(0, 4, 0, 0)
-        Opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        Opt.AutoButtonColor = false
+        Opt.Size = UDim2.new(1, 0, 0, 28)
+        Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+        Opt.Text = "❌  " .. item
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.TextXAlignment = Enum.TextXAlignment.Left
-        Opt.Text = "❌ " .. item
-        Opt.ZIndex = 20
+        Opt.ZIndex = 15
 
-        local UIC = Instance.new("UICorner", Opt)
-        UIC.CornerRadius = UDim.new(0, 6)
+        local UIPadding = Instance.new("UIPadding", Opt)
+        UIPadding.PaddingLeft = UDim.new(0, 8)
+
+        local UICornerOpt = Instance.new("UICorner", Opt)
+        UICornerOpt.CornerRadius = UDim.new(0, 6)
 
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
-                Opt.Text = "❌ " .. item
+                Opt.Text = "❌  " .. item
             else
                 selectedItems[item] = true
-                Opt.Text = "✅ " .. item
+                Opt.Text = "✅  " .. item
             end
 
             local names = {}
             for name, _ in pairs(selectedItems) do
                 table.insert(names, name)
             end
+            Button.Text = text .. ": " .. table.concat(names, ", ") .. " ▼"
             callback(names)
         end)
     end
 
+    local open = false
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
-        Arrow.Text = open and "▲" or "▼"
+        Button.Text = text .. (open and " ▲" or " ▼")
     end)
 end
 function tab:RealLine(side)
