@@ -98,12 +98,12 @@ function CFAHub:DraggingEnabled(frame, parent)
     parent = parent or frame
 
     local dragging = false
-    local dragInput, mousePos, framePos
+    local dragInput, inputPos, framePos
 
     frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
-            mousePos = input.Position
+            inputPos = input.Position
             framePos = parent.Position
 
             input.Changed:Connect(function()
@@ -115,14 +115,14 @@ function CFAHub:DraggingEnabled(frame, parent)
     end)
 
     frame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
 
-    Input.InputChanged:Connect(function(input)
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
         if input == dragInput and dragging then
-            local delta = input.Position - mousePos
+            local delta = input.Position - inputPos
             Utility:TweenObject(parent, {Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)}, 0.25)
         end
     end)
