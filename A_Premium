@@ -47,6 +47,7 @@ end
 if _G.NewUI == true then
     if isPremiumKey(script_key) then
         local ScriptsNewUI = {
+        [7326934954] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly99NightNewUi.lua",
         }
         local url = ScriptsNewUI[game.PlaceId] or ScriptsNewUI[game.GameId]
         if url then
