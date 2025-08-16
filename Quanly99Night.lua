@@ -24,7 +24,7 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
 
 local Tab = UI:Create(105, "General")
-local Fire = UI:Create(140, "Camp Fire & Create")
+local Fire = UI:Create(145, "Camp Fire + Create")
 local Web = UI:Create(110, "Webhook")
 Tab:AddTextLabel("Left", "Chest")
 Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
