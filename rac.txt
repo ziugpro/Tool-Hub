@@ -10,7 +10,7 @@ repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidR
 
 warn("UI Loaded.")
 
-local Fully_Support_Exploits = {"Krnl", "Synapse X"}
+local Fully_Support_Exploits = {"Krnl", "Synapse X", "Delta X"}
 
 local Tween = game:GetService("TweenService")
 local Tweeninfo = TweenInfo.new
