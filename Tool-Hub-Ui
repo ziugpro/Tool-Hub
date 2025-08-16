@@ -536,28 +536,50 @@ function tab:AddMultiDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, 0, 0, 30)
+    Container.Size = UDim2.new(1, 0, 0, 36)
+    Container.BackgroundTransparency = 1
     Container.AutomaticSize = Enum.AutomaticSize.Y
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Container.Parent = parent
 
-    local UICorner = Instance.new("UICorner", Container)
-    UICorner.CornerRadius = UDim.new(0, 6)
-
     local Button = Instance.new("TextButton", Container)
-    Button.Size = UDim2.new(1, 0, 0, 30)
-    Button.BackgroundTransparency = 1
-    Button.Font = Enum.Font.Gotham
+    Button.Size = UDim2.new(1, 0, 0, 36)
+    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    Button.AutoButtonColor = false
+    Button.Font = Enum.Font.GothamBold
     Button.TextSize = 14
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text .. " ▼"
+    Button.Text = text
+    Button.TextXAlignment = Enum.TextXAlignment.Left
+
+    local UICorner = Instance.new("UICorner", Button)
+    UICorner.CornerRadius = UDim.new(0, 8)
+
+    local Arrow = Instance.new("TextLabel", Button)
+    Arrow.Size = UDim2.new(0, 20, 1, 0)
+    Arrow.Position = UDim2.new(1, -22, 0, 0)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Font = Enum.Font.GothamBold
+    Arrow.TextSize = 14
+    Arrow.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Arrow.Text = "▼"
+
+    Button.MouseEnter:Connect(function()
+        Button.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+    end)
+    Button.MouseLeave:Connect(function()
+        Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    end)
 
     local DropdownFrame = Instance.new("Frame", Container)
-    DropdownFrame.Position = UDim2.new(0, 0, 0, 30)
+    DropdownFrame.Position = UDim2.new(0, 0, 0, 38)
     DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-    DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
-    DropdownFrame.BackgroundTransparency = 1
+    DropdownFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     DropdownFrame.Visible = false
+    DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
+    DropdownFrame.ZIndex = 10
+
+    local UICorner2 = Instance.new("UICorner", DropdownFrame)
+    UICorner2.CornerRadius = UDim.new(0, 8)
 
     local UIList = Instance.new("UIListLayout", DropdownFrame)
     UIList.Padding = UDim.new(0, 4)
@@ -568,56 +590,33 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", DropdownFrame)
-        Opt.Size = UDim2.new(1, -6, 0, 28)
-        Opt.Position = UDim2.new(0, 3, 0, 0)
-        Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-        Opt.Text = ""
+        Opt.Size = UDim2.new(1, -8, 0, 30)
+        Opt.Position = UDim2.new(0, 4, 0, 0)
+        Opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         Opt.AutoButtonColor = false
+        Opt.Font = Enum.Font.Gotham
+        Opt.TextSize = 13
+        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Opt.TextXAlignment = Enum.TextXAlignment.Left
+        Opt.Text = "❌ " .. item
         Opt.ZIndex = 20
 
         local UIC = Instance.new("UICorner", Opt)
-        UIC.CornerRadius = UDim.new(0, 5)
-
-        local Icon = Instance.new("TextLabel", Opt)
-        Icon.Size = UDim2.new(0, 22, 0, 22)
-        Icon.Position = UDim2.new(0, 6, 0.5, -11)
-        Icon.Text = "❌"
-        Icon.Font = Enum.Font.GothamBold
-        Icon.TextSize = 16
-        Icon.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Icon.BackgroundTransparency = 1
-
-        local Label = Instance.new("TextLabel", Opt)
-        Label.Size = UDim2.new(1, -40, 1, 0)
-        Label.Position = UDim2.new(0, 34, 0, 0)
-        Label.Text = item
-        Label.Font = Enum.Font.Gotham
-        Label.TextSize = 14
-        Label.TextColor3 = Color3.fromRGB(230, 230, 230)
-        Label.BackgroundTransparency = 1
-        Label.TextXAlignment = Enum.TextXAlignment.Left
-
-        Opt.MouseEnter:Connect(function()
-            Opt.BackgroundColor3 = Color3.fromRGB(85, 85, 85)
-        end)
-        Opt.MouseLeave:Connect(function()
-            Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-        end)
+        UIC.CornerRadius = UDim.new(0, 6)
 
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
-                Icon.Text = "❌"
+                Opt.Text = "❌ " .. item
             else
                 selectedItems[item] = true
-                Icon.Text = "✅"
+                Opt.Text = "✅ " .. item
             end
 
             local names = {}
             for name, _ in pairs(selectedItems) do
                 table.insert(names, name)
             end
-            Button.Text = text .. ": " .. table.concat(names, ", ") .. (open and " ▲" or " ▼")
             callback(names)
         end)
     end
@@ -625,7 +624,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
-        Button.Text = text .. (open and " ▲" or " ▼")
+        Arrow.Text = open and "▲" or "▼"
     end)
 end
 function tab:RealLine(side)
