@@ -334,16 +334,26 @@ Tab:AddTextLabel("Right", "Tree")
 local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
 Tab:AddToggle("Right", "Auto Chop Tree", false, function(v)
-    _G.AutoChopSmall = v
+    _G.AutoChop = v
     if v then
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         local originalPos = hrp and hrp.CFrame
-        while _G.AutoChopSmall do
+        while _G.AutoChop do
             task.wait()
-            for _, tree in pairs(workspace:GetDescendants()) do
-                if not _G.AutoChopSmall then break end
-                if tree:IsA("Model") and tree.Name == "Small Tree" and tree.PrimaryPart then
+            local trees = {}
+            for _, m in pairs(workspace:GetDescendants()) do
+                if m:IsA("Model") and m.Name == "Small Tree" and m.PrimaryPart then
+                    table.insert(trees, m)
+                end
+            end
+            if #trees == 0 then break end
+            for _, tree in ipairs(trees) do
+                if not _G.AutoChop then break end
+                if hrp and tree.PrimaryPart then
                     hrp.CFrame = tree.PrimaryPart.CFrame + Vector3.new(0, 0, -3)
                     UIS.InputBegan:Fire({UserInputType = Enum.UserInputType.MouseButton1}, false)
                     task.wait(1)
@@ -354,7 +364,41 @@ Tab:AddToggle("Right", "Auto Chop Tree", false, function(v)
             hrp.CFrame = originalPos
         end
     else
-        _G.AutoChopSmall = false
+        _G.AutoChop = false
+    end
+end)
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+Tab:AddToggle("Right", "Auto Chop Tree (Teleport + Click)", false, function(v)
+    _G.AutoChopTP = v
+    if v then
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local originalPos = hrp and hrp.CFrame
+        while _G.AutoChopTP do
+            task.wait(0.3)
+            local trees = {}
+            for _, tree in pairs(workspace:GetDescendants()) do
+                if tree:IsA("Model") and tree.Name == "Small Tree" and tree.PrimaryPart then
+                    table.insert(trees, tree)
+                end
+            end
+            for _, tree in ipairs(trees) do
+                if not _G.AutoChopTP then break end
+                if hrp and tree.PrimaryPart then
+                    hrp.CFrame = tree.PrimaryPart.CFrame + Vector3.new(0,0,-3)
+                    UIS.InputBegan:Fire({UserInputType=Enum.UserInputType.MouseButton1, Position=tree.PrimaryPart.Position}, false)
+                    task.wait(0.1)
+                    UIS.InputEnded:Fire({UserInputType=Enum.UserInputType.MouseButton1, Position=tree.PrimaryPart.Position}, false)
+                    task.wait(0.5)
+                end
+            end
+        end
+        if hrp and originalPos then
+            hrp.CFrame = originalPos
+        end
+    else
+        _G.AutoChopTP = false
     end
 end)
 local UIS = game:GetService("UserInputService")
