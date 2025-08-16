@@ -645,7 +645,7 @@ function tab:AddText(side, text)
     Label.TextWrapped = true
     Label.Parent = parent
 end
-function tab:HideLine(side)
+function tab:AddHideLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Line = Instance.new("Frame")
