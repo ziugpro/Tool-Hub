@@ -280,6 +280,25 @@ Tab:AddToggle("Left", "No Shadows", false, function(v)
         lighting.ShadowSoftness = 0.5
     end
 end)
+local player = game.Players.LocalPlayer
+
+Tab:AddToggle("Left", "God Mode", false, function(v)
+    _G.GodMode = v
+    if v then
+        while _G.GodMode do
+            task.wait(0.1)
+            local char = player.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.Health = hum.MaxHealth
+                end
+            end
+        end
+    else
+        _G.GodMode = false
+    end
+end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Right", "Item")
 local selectedModel = "Carrot"
@@ -292,13 +311,23 @@ Tab:AddButton("Right", "Bring Model", function()
     local player = game.Players.LocalPlayer
     if not player or not player.Character then return end
 
-    local model = workspace.Models:FindFirstChild(selectedModel)
-    if model then
-        local character = player.Character
-        local rootPart = character:FindFirstChild("HumanoidRootPart")
-        if rootPart then
-            model:SetPrimaryPartCFrame(rootPart.CFrame * CFrame.new(0, 0, -5))
+    local rootPart = player.Character:FindFirstChild("HumanoidRootPart")
+    if not rootPart then return end
+
+    local model = workspace:FindFirstChild(selectedModel)
+    if model and model:IsA("Model") then
+        if not model.PrimaryPart then
+            local found = false
+            for _, part in pairs(model:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    model.PrimaryPart = part
+                    found = true
+                    break
+                end
+            end
+            if not found then return end
         end
+        model:SetPrimaryPartCFrame(rootPart.CFrame * CFrame.new(0, 0, -5))
     end
 end)
 Tab:AddTextLabel("Right", "Tree")
