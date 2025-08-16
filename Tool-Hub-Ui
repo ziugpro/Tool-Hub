@@ -661,6 +661,66 @@ function tab:AddHideLine(side)
     Corner.CornerRadius = UDim.new(0, 3)
     Corner.Parent = Line
 end
+function tab:AddPremiumText(side, title, description)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(1, 0, 0, 30)
+    Frame.BackgroundTransparency = 1
+    Frame.Parent = parent
+
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, -30, 0, 30)
+    Title.Position = UDim2.new(0, 0, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = title
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 16
+    Title.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Parent = Frame
+
+    local Arrow = Instance.new("TextLabel")
+    Arrow.Size = UDim2.new(0, 30, 0, 30)
+    Arrow.Position = UDim2.new(1, -30, 0, 0)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Text = "▼"
+    Arrow.Font = Enum.Font.GothamBold
+    Arrow.TextSize = 16
+    Arrow.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Arrow.Parent = Frame
+
+    local Desc = Instance.new("TextLabel")
+    Desc.Size = UDim2.new(1, -10, 0, 0)
+    Desc.Position = UDim2.new(0, 5, 0, 30)
+    Desc.BackgroundTransparency = 1
+    Desc.Text = description
+    Desc.Font = Enum.Font.Gotham
+    Desc.TextSize = 14
+    Desc.TextColor3 = Color3.fromRGB(180, 180, 180)
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.TextYAlignment = Enum.TextYAlignment.Top
+    Desc.TextWrapped = true
+    Desc.Visible = false
+    Desc.Parent = Frame
+
+    local open = false
+    Frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            open = not open
+            if open then
+                Desc.Visible = true
+                Desc.Size = UDim2.new(1, -10, 0, Desc.TextBounds.Y)
+                Frame.Size = UDim2.new(1, 0, 0, 30 + Desc.TextBounds.Y + 5)
+                Arrow.Text = "▲"
+            else
+                Desc.Visible = false
+                Frame.Size = UDim2.new(1, 0, 0, 30)
+                Arrow.Text = "▼"
+            end
+        end
+    end)
+end
 function tab:Line(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
