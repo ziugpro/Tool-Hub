@@ -666,7 +666,8 @@ function tab:AddPremiumText(side, title, description)
 
     local Frame = Instance.new("Frame")
     Frame.Size = UDim2.new(1, 0, 0, 30)
-    Frame.BackgroundTransparency = 1
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.BorderSizePixel = 0
     Frame.Parent = parent
 
     local Title = Instance.new("TextLabel")
@@ -710,8 +711,10 @@ function tab:AddPremiumText(side, title, description)
             open = not open
             if open then
                 Desc.Visible = true
-                Desc.Size = UDim2.new(1, -10, 0, Desc.TextBounds.Y)
-                Frame.Size = UDim2.new(1, 0, 0, 30 + Desc.TextBounds.Y + 5)
+                game:GetService("RunService").Heartbeat:Wait()
+                local h = Desc.TextBounds.Y
+                Desc.Size = UDim2.new(1, -10, 0, h + 5)
+                Frame.Size = UDim2.new(1, 0, 0, 30 + h + 10)
                 Arrow.Text = "▲"
             else
                 Desc.Visible = false
