@@ -74,6 +74,35 @@ Tab:AddToggle("Left", "Kill Aura", false, function(enabled)
         end)
     end
 end)
+local player = game.Players.LocalPlayer
+local range = 500
+
+Tab:AddToggle("Left", "Kill Aura (New)", false, function(v)
+    _G.KillAura = v
+    if v then
+        while _G.KillAura do
+            task.wait(0.1)
+            local char = player.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local hrp = char.HumanoidRootPart
+                for _, npc in pairs(workspace:GetDescendants()) do
+                    if npc:IsA("Model") and not game.Players:GetPlayerFromCharacter(npc) then
+                        local npcHum = npc:FindFirstChildOfClass("Humanoid")
+                        local npcHrp = npc:FindFirstChild("HumanoidRootPart")
+                        if npcHum and npcHrp then
+                            local dist = (npcHrp.Position - hrp.Position).Magnitude
+                            if dist <= range then
+                                npcHum.Health = 0
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    else
+        _G.KillAura = false
+    end
+end)
 Tab:AddTextLabel("Left", "Fly Up")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
