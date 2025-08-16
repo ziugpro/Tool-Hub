@@ -663,11 +663,14 @@ function tab:AddHideLine(side)
 end
 function tab:AddPremiumText(side, title, description)
     local parent = (side == "Left") and LeftScroll or RightScroll
+    local TextService = game:GetService("TextService")
 
-    local Frame = Instance.new("Frame")
+    local Frame = Instance.new("TextButton")
     Frame.Size = UDim2.new(1, 0, 0, 30)
     Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     Frame.BorderSizePixel = 0
+    Frame.AutoButtonColor = false
+    Frame.Text = ""
     Frame.Parent = parent
 
     local Title = Instance.new("TextLabel")
@@ -679,6 +682,7 @@ function tab:AddPremiumText(side, title, description)
     Title.TextSize = 16
     Title.TextColor3 = Color3.fromRGB(200, 200, 200)
     Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.InputTransparent = true
     Title.Parent = Frame
 
     local Arrow = Instance.new("TextLabel")
@@ -689,6 +693,7 @@ function tab:AddPremiumText(side, title, description)
     Arrow.Font = Enum.Font.GothamBold
     Arrow.TextSize = 16
     Arrow.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Arrow.InputTransparent = true
     Arrow.Parent = Frame
 
     local Desc = Instance.new("TextLabel")
@@ -706,21 +711,18 @@ function tab:AddPremiumText(side, title, description)
     Desc.Parent = Frame
 
     local open = false
-    Frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            open = not open
-            if open then
-                Desc.Visible = true
-                game:GetService("RunService").Heartbeat:Wait()
-                local h = Desc.TextBounds.Y
-                Desc.Size = UDim2.new(1, -10, 0, h + 5)
-                Frame.Size = UDim2.new(1, 0, 0, 30 + h + 10)
-                Arrow.Text = "▲"
-            else
-                Desc.Visible = false
-                Frame.Size = UDim2.new(1, 0, 0, 30)
-                Arrow.Text = "▼"
-            end
+    Frame.MouseButton1Click:Connect(function()
+        open = not open
+        if open then
+            Desc.Visible = true
+            local size = TextService:GetTextSize(description, 14, Enum.Font.Gotham, Vector2.new(Desc.AbsoluteSize.X, 1000))
+            Desc.Size = UDim2.new(1, -10, 0, size.Y + 5)
+            Frame.Size = UDim2.new(1, 0, 0, 30 + size.Y + 10)
+            Arrow.Text = "▲"
+        else
+            Desc.Visible = false
+            Frame.Size = UDim2.new(1, 0, 0, 30)
+            Arrow.Text = "▼"
         end
     end)
 end
