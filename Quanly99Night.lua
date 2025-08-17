@@ -27,13 +27,14 @@ local Tab = UI:Create(105, "General")
 local Fire = UI:Create(145, "Camp Fire + Create")
 local Web = UI:Create(110, "Webhook")
 Tab:AddTextLabel("Left", "Chest")
-Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
+Tab:AddToggle("Left", "Auto Open Chest (Auto)", false, function(v)
     local Players = game:GetService("Players")
     local player = Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local running = false
-    local originalCFrame
+    if not _G.AutoChestData then
+        _G.AutoChestData = {running = false, originalCFrame = nil}
+    end
 
     local function getChests()
         local chests = {}
@@ -56,13 +57,14 @@ Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
     end
 
     if v then
-        running = true
-        originalCFrame = humanoidRootPart.CFrame
+        if _G.AutoChestData.running then return end
+        _G.AutoChestData.running = true
+        _G.AutoChestData.originalCFrame = humanoidRootPart.CFrame
         task.spawn(function()
-            while running do
+            while _G.AutoChestData.running do
                 local chests = getChests()
                 for _, chest in ipairs(chests) do
-                    if not running then break end
+                    if not _G.AutoChestData.running then break end
                     local part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
                     if part then
                         humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
@@ -71,17 +73,92 @@ Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
                             fireproximityprompt(prompt, math.huge)
                         end
                         local t = tick()
-                        while running and tick() - t < 4 do task.wait() end
+                        while _G.AutoChestData.running and tick() - t < 4 do task.wait() end
                     end
                 end
                 task.wait(0.1)
             end
         end)
     else
-        running = false
-        if originalCFrame then
-            humanoidRootPart.CFrame = originalCFrame
+        _G.AutoChestData.running = false
+        if _G.AutoChestData.originalCFrame then
+            humanoidRootPart.CFrame = _G.AutoChestData.originalCFrame
         end
+    end
+end)
+local chestRange = 50
+
+Tab:AddSlider("Left", "Range Open Chest", 1, 100, 50, function(val)
+    chestRange = val
+end)
+
+Tab:AddToggle("Left", "Auto Open Chest (Near)", false, function(v)
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    if not _G.AutoChestNearby then
+        _G.AutoChestNearby = {running = false}
+    end
+
+    local function getPromptsInRange(range)
+        local prompts = {}
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+                local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                if part then
+                    local dist = (humanoidRootPart.Position - part.Position).Magnitude
+                    if dist <= range then
+                        for _, p in ipairs(obj:GetDescendants()) do
+                            if p:IsA("ProximityPrompt") then
+                                table.insert(prompts, p)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        return prompts
+    end
+
+    if v then
+        if _G.AutoChestNearby.running then return end
+        _G.AutoChestNearby.running = true
+        task.spawn(function()
+            while _G.AutoChestNearby.running do
+                local prompts = getPromptsInRange(chestRange)
+                for _, prompt in ipairs(prompts) do
+                    fireproximityprompt(prompt, math.huge)
+                end
+                task.wait(0.5)
+            end
+        end)
+    else
+        _G.AutoChestNearby.running = false
+    end
+end)
+Tab:AddButton("Left", "Teleport To Chest", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local nearestChest, nearestDist
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+            local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+            if part then
+                local dist = (humanoidRootPart.Position - part.Position).Magnitude
+                if not nearestDist or dist < nearestDist then
+                    nearestDist = dist
+                    nearestChest = part
+                end
+            end
+        end
+    end
+
+    if nearestChest then
+        humanoidRootPart.CFrame = nearestChest.CFrame + Vector3.new(0, 6, 0)
     end
 end)
 Tab:AddTextLabel("Left", "Kill")
