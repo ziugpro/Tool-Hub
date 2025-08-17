@@ -28,6 +28,61 @@ local Fire = UI:Create(145, "Camp Fire + Create")
 local Web = UI:Create(110, "Webhook")
 Tab:AddTextLabel("Left", "Chest")
 Tab:AddToggle("Left", "Auto Open Chest", false, function(v)
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local running = false
+    local originalCFrame
+
+    local function getChests()
+        local chests = {}
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+                table.insert(chests, obj)
+            end
+        end
+        return chests
+    end
+
+    local function getPrompt(model)
+        local prompts = {}
+        for _, obj in ipairs(model:GetDescendants()) do
+            if obj:IsA("ProximityPrompt") then
+                table.insert(prompts, obj)
+            end
+        end
+        return prompts
+    end
+
+    if v then
+        running = true
+        originalCFrame = humanoidRootPart.CFrame
+        task.spawn(function()
+            while running do
+                local chests = getChests()
+                for _, chest in ipairs(chests) do
+                    if not running then break end
+                    local part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
+                    if part then
+                        humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
+                        local prompts = getPrompt(chest)
+                        for _, prompt in ipairs(prompts) do
+                            fireproximityprompt(prompt, math.huge)
+                        end
+                        local t = tick()
+                        while running and tick() - t < 4 do task.wait() end
+                    end
+                end
+                task.wait(0.1)
+            end
+        end)
+    else
+        running = false
+        if originalCFrame then
+            humanoidRootPart.CFrame = originalCFrame
+        end
+    end
 end)
 Tab:AddTextLabel("Left", "Kill")
 _G.killRange = _G.killRange or 10
