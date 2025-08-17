@@ -1,0 +1,630 @@
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Aura Hub",
+    Text = "Success Loading",
+    Icon = "rbxthumb://type=Asset&id=131484641795167&w=420&h=420",
+    Duration = 5,
+    Callback = function()
+    end
+})
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+getgenv().Image = "rbxthumb://type=Asset&id=106019376492019&w=420&h=420"
+getgenv().ToggleUI = "RightShift"
+
+task.spawn(function()
+    if not getgenv().LoadedMobileUI then
+        getgenv().LoadedMobileUI = true
+        local OpenUI = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        local UICorner = Instance.new("UICorner")
+        OpenUI.Name = "OpenUI"
+        OpenUI.Parent = game:GetService("CoreGui")
+        OpenUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        ImageButton.Parent = OpenUI
+        ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
+        ImageButton.BackgroundTransparency = 0.8
+        ImageButton.Position = UDim2.new(0, 20, 0, 20)
+        ImageButton.Size = UDim2.new(0, 50, 0, 50)
+        ImageButton.Image = getgenv().Image
+        ImageButton.Draggable = true
+        ImageButton.Transparency = 0.5
+        UICorner.CornerRadius = UDim.new(0,13)
+        UICorner.Parent = ImageButton
+        ImageButton.MouseButton1Click:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
+        end)
+    end
+end)
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Aura Hub - 99 Night In Forest [Premium]",
+    SubTitle = "[THANAWAT_9999]",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(530, 375),
+    Acrylic = true, 
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightShift
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "home" }),
+       
+}
+local Main = Tabs.Main:AddSection("Chest")
+
+local AutoOpenChest = Tabs.Main:AddToggle("AutoOpenChest", {Title = "Auto Open Chest (Auto)", Default = false})
+AutoOpenChest:OnChanged(function(Value)
+    _G.AutoChestAuto = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.AutoChestAuto then
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            if not _G.AutoChestData then
+                _G.AutoChestData = {running = false, originalCFrame = nil}
+            end
+            if not _G.AutoChestData.running then
+                _G.AutoChestData.running = true
+                _G.AutoChestData.originalCFrame = humanoidRootPart.CFrame
+                task.spawn(function()
+                    while _G.AutoChestData.running do
+                        local chests = {}
+                        for _, obj in ipairs(workspace:GetDescendants()) do
+                            if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+                                table.insert(chests, obj)
+                            end
+                        end
+                        for _, chest in ipairs(chests) do
+                            if not _G.AutoChestData.running then break end
+                            local part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
+                            if part then
+                                humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
+                                for _, prompt in ipairs(chest:GetDescendants()) do
+                                    if prompt:IsA("ProximityPrompt") then
+                                        fireproximityprompt(prompt, math.huge)
+                                    end
+                                end
+                                local t = tick()
+                                while _G.AutoChestData.running and tick() - t < 4 do task.wait() end
+                            end
+                        end
+                        task.wait(0.1)
+                    end
+                end)
+            end
+        else
+            _G.AutoChestData.running = false
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            if _G.AutoChestData.originalCFrame then
+                humanoidRootPart.CFrame = _G.AutoChestData.originalCFrame
+            end
+        end
+    end
+end)
+
+local SliderRange = Tabs.Main:AddSlider("RangeOpenChest", {
+    Title = "Range Open Chest",
+    Description = "",
+    Default = 50,
+    Min = 1,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(Value)
+        chestRange = Value
+    end
+})
+
+local AutoOpenChestNear = Tabs.Main:AddToggle("AutoOpenChestNear", {Title = "Auto Open Chest (Near)", Default = false})
+AutoOpenChestNear:OnChanged(function(Value)
+    _G.AutoChestNear = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.AutoChestNear then
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local prompts = {}
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+                    local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                    if part then
+                        local dist = (humanoidRootPart.Position - part.Position).Magnitude
+                        if dist <= chestRange then
+                            for _, p in ipairs(obj:GetDescendants()) do
+                                if p:IsA("ProximityPrompt") then
+                                    table.insert(prompts, p)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            for _, prompt in ipairs(prompts) do
+                fireproximityprompt(prompt, math.huge)
+            end
+            task.wait(0.5)
+        end
+    end
+end)
+
+Tabs.Main:AddButton({
+    Title = "Teleport To Chest",
+    Description = "",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local nearestChest, nearestDist, targetPart
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
+                local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                if part then
+                    local dist = (humanoidRootPart.Position - part.Position).Magnitude
+                    if not nearestDist or dist < nearestDist then
+                        nearestDist = dist
+                        nearestChest = obj
+                        targetPart = part
+                    end
+                end
+            end
+        end
+        if targetPart then
+            humanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, targetPart.Size.Y/2 + 6, 0)
+        end
+    end
+})
+local Main = Tabs.Main:AddSection("Fly Up")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local player = game.Players.LocalPlayer
+
+local FlyUpAllToggle = Tabs.Main:AddToggle("FlyUpAll", {Title = "Fly Up (All Time)", Default = false})
+FlyUpAllToggle:OnChanged(function(Value)
+    _G.FlyUpAll = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.FlyUpAll then
+            local character = player.Character
+            if not character then return end
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if not hrp or not humanoid then return end
+            humanoid.PlatformStand = true
+            local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+            local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+            local targetY = (part and pos.Y or hrp.Position.Y) + 30
+            hrp.Velocity = Vector3.new(0,0,0)
+            hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
+        end
+    end
+end)
+
+local FlyUpNightToggle = Tabs.Main:AddToggle("FlyUpNight", {Title = "Fly Up (Night Only)", Default = false})
+FlyUpNightToggle:OnChanged(function(Value)
+    _G.FlyUpNight = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.FlyUpNight then
+            local character = player.Character
+            if not character then return end
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if not hrp or not humanoid then return end
+            local t = Lighting.ClockTime
+            if t >= 18 or t < 6 then
+                humanoid.PlatformStand = true
+                local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+                local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+                local targetY = (part and pos.Y or hrp.Position.Y) + 30
+                hrp.Velocity = Vector3.new(0,0,0)
+                hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
+            else
+                _G.FlyUpNight = false
+                humanoid.PlatformStand = false
+            end
+        end
+    end
+end)
+local Main = Tabs.Main:AddSection("Player")
+local player = game.Players.LocalPlayer
+
+local NoclipToggle = Tab:AddToggle("Noclip", {Title = "Noclip", Default = false})
+NoclipToggle:OnChanged(function(Value)
+    _G.Noclip = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.Noclip then
+            local character = player.Character
+            if not character then return end
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        else
+            local character = player.Character
+            if not character then return end
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+    end
+end)
+
+Tab:AddButton("ThroughWall", function()
+    local Players = game:GetService("Players")
+    local Workspace = game:GetService("Workspace")
+    local RunService = game:GetService("RunService")
+
+    local LocalPlayer = Players.LocalPlayer
+    if not LocalPlayer then return end
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local RootPart = Character:FindFirstChild("HumanoidRootPart")
+    if not RootPart then return end
+
+    local CurrentPosition = RootPart.Position
+    local CurrentCFrame = RootPart.CFrame
+    local FacingDirection = CurrentCFrame.LookVector
+
+    local DashMagnitude = 30
+    local DashOffset = Vector3.new(0, 1.25, 0)
+    local DashVector = FacingDirection * DashMagnitude
+    local Destination = CurrentPosition + DashVector + DashOffset
+
+    local BodyPosition = Instance.new("BodyPosition")
+    BodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+    BodyPosition.P = 1e5
+    BodyPosition.D = 2000
+    BodyPosition.Position = Destination
+    BodyPosition.Parent = RootPart
+
+    local DashDuration = 0.2
+    local StartTime = tick()
+    local Connection
+    Connection = RunService.RenderStepped:Connect(function()
+        if tick() - StartTime >= DashDuration then
+            BodyPosition:Destroy()
+            if Connection then Connection:Disconnect() end
+        end
+    end)
+end)
+
+local InfinityJumpToggle = Tab:AddToggle("InfinityJump", {Title = "Infinity Jump", Default = false})
+InfinityJumpToggle:OnChanged(function(Value)
+    _G.InfinityJump = Value
+end)
+
+spawn(function()
+    if _G.infinityJumpConn then
+        _G.infinityJumpConn:Disconnect()
+        _G.infinityJumpConn = nil
+    end
+    while wait() do
+        if _G.InfinityJump then
+            _G.infinityJumpConn = game:GetService("UserInputService").JumpRequest:Connect(function()
+                local character = player.Character
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end)
+        else
+            if _G.infinityJumpConn then
+                _G.infinityJumpConn:Disconnect()
+                _G.infinityJumpConn = nil
+            end
+        end
+    end
+end)
+
+local NoShadowsToggle = Tab:AddToggle("NoShadows", {Title = "No Shadows", Default = false})
+NoShadowsToggle:OnChanged(function(Value)
+    _G.NoShadows = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.NoShadows then
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if obj:IsA("SpotLight") or obj:IsA("PointLight") or obj:IsA("SurfaceLight") then
+                    obj.Enabled = false
+                end
+            end
+            if workspace:FindFirstChildOfClass("Terrain") then
+                workspace.Terrain.CastShadow = false
+            end
+            local lighting = game:GetService("Lighting")
+            lighting.GlobalShadows = false
+            lighting.ShadowSoftness = 0
+        else
+            local lighting = game:GetService("Lighting")
+            lighting.GlobalShadows = true
+            lighting.ShadowSoftness = 0.5
+        end
+    end
+end)
+
+local GodModeToggle = Tab:AddToggle("GodMode", {Title = "God Mode", Default = false})
+GodModeToggle:OnChanged(function(Value)
+    _G.GodMode = Value
+end)
+
+spawn(function()
+    while wait(0.1) do
+        if _G.GodMode then
+            local char = player.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.Health = hum.MaxHealth
+                end
+            end
+        end
+    end
+end)
+Window:SelectTab(1)
+local Main = Tabs.Main:AddSection("Tree")
+local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+local AutoChopToggle = Tab:AddToggle("AutoChop", {Title = "Auto Chop Tree", Default = false})
+AutoChopToggle:OnChanged(function(Value)
+    _G.AutoChop = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.AutoChop then
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            local originalPos = hrp and hrp.CFrame
+            local trees = {}
+            for _, m in pairs(workspace:GetDescendants()) do
+                if m:IsA("Model") and m.Name == "Small Tree" and m.PrimaryPart then
+                    table.insert(trees, m)
+                end
+            end
+            for _, tree in ipairs(trees) do
+                if not _G.AutoChop then break end
+                if hrp and tree.PrimaryPart then
+                    hrp.CFrame = tree.PrimaryPart.CFrame + Vector3.new(0, 0, -3)
+                    UIS.InputBegan:Fire({UserInputType = Enum.UserInputType.MouseButton1}, false)
+                    task.wait(1)
+                end
+            end
+            if hrp and originalPos then
+                hrp.CFrame = originalPos
+            end
+        end
+    end
+end)
+
+local AutoChopTPToggle = Tab:AddToggle("AutoChopTP", {Title = "Auto Chop Tree (Teleport + Click)", Default = false})
+AutoChopTPToggle:OnChanged(function(Value)
+    _G.AutoChopTP = Value
+end)
+
+spawn(function()
+    while wait(0.3) do
+        if _G.AutoChopTP then
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            local originalPos = hrp and hrp.CFrame
+            local trees = {}
+            for _, tree in pairs(workspace:GetDescendants()) do
+                if tree:IsA("Model") and tree.Name == "Small Tree" and tree.PrimaryPart then
+                    table.insert(trees, tree)
+                end
+            end
+            for _, tree in ipairs(trees) do
+                if not _G.AutoChopTP then break end
+                if hrp and tree.PrimaryPart then
+                    hrp.CFrame = tree.PrimaryPart.CFrame + Vector3.new(0,0,-3)
+                    UIS.InputBegan:Fire({UserInputType=Enum.UserInputType.MouseButton1, Position=tree.PrimaryPart.Position}, false)
+                    task.wait(0.1)
+                    UIS.InputEnded:Fire({UserInputType=Enum.UserInputType.MouseButton1, Position=tree.PrimaryPart.Position}, false)
+                    task.wait(0.5)
+                end
+            end
+            if hrp and originalPos then
+                hrp.CFrame = originalPos
+            end
+        end
+    end
+end)
+
+local AutoChopFakeToggle = Tab:AddToggle("AutoChopFake", {Title = "Auto Chop Tree (Testing)", Default = false})
+AutoChopFakeToggle:OnChanged(function(Value)
+    _G.AutoChopFake = Value
+end)
+
+spawn(function()
+    while wait(0.3) do
+        if _G.AutoChopFake then
+            for _, tree in pairs(workspace:GetDescendants()) do
+                if not _G.AutoChopFake then break end
+                if tree:IsA("Model") and tree.Name == "Small Tree" and tree.PrimaryPart then
+                    local fakeCFrame = tree.PrimaryPart.CFrame * CFrame.new(0,0,-3)
+                    UIS.InputBegan:Fire({UserInputType = Enum.UserInputType.MouseButton1, Position = fakeCFrame.Position}, false)
+                    task.wait(0.1)
+                    UIS.InputEnded:Fire({UserInputType = Enum.UserInputType.MouseButton1, Position = fakeCFrame.Position}, false)
+                end
+            end
+        end
+    end
+end)
+local Main = Tabs.Main:AddSection("Kill Aura")
+local KillRangeSlider = Tabs.Main:AddSlider("KillRange", {
+    Title = "Kill Range",
+    Description = "",
+    Default = 10,
+    Min = 1,
+    Max = 50,
+    Rounding = 1,
+    Callback = function(Value)
+        _G.killRange = Value
+    end
+})
+
+local KillAuraToggle = Tabs.Main:AddToggle("KillAura", {Title = "Kill Aura", Default = false})
+KillAuraToggle:OnChanged(function(Value)
+    _G.KillAuraEnabled = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.KillAuraEnabled then
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if not humanoid or not hrp then return end
+            local range = _G.killRange or 10
+            for _, target in ipairs(game.Players:GetPlayers()) do
+                if target ~= player then
+                    local targetChar = target.Character
+                    if targetChar then
+                        local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+                        local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+                        if targetHum and targetHrp and (hrp.Position - targetHrp.Position).Magnitude <= range then
+                            targetHum.Health = 0
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+local KillAuraFixedToggle = Tabs.Main:AddToggle("KillAuraFixed", {Title = "Kill Aura (Fixed)", Default = false})
+KillAuraFixedToggle:OnChanged(function(Value)
+    _G.KillAuraFixedEnabled = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.KillAuraFixedEnabled then
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:WaitForChild("Humanoid")
+            local tool = player.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
+            if tool and not tool.Parent:IsA("Model") then
+                humanoid:EquipTool(tool)
+            end
+            tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                for _, mob in ipairs(workspace.Character:GetChildren()) do
+                    local target = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChild("HitRegisters")
+                    if target then
+                        tool:Activate()
+                    end
+                end
+            end
+            task.wait(0.2)
+        end
+    end
+end)
+
+local KillAuraTestingToggle = Tabs.Main:AddToggle("KillAuraTesting", {Title = "Kill Aura (Testing)", Default = false})
+KillAuraTestingToggle:OnChanged(function(Value)
+    _G.KillAuraTestingEnabled = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.KillAuraTestingEnabled then
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:WaitForChild("Humanoid")
+            local tool = player.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
+            if tool and not tool.Parent:IsA("Model") then
+                humanoid:EquipTool(tool)
+            end
+            tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                for _, mob in ipairs(workspace:GetDescendants()) do
+                    local hum = mob:FindFirstChildOfClass("Humanoid")
+                    local hrp = mob:FindFirstChild("HumanoidRootPart")
+                    if hum and hrp and hum.Health > 0 then
+                        char:MoveTo(hrp.Position + Vector3.new(0,3,0))
+                        char[tool.Name]:Activate()
+                        while hum.Health > 0 and _G.KillAuraTestingEnabled do
+                            char[tool.Name]:Activate()
+                            task.wait(1)
+                        end
+                    end
+                end
+            end
+            task.wait(0.2)
+        end
+    end
+end)
+
+local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
+    Title = "Select Tool",
+    Description = "",
+    Values = {},
+    Multi = true,
+    Default = {},
+    Callback = function(choices)
+        _G.SelectedTools = choices
+    end
+})
+
+local AutoFarmToggle = Tabs.Main:AddToggle("AutoFarm", {Title = "Auto Farm", Default = false})
+AutoFarmToggle:OnChanged(function(Value)
+    _G.AutoFarm.running = Value
+end)
+
+spawn(function()
+    while wait() do
+        if _G.AutoFarm.running then
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:WaitForChild("Humanoid")
+            local selectedTool = _G.SelectedTools and _G.SelectedTools[1] or nil
+            local tool = player.Backpack:FindFirstChild(selectedTool) or char:FindFirstChild(selectedTool)
+            if tool and humanoid then
+                humanoid:EquipTool(tool)
+            end
+            for _, mob in ipairs(workspace:GetDescendants()) do
+                local hum = mob:FindFirstChildOfClass("Humanoid")
+                local hrp = mob:FindFirstChild("HumanoidRootPart")
+                if hum and hrp and hum.Health > 0 then
+                    char:MoveTo(hrp.Position + Vector3.new(0,3,0))
+                    if char:FindFirstChild(selectedTool) then
+                        char[selectedTool]:Activate()
+                    end
+                    while hum.Health > 0 and _G.AutoFarm.running do
+                        if char:FindFirstChild(selectedTool) then
+                            char[selectedTool]:Activate()
+                        end
+                        task.wait(1)
+                    end
+                end
+            end
+            task.wait(0.2)
+        end
+    end
+end)
