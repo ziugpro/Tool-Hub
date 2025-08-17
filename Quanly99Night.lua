@@ -207,33 +207,90 @@ Tab:AddToggle("Left", "Kill Aura", false, function(enabled)
         end)
     end
 end)
-local player = game.Players.LocalPlayer
-local range = 500
+Tab:AddToggle("Left", "Kill Aura (Testing)", false, function(v)
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
 
-Tab:AddToggle("Left", "Kill Aura (New)", false, function(v)
-    _G.KillAura = v
+    if not _G.KillAura then
+        _G.KillAura = {running = false}
+    end
+
     if v then
-        while _G.KillAura do
-            task.wait(0.1)
-            local char = player.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                local hrp = char.HumanoidRootPart
-                for _, npc in pairs(workspace:GetDescendants()) do
-                    if npc:IsA("Model") and not game.Players:GetPlayerFromCharacter(npc) then
-                        local npcHum = npc:FindFirstChildOfClass("Humanoid")
-                        local npcHrp = npc:FindFirstChild("HumanoidRootPart")
-                        if npcHum and npcHrp then
-                            local dist = (npcHrp.Position - hrp.Position).Magnitude
-                            if dist <= range then
-                                npcHum.Health = 0
-                            end
+        if _G.KillAura.running then return end
+        _G.KillAura.running = true
+        task.spawn(function()
+            while _G.KillAura.running do
+                local tool = player.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
+                if tool and not tool.Parent:IsA("Model") then
+                    humanoid:EquipTool(tool)
+                end
+                tool = char:FindFirstChildOfClass("Tool")
+                if tool then
+                    for _, mob in ipairs(workspace.Character:GetChildren()) do
+                        local target = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChild("HitRegisters")
+                        if target then
+                            tool:Activate()
                         end
                     end
                 end
+                task.wait(0.2)
             end
-        end
+        end)
     else
-        _G.KillAura = false
+        _G.KillAura.running = false
+    end
+end)
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+
+local selectedTool = nil
+
+Tab:AddMultiDropdown("Left", "Select Tool", {}, {}, function(choices)
+    for _, tool in ipairs(player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") and table.find(choices, tool.Name) then
+            selectedTool = tool.Name
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Auto Farm", false, function(v)
+    if not _G.AutoFarm then
+        _G.AutoFarm = {running = false}
+    end
+    if v then
+        if _G.AutoFarm.running then return end
+        _G.AutoFarm.running = true
+        task.spawn(function()
+            while _G.AutoFarm.running do
+                local tool = player.Backpack:FindFirstChild(selectedTool) or char:FindFirstChild(selectedTool)
+                if tool and humanoid then
+                    humanoid:EquipTool(tool)
+                end
+                for _, mob in ipairs(workspace:GetDescendants()) do
+                    local hum = mob:FindFirstChildOfClass("Humanoid")
+                    local hrp = mob:FindFirstChild("HumanoidRootPart")
+                    if hum and hrp and hum.Health > 0 then
+                        char:MoveTo(hrp.Position + Vector3.new(0, 3, 0))
+                        if char:FindFirstChild(selectedTool) then
+                            char[selectedTool]:Activate()
+                        end
+                        while hum.Health > 0 and _G.AutoFarm.running do
+                            if char:FindFirstChild(selectedTool) then
+                                char[selectedTool]:Activate()
+                            end
+                            task.wait(1)
+                        end
+                    end
+                end
+                task.wait(0.2)
+            end
+        end)
+    else
+        _G.AutoFarm.running = false
     end
 end)
 Tab:AddTextLabel("Left", "Fly Up")
