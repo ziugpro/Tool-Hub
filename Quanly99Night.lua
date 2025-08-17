@@ -207,6 +207,41 @@ Tab:AddToggle("Left", "Kill Aura", false, function(enabled)
         end)
     end
 end)
+Tab:AddToggle("Left", "Kill Aura (Fixed)", false, function(v)
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+
+    if not _G.KillAuraa then
+        _G.KillAuraa = {running = false}
+    end
+
+    if v then
+        if _G.KillAuraa.running then return end
+        _G.KillAuraa.running = true
+        task.spawn(function()
+            while _G.KillAuraa.running do
+                local tool = player.Backpack:FindFirstChildOfClass("Tool") or char:FindFirstChildOfClass("Tool")
+                if tool and not tool.Parent:IsA("Model") then
+                    humanoid:EquipTool(tool)
+                end
+                tool = char:FindFirstChildOfClass("Tool")
+                if tool then
+                    for _, mob in ipairs(workspace.Character:GetChildren()) do
+                        local target = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChild("HitRegisters")
+                        if target then
+                            tool:Activate()
+                        end
+                    end
+                end
+                task.wait(0.2)
+            end
+        end)
+    else
+        _G.KillAuraa.running = false
+    end
+end)
 Tab:AddToggle("Left", "Kill Aura (Testing)", false, function(v)
     local Players = game:GetService("Players")
     local player = Players.LocalPlayer
