@@ -143,7 +143,7 @@ Tab:AddButton("Left", "Teleport To Chest", function()
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-    local nearestChest, nearestDist
+    local nearestChest, nearestDist, targetPart
     for _, obj in ipairs(workspace:GetDescendants()) do
         if obj:IsA("Model") and string.find(obj.Name, "Item Chest") then
             local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
@@ -151,14 +151,15 @@ Tab:AddButton("Left", "Teleport To Chest", function()
                 local dist = (humanoidRootPart.Position - part.Position).Magnitude
                 if not nearestDist or dist < nearestDist then
                     nearestDist = dist
-                    nearestChest = part
+                    nearestChest = obj
+                    targetPart = part
                 end
             end
         end
     end
 
-    if nearestChest then
-        humanoidRootPart.CFrame = nearestChest.CFrame + Vector3.new(0, 6, 0)
+    if targetPart then
+        humanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, targetPart.Size.Y/2 + 6, 0)
     end
 end)
 Tab:AddTextLabel("Left", "Kill")
