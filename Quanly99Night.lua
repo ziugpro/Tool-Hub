@@ -664,6 +664,22 @@ Tab:AddButton("Right", "Set Speed", function()
         humanoid.WalkSpeed = speed
     end
 end)
+Tab:AddToggle("Right", "Speed Boost", false, function(Value)
+    _G.Speed100 = Value
+
+    local player = game:GetService("Players").LocalPlayer
+    if not player then return end
+
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+
+    if _G.Speed100 == true then
+        humanoid.WalkSpeed = 100
+    elseif _G.Speed100 == false then
+        humanoid.WalkSpeed = 16
+    end
+end)
 Tab:RealLine("Right")
 Tab:AddTextLabel("Right", "Esp")
 Tab:AddToggle("Right", "🧍 Player ESP", false, function(v)
