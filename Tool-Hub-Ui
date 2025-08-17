@@ -31,11 +31,11 @@ task.spawn(function()
         ImageButton.BackgroundColor3 = Color3.fromRGB(105, 105, 105)
         ImageButton.BackgroundTransparency = 0.8
         ImageButton.Position = UDim2.new(0, 5, 0, 5)
-        ImageButton.Size = UDim2.new(0, 51, 0, 51)
+        ImageButton.Size = UDim2.new(0, 50, 0, 50)
         ImageButton.Image = getgenv().Image
         ImageButton.Draggable = true
         ImageButton.Transparency = 1
-        UICorner.CornerRadius = UDim.new(0,10)
+        UICorner.CornerRadius = UDim.new(0,13)
         UICorner.Parent = ImageButton
         ImageButton.MouseButton1Click:Connect(function()
             game:GetService("VirtualInputManager"):SendKeyEvent(true, getgenv().ToggleUI, false, game)
