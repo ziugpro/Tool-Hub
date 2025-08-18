@@ -1,24 +1,3 @@
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not humanoid then return end
-
-local function heavyLoadStep()
-    local sum = 0
-    for i = 1, 1e6 do
-        for j = 1, 20  do
-            sum = sum + math.sin(i * j)
-        end
-    end
-    return sum
-end
-
-for step = 1, 1 do
-    task.spawn(function()
-        heavyLoadStep()
-    end)
-    task.wait(1)
-end
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
@@ -162,6 +141,26 @@ Tab:AddButton("Left", "Teleport To Chest", function()
         humanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, targetPart.Size.Y/2 + 6, 0)
     end
 end)
+Tab:AddButton("Left", "Teleport To Strong Axe", function()
+    local index = 1
+    return function()
+        local count = 0
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("Model") and v.Name:find("Strong Axe") then
+                count = count + 1
+                if count == index then
+                    local root = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChildWhichIsA("BasePart")
+                    if root then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = root.CFrame + Vector3.new(0,5,0)
+                    end
+                    index = index + 1
+                    return
+                end
+            end
+        end
+        index = 1
+    end
+end)()
 Tab:AddTextLabel("Left", "Kill")
 _G.killRange = _G.killRange or 10
 _G.killAuraConn = _G.killAuraConn or nil
