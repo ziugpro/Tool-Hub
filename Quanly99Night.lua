@@ -160,7 +160,32 @@ Tab:AddButton("Left", "Teleport To Strong Axe", function()
         end
         index = 1
     end
-end)()
+end)
+Tab:AddButton("Left", "Teleport To Strong Axe (v2)", function()
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local nearestChest, nearestDist, targetPart
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and string.find(obj.Name, "Strong Axe") then
+            local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+            if part then
+                local dist = (humanoidRootPart.Position - part.Position).Magnitude
+                if not nearestDist or dist < nearestDist then
+                    nearestDist = dist
+                    nearestChest = obj
+                    targetPart = part
+                end
+            end
+        end
+    end
+
+    if targetPart then
+        humanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, targetPart.Size.Y/2 + 6, 0)
+    end
+end)
 Tab:AddTextLabel("Left", "Kill")
 _G.killRange = _G.killRange or 10
 _G.killAuraConn = _G.killAuraConn or nil
