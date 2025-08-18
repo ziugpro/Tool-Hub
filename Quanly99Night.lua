@@ -141,27 +141,7 @@ Tab:AddButton("Left", "Teleport To Chest", function()
         humanoidRootPart.CFrame = targetPart.CFrame + Vector3.new(0, targetPart.Size.Y/2 + 6, 0)
     end
 end)
-Tab:AddButton("Left", "Teleport To Strong Axe", function()
-    local index = 1
-    return function()
-        local count = 0
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("Model") and v.Name:find("Strong Axe") then
-                count = count + 1
-                if count == index then
-                    local root = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChildWhichIsA("BasePart")
-                    if root then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = root.CFrame + Vector3.new(0,5,0)
-                    end
-                    index = index + 1
-                    return
-                end
-            end
-        end
-        index = 1
-    end
-end)
-Tab:AddButton("Left", "Teleport To Strong Axe (v2)", function()
+Tab:AddButton("Left", "Teleport To Strong Axe (Testing)", function()
     local Players = game:GetService("Players")
     local player = Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
