@@ -28,8 +28,9 @@ local TabHandles = {
     Camp = Tabs.Play:Tab({ Title = "Camp Fire", Icon = "layout-grid", Desc = "" }),
     Create = Tabs.Play:Tab({ Title = "Create", Icon = "layout-grid", Desc = "" }),
     Tree = Tabs.Play:Tab({ Title = "Tree Farm", Icon = "layout-grid", Desc = "" }),
-    Noclip = Tabs.Misc:Tab({ Title = "Tree Farm", Icon = "layout-grid", Desc = "" }),
-    
+    Noclip = Tabs.Misc:Tab({ Title = "Noclip", Icon = "layout-grid", Desc = "" }),
+    FlyUp = Tabs.Misc:Tab({ Title = "Fly Up", Icon = "layout-grid", Desc = "" }),
+
 }
 local SpeedBoost = TabHandles.Player:Toggle({
     Title = "Speed Boost",
@@ -1080,6 +1081,50 @@ local Noclip10 = TabHandles.Noclip:Toggle({
         while _G.Noclip10 do
             task.wait()
             hrp.CFrame = hrp.CFrame * CFrame.Angles(0,math.rad(15),0)
+        end
+    end
+})
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+_G.FlyUpAllTime = false
+_G.FlyUpNightOnly = false
+_G.StartFlyUp = false
+
+local ToggleAllTime = TabHandles.FlyUp:Toggle({
+    Title = "All Time",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.FlyUpAllTime = v
+    end
+})
+
+local ToggleNightOnly = TabHandles.FlyUp:Toggle({
+    Title = "Night Only",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.FlyUpNightOnly = v
+    end
+})
+
+local ToggleStartFlyUp = TabHandles.FlyUp:Toggle({
+    Title = "Start Fly Up",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.StartFlyUp = v
+        if v then
+            task.spawn(function()
+                while _G.StartFlyUp do
+                    local time = game.Lighting.ClockTime
+                    if _G.FlyUpAllTime or (_G.FlyUpNightOnly and (time >= 18 or time <= 6)) then
+                        hrp.CFrame = CFrame.new(hrp.Position.X, 150, hrp.Position.Z)
+                    end
+                end
+            end)
         end
     end
 })
