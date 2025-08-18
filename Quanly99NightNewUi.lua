@@ -16,9 +16,10 @@ local Window = WindUI:CreateWindow({
 })
 
 local Tabs = {
-    Main = Window:Section({ Title = "General", Opened = true }),
+    Main = Window:Section({ Title = "Player", Opened = true }),
     Play = Window:Section({ Title = "Play Game", Opened = true }),
-    
+    Misc = Window:Section({ Title = "Misc", Opened = true }),
+
 }
 local TabHandles = {
     Player = Tabs.Main:Tab({ Title = "Speed & Jump", Icon = "layout-grid", Desc = "" }),
@@ -27,7 +28,8 @@ local TabHandles = {
     Camp = Tabs.Play:Tab({ Title = "Camp Fire", Icon = "layout-grid", Desc = "" }),
     Create = Tabs.Play:Tab({ Title = "Create", Icon = "layout-grid", Desc = "" }),
     Tree = Tabs.Play:Tab({ Title = "Tree Farm", Icon = "layout-grid", Desc = "" }),
-
+    Noclip = Tabs.Misc:Tab({ Title = "Tree Farm", Icon = "layout-grid", Desc = "" }),
+    
 }
 local SpeedBoost = TabHandles.Player:Toggle({
     Title = "Speed Boost",
@@ -935,6 +937,149 @@ local ChopFakeToggle = TabHandles.Tree:Toggle({
             end
         else
             _G.AutoChopFake = false
+        end
+    end
+})
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+local Noclip1 = TabHandles.Noclip:Toggle({
+    Title = "Basic Noclip",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip1 = v
+        while _G.Noclip1 do
+            task.wait()
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+})
+
+local Noclip2 = TabHandles.Noclip:Toggle({
+    Title = "Smooth Noclip",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip2 = v
+        while _G.Noclip2 do
+            task.wait()
+            hrp.Velocity = Vector3.new(0,0,0)
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+})
+
+local Noclip3 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Jump",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip3 = v
+        while _G.Noclip3 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + Vector3.new(0,0.2,0)
+        end
+    end
+})
+
+local Noclip4 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Slide",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip4 = v
+        while _G.Noclip4 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + Vector3.new(0.5,0,0)
+        end
+    end
+})
+
+local Noclip5 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Fly",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip5 = v
+        while _G.Noclip5 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + Vector3.new(0,1,0)
+        end
+    end
+})
+
+local Noclip6 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Down",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip6 = v
+        while _G.Noclip6 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + Vector3.new(0,-1,0)
+        end
+    end
+})
+
+local Noclip7 = TabHandles.Noclip:Toggle({
+    Title = "Wall Phase",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip7 = v
+        while _G.Noclip7 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + hrp.CFrame.LookVector * 1
+        end
+    end
+})
+
+local Noclip8 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Dash",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip8 = v
+        while _G.Noclip8 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame + hrp.CFrame.RightVector * 1
+        end
+    end
+})
+
+local Noclip9 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Drift",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip9 = v
+        while _G.Noclip9 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0,math.rad(5),0)
+        end
+    end
+})
+
+local Noclip10 = TabHandles.Noclip:Toggle({
+    Title = "Noclip Spin",
+    Locked = false,
+    Value = false,
+    Callback = function(v)
+        _G.Noclip10 = v
+        while _G.Noclip10 do
+            task.wait()
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0,math.rad(15),0)
         end
     end
 })
