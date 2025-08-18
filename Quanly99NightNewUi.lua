@@ -1084,46 +1084,72 @@ local Noclip10 = TabHandles.Noclip:Toggle({
         end
     end
 })
+
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local hrp = character:WaitForChild("HumanoidRootPart")
 
 _G.FlyUpAllTime = false
 _G.FlyUpNightOnly = false
-_G.StartFlyUp = false
 
 local ToggleAllTime = TabHandles.FlyUp:Toggle({
-    Title = "All Time",
+    Title = "Fly Up (All Time)",
     Locked = false,
     Value = false,
     Callback = function(v)
         _G.FlyUpAllTime = v
+        local character = player.Character
+        if not character then return end
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not hrp or not humanoid then return end
+
+        humanoid.PlatformStand = v
+
+        if v then
+            task.spawn(function()
+                while _G.FlyUpAllTime do
+                    local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+                    local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+                    local targetY = (part and pos.Y or hrp.Position.Y) + 300
+                    hrp.Velocity = Vector3.new(0, 0, 0)
+                    hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
+                    task.wait()
+                end
+                humanoid.PlatformStand = false
+            end)
+        end
     end
 })
 
 local ToggleNightOnly = TabHandles.FlyUp:Toggle({
-    Title = "Night Only",
+    Title = "Fly Up (Night Only)",
     Locked = false,
     Value = false,
     Callback = function(v)
         _G.FlyUpNightOnly = v
-    end
-})
+        local character = player.Character
+        if not character then return end
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not hrp or not humanoid then return end
 
-local ToggleStartFlyUp = TabHandles.FlyUp:Toggle({
-    Title = "Start Fly Up",
-    Locked = false,
-    Value = false,
-    Callback = function(v)
-        _G.StartFlyUp = v
+        humanoid.PlatformStand = v
+
         if v then
             task.spawn(function()
-                while _G.StartFlyUp do
-                    local time = game.Lighting.ClockTime
-                    if _G.FlyUpAllTime or (_G.FlyUpNightOnly and (time >= 18 or time <= 6)) then
-                        hrp.CFrame = CFrame.new(hrp.Position.X, 150, hrp.Position.Z)
+                while _G.FlyUpNightOnly do
+                    local currentTime = Lighting.ClockTime
+                    if currentTime >= 18 or currentTime < 6 then
+                        local ray = Ray.new(hrp.Position, Vector3.new(0, -1000, 0))
+                        local part, pos = workspace:FindPartOnRay(ray, hrp.Parent)
+                        local targetY = (part and pos.Y or hrp.Position.Y) + 300
+                        hrp.Velocity = Vector3.new(0, 0, 0)
+                        hrp.CFrame = CFrame.new(hrp.Position.X, targetY, hrp.Position.Z)
                     end
+                    task.wait()
                 end
+                humanoid.PlatformStand = false
             end)
         end
     end
