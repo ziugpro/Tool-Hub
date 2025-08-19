@@ -2,6 +2,11 @@ local PremiumKeys = {
     "jhy4chtoc8po4v8ei71m1law2unf9l2t", 
     "HFmFnVAv3n0Lu8sOynboDODYLVN0kCXy",
     "f5flrAeJ5Lpp7IdcXcDb4vNBdDXq1oLa",
+    "CGFXmMNWQBMLkIIacfmAEg5IFFoZAtvt",
+    "NOuYvf9BnR4Mnwm6XFBqK8AKVMx7X4NF",
+    "y8W9q6WoCIGsacMdsAondrHs1e370Nom",
+    "7mnnbJy45eGIQqPWohTzGD6oWASnhHGX",
+    "YEFTan5Tls0bUUJWmYGBum09DpjxgJbw",
 }  
 
 local BlacklistKeys = {  
