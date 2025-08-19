@@ -1,5 +1,11 @@
 local PremiumKeys = {  
     "ziugpro-depzai0123",  
+    "jFzImUHQzXBvYqVOUTvEfdWEzYtdHMCv",
+    "fx9YJP1DFw9gkoUCqYQAmv2cfJyrWzaK",
+    "kDQuKfA3c8bN69KFlT7zMrWkf1XqLpLq",
+    "UksBaciJaaPaH04nqX5AT6h1Zw4ht6V4",
+    "cSgc4EgTbJhxfAyIUpQQa6wkxYT1Nc3q",
+    
 }  
   
 local BlacklistKeys = {  
