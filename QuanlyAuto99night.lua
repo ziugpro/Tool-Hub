@@ -146,6 +146,38 @@ task.delay(25, function()
     TeleportService:Teleport(PLACE_ID, player)
 end)
 end)
+
+task.spawn(function()
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local function getRemotes(parent)
+    local remotes = {}
+    for _, obj in ipairs(parent:GetDescendants()) do
+        if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") then
+            table.insert(remotes, obj)
+        end
+    end
+    return remotes
+end
+
+local allRemotes = {}
+for _, parent in ipairs({ReplicatedStorage, Workspace}) do
+    for _, r in ipairs(getRemotes(parent)) do
+        table.insert(allRemotes, r)
+    end
+end
+
+for _, remote in ipairs(allRemotes) do
+    if remote:IsA("RemoteEvent") then
+        remote:FireServer()
+    elseif remote:IsA("RemoteFunction") then
+        pcall(function()
+            remote:InvokeServer()
+        end)
+    end
+end
+end)
   else  
     game:GetService("Players").LocalPlayer:Kick("Invalid Key")  
 end
