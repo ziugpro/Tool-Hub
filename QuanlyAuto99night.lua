@@ -80,11 +80,9 @@ Version.Parent = ScreenGui
 
 task.spawn(function()
 local Players = game:GetService("Players")
-local VirtualInputManager = game:GetService("VirtualInputManager")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-local camera = workspace.CurrentCamera
 
 if not _G.AutoChestData then
     _G.AutoChestData = {running = false}
@@ -110,12 +108,10 @@ local function getPrompt(model)
     return prompts
 end
 
-local function clickCenter()
-    local viewport = camera.ViewportSize
-    local x = viewport.X / 2
-    local y = viewport.Y / 2
-    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
-    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+local function clickMiddleScreen()
+    local VirtualUser = game:GetService("VirtualUser")
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton1(Vector2.new(workspace.CurrentCamera.ViewportSize.X/2, workspace.CurrentCamera.ViewportSize.Y/2))
 end
 
 if not _G.AutoChestData.running then
@@ -127,15 +123,16 @@ if not _G.AutoChestData.running then
                 if not _G.AutoChestData.running then break end
                 local part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
                 if part then
-                    humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
-                    humanoidRootPart.Velocity = Vector3.zero
-                    humanoidRootPart.RotVelocity = Vector3.zero
-                    clickCenter()
+                    local prompts = getPrompt(chest)
+                    for _, prompt in ipairs(prompts) do
+                        fireproximityprompt(prompt, math.huge)
+                    end
                     local t = tick()
                     while _G.AutoChestData.running and tick() - t < 5 do
                         humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
                         humanoidRootPart.Velocity = Vector3.zero
                         humanoidRootPart.RotVelocity = Vector3.zero
+                        clickMiddleScreen()
                         task.wait()
                     end
                 end
