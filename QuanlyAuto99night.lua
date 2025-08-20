@@ -127,14 +127,13 @@ if not _G.AutoChestData.running then
                 if not _G.AutoChestData.running then break end
                 local part = chest.PrimaryPart or chest:FindFirstChildWhichIsA("BasePart")
                 if part then
-                    player.CameraMode = Enum.CameraMode.LockFirstPerson
-                    humanoidRootPart.CFrame = part.CFrame - Vector3.new(0, 6, 0)
+                    humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
                     humanoidRootPart.Velocity = Vector3.zero
                     humanoidRootPart.RotVelocity = Vector3.zero
                     clickCenter()
                     local t = tick()
                     while _G.AutoChestData.running and tick() - t < 5 do
-                        humanoidRootPart.CFrame = part.CFrame - Vector3.new(0, 6, 0)
+                        humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 6, 0)
                         humanoidRootPart.Velocity = Vector3.zero
                         humanoidRootPart.RotVelocity = Vector3.zero
                         task.wait()
@@ -144,7 +143,7 @@ if not _G.AutoChestData.running then
             task.wait(0.1)
         end
     end)
-end
+            end
 end)
 
 task.spawn(function()
