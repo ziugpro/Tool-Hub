@@ -80,10 +80,10 @@ Version.Parent = ScreenGui
 
 local Timewait = Instance.new("TextLabel")
 Timewait.AnchorPoint = Vector2.new(0.5, 0.5)
-Timewait.Position = UDim2.new(0.5, 0, 0.5, 75)
+Timewait.Position = UDim2.new(0.5, 0, 0.5, 85)
 Timewait.Size = UDim2.new(0, 600, 0, 50)
 Timewait.BackgroundTransparency = 1
-Timewait.Text = "1:00"
+Timewait.Text = "Please Wait: 1:00"
 Timewait.Font = Enum.Font.PermanentMarker
 Timewait.TextSize = 55
 Timewait.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -91,7 +91,7 @@ Timewait.ZIndex = 39999999
 Timewait.Parent = ScreenGui
 
 task.spawn(function()
-    local seconds = 600
+    local seconds = 60
     while seconds >= 0 do
         local minutes = math.floor(seconds / 60)
         local secs = seconds % 60
