@@ -77,13 +77,26 @@ Version.TextSize = 55
 Version.TextColor3 = Color3.fromRGB(255, 255, 255)
 Version.ZIndex = 39999999
 Version.Parent = ScreenGui
+    
+local Note = Instance.new("TextLabel")
+Note.AnchorPoint = Vector2.new(0.5, 0.5)
+Note.Position = UDim2.new(0.5, 0, 0.5, 80)
+Note.Size = UDim2.new(0, 600, 0, 50)
+Note.BackgroundTransparency = 1
+Note.Text = "Wait for the countdown to end to activate kaitun"
+Note.Font = Enum.Font.PermanentMarker
+Note.TextSize = 24
+Note.TextColor3 = Color3.fromRGB(255, 255, 255)
+Note.ZIndex = 39999999
+Note.Parent = ScreenGui
+
 
 local Timewait = Instance.new("TextLabel")
 Timewait.AnchorPoint = Vector2.new(0.5, 0.5)
-Timewait.Position = UDim2.new(0.5, 0, 0.5, 85)
+Timewait.Position = UDim2.new(0.5, 0, 0.5, 160)
 Timewait.Size = UDim2.new(0, 600, 0, 50)
 Timewait.BackgroundTransparency = 1
-Timewait.Text = "Please Wait: 1:00"
+Timewait.Text = "1:00"
 Timewait.Font = Enum.Font.PermanentMarker
 Timewait.TextSize = 50
 Timewait.TextColor3 = Color3.fromRGB(255, 255, 255)
