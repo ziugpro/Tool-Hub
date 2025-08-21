@@ -93,7 +93,7 @@ Note.Parent = ScreenGui
 
 local Timewait = Instance.new("TextLabel")
 Timewait.AnchorPoint = Vector2.new(0.5, 0.5)
-Timewait.Position = UDim2.new(0.5, 0, 0.5, 160)
+Timewait.Position = UDim2.new(0.5, 0, 0.5, 140)
 Timewait.Size = UDim2.new(0, 600, 0, 50)
 Timewait.BackgroundTransparency = 1
 Timewait.Text = "1:00"
