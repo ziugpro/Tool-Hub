@@ -97,14 +97,14 @@ Timewait.Position = UDim2.new(0.5, 0, 0.5, 140)
 Timewait.Size = UDim2.new(0, 600, 0, 50)
 Timewait.BackgroundTransparency = 1
 Timewait.Text = "1:00"
-Timewait.Font = Enum.Font.PermanentMarker
-Timewait.TextSize = 50
+Timewait.Font = Enum.Font.GothamBold
+Timewait.TextSize = 40
 Timewait.TextColor3 = Color3.fromRGB(255, 255, 255)
 Timewait.ZIndex = 39999999
 Timewait.Parent = ScreenGui
 
 task.spawn(function()
-    local seconds = 60
+    local seconds = 27
     while seconds >= 0 do
         local minutes = math.floor(seconds / 60)
         local secs = seconds % 60
@@ -116,7 +116,7 @@ task.spawn(function()
 end)
     
 task.spawn(function()
-            task.wait(60)
+            task.wait(27)
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -182,7 +182,7 @@ if not _G.AutoChestData.running then
 end)
 
 task.spawn(function()
-            task.wait(60)
+            task.wait(27)
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
