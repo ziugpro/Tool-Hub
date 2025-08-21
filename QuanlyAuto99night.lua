@@ -78,7 +78,32 @@ Version.TextColor3 = Color3.fromRGB(255, 255, 255)
 Version.ZIndex = 39999999
 Version.Parent = ScreenGui
 
+local Timewait = Instance.new("TextLabel")
+Timewait.AnchorPoint = Vector2.new(0.5, 0.5)
+Timewait.Position = UDim2.new(0.5, 0, 0.5, 40)
+Timewait.Size = UDim2.new(0, 600, 0, 50)
+Timewait.BackgroundTransparency = 1
+Timewait.Text = "1:00"
+Timewait.Font = Enum.Font.PermanentMarker
+Timewait.TextSize = 55
+Timewait.TextColor3 = Color3.fromRGB(255, 255, 255)
+Timewait.ZIndex = 39999999
+Timewait.Parent = ScreenGui
+
 task.spawn(function()
+    local seconds = 600
+    while seconds >= 0 do
+        local minutes = math.floor(seconds / 60)
+        local secs = seconds % 60
+        Timewait.Text = string.format("%02d:%02d", minutes, secs)
+        task.wait(1)
+        seconds -= 1
+    end
+    Timewait.Text = "Start Kaitun......."
+end)
+    
+task.spawn(function()
+            task.wait(60)
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
