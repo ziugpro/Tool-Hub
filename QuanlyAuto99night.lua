@@ -55,7 +55,7 @@ FullBlack.Position = UDim2.new(0, 0, -0.03, 0)
 FullBlack.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 FullBlack.BorderSizePixel = 0
 FullBlack.ZIndex = 19999999
-FullBlack.BackgroundTransparency = 0.9
+FullBlack.BackgroundTransparency = 0
 FullBlack.Parent = ScreenGui
 
 local Image = Instance.new("ImageLabel")
