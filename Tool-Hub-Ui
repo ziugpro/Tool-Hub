@@ -238,7 +238,7 @@ function tab:AddToggle(side, text, default, callback)
 
     local icon = Instance.new("Frame", Toggle)
     icon.AnchorPoint = Vector2.new(1, 0.5)
-    icon.Position = UDim2.new(1, -8, 0.5, 0)
+    icon.Position = UDim2.new(1, -20, 0.5, 0)
     icon.Size = UDim2.new(0, 20, 0, 20)
     icon.BackgroundColor3 = default and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
     icon.BorderSizePixel = 0
@@ -592,24 +592,45 @@ function tab:AddMultiDropdown(side, text, list, callback)
     DropdownFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     DropdownFrame.Visible = false
     DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
-    DropdownFrame.ZIndex = 10
+    DropdownFrame.ClipsDescendants = true
 
-    local UIList = Instance.new("UIListLayout", DropdownFrame)
+    local Scroll = Instance.new("ScrollingFrame", DropdownFrame)
+    Scroll.Size = UDim2.new(1, 0, 0, 150)
+    Scroll.BackgroundTransparency = 1
+    Scroll.ScrollBarThickness = 6
+    Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Scroll.ClipsDescendants = true
+    Scroll.ScrollBarImageTransparency = 1
+
+    local UIList = Instance.new("UIListLayout", Scroll)
     UIList.Padding = UDim.new(0, 2)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local SelectedBox = Instance.new("ScrollingFrame", Container)
+    SelectedBox.Size = UDim2.new(1, 0, 0, 28)
+    SelectedBox.CanvasSize = UDim2.new(0, 0, 0, 0)
+    SelectedBox.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+    SelectedBox.HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+    SelectedBox.ClipsDescendants = true
+    SelectedBox.AutomaticCanvasSize = Enum.AutomaticSize.X
+    SelectedBox.ScrollBarImageTransparency = 1
+
+    local SelectedLayout = Instance.new("UIListLayout", SelectedBox)
+    SelectedLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    SelectedLayout.FillDirection = Enum.FillDirection.Horizontal
+    SelectedLayout.Padding = UDim.new(0, 4)
 
     local selectedItems = {}
 
     for _, item in ipairs(list) do
-        local Opt = Instance.new("TextButton", DropdownFrame)
+        local Opt = Instance.new("TextButton", Scroll)
         Opt.Size = UDim2.new(1, 0, 0, 28)
         Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-        Opt.Text = "❌  " .. item
+        Opt.Text = item
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.TextXAlignment = Enum.TextXAlignment.Left
-        Opt.ZIndex = 15
 
         local UIPadding = Instance.new("UIPadding", Opt)
         UIPadding.PaddingLeft = UDim.new(0, 8)
@@ -620,17 +641,33 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
-                Opt.Text = "❌  " .. item
             else
                 selectedItems[item] = true
-                Opt.Text = "✅  " .. item
+            end
+
+            for _, child in pairs(SelectedBox:GetChildren()) do
+                if child:IsA("TextLabel") then
+                    child:Destroy()
+                end
             end
 
             local names = {}
             for name, _ in pairs(selectedItems) do
                 table.insert(names, name)
             end
-            Button.Text = text .. ": " .. table.concat(names, ", ") .. " ▼"
+
+            for _, name in ipairs(names) do
+                local lbl = Instance.new("TextLabel", SelectedBox)
+                lbl.Text = name
+                lbl.Size = UDim2.new(0, 0, 1, 0)
+                lbl.AutomaticSize = Enum.AutomaticSize.X
+                lbl.BackgroundTransparency = 1
+                lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+                lbl.Font = Enum.Font.Gotham
+                lbl.TextSize = 13
+            end
+
+            SelectedBox.CanvasPosition = Vector2.new(0, 0)
             callback(names)
         end)
     end
