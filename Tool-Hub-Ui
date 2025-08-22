@@ -239,11 +239,11 @@ function tab:AddToggle(side, text, default, callback)
     local icon = Instance.new("Frame", Toggle)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -20, 0.5, 0)
-    icon.Size = UDim2.new(0, 27, 0, 27)
+    icon.Size = UDim2.new(0, 25, 0, 25)
     icon.BackgroundColor3 = default and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
     icon.BorderSizePixel = 0
     icon.ZIndex = 2
-    Roundify(icon, 10)
+    Roundify(icon, 100)
 
     local tick = Instance.new("TextLabel", icon)
     tick.Size = UDim2.new(1, 0, 1, 0)
