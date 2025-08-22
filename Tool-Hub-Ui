@@ -250,7 +250,7 @@ function tab:AddToggle(side, text, default, callback)
     tick.BackgroundTransparency = 1
     tick.Text = "✓"
     tick.Font = Enum.Font.GothamBold
-    tick.TextSize = 14
+    tick.TextSize = 19
     tick.TextColor3 = Color3.fromRGB(255, 255, 255)
     tick.TextTransparency = default and 0 or 1
     tick.ZIndex = 3
@@ -330,94 +330,6 @@ function tab:AddButton(side, text, callback)
 
     Button.MouseButton1Click:Connect(callback)
 end        
-
-function tab:AddDropdown(side, text, list, callback)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-
-    local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, 0, 0, 30)
-    Container.AnchorPoint = Vector2.new(0.5, 0)
-    Container.Position = UDim2.new(0.5, 0, 0, 0)
-    Container.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Container.ClipsDescendants = false
-    Container.Parent = parent
-
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 6)
-    UICorner.Parent = Container
-
-    local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(1, 0, 1, 0)
-    Button.BackgroundTransparency = 1
-    Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text .. " ▼"
-    Button.Parent = Container
-
-    local DropdownFrame = Instance.new("Frame")
-    DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-    DropdownFrame.Position = UDim2.new(0, 0, 1, 2)
-    DropdownFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    DropdownFrame.BorderSizePixel = 0
-    DropdownFrame.ClipsDescendants = true
-    DropdownFrame.ZIndex = 0
-    DropdownFrame.Parent = Container
-
-    local Scrolling = Instance.new("ScrollingFrame")
-    Scrolling.Size = UDim2.new(1, 0, 0, 0)
-    Scrolling.Position = UDim2.new(0, 0, 0, 0)
-    Scrolling.BackgroundTransparency = 1
-    Scrolling.BorderSizePixel = 0
-    Scrolling.CanvasSize = UDim2.new(0, 0, 0, #list * 30)
-    Scrolling.ScrollBarThickness = 4
-    Scrolling.Visible = false
-    Scrolling.ZIndex = 20
-    Scrolling.Parent = DropdownFrame
-
-    local UIList = Instance.new("UIListLayout")
-    UIList.Padding = UDim.new(0, 2)
-    UIList.SortOrder = Enum.SortOrder.LayoutOrder
-    UIList.Parent = Scrolling
-
-    local open = false
-
-    Button.MouseButton1Click:Connect(function()
-        open = not open
-        if open then
-            local height = math.min(#list * 30, 150)
-            DropdownFrame.Size = UDim2.new(1, 0, 0, height)
-            Scrolling.Size = UDim2.new(1, 0, 0, height)
-            Scrolling.Visible = true
-            Button.Text = text .. " ▲"
-        else
-            Scrolling.Visible = false
-            DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-            Button.Text = text .. " ▼"
-        end
-    end)
-
-    for _, item in ipairs(list) do
-        local Opt = Instance.new("TextButton")
-        Opt.Size = UDim2.new(1, -4, 0, 28)
-        Opt.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        Opt.Text = item
-        Opt.Font = Enum.Font.Gotham
-        Opt.TextSize = 13
-        Opt.ZIndex = 30
-        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Opt.AutoButtonColor = true
-        Opt.Parent = Scrolling
-
-        Opt.MouseButton1Click:Connect(function()
-            Button.Text = text .. ": " .. item .. " ▼"
-            Scrolling.Visible = false
-            DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-            open = false
-            callback(item)
-        end)
-    end
-end
 function tab:AddLabel(side, text)
     local parent = (side == "Left") and LeftScroll or RightScroll
     local Label = Instance.new("TextLabel")
@@ -597,6 +509,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
     local SearchBox = Instance.new("TextBox", DropdownFrame)
     SearchBox.Size = UDim2.new(1, -10, 0, 28)
     SearchBox.Position = UDim2.new(0, 5, 0, 5)
+    SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
     SearchBox.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     SearchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -664,6 +577,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Opt.Size = UDim2.new(1, 0, 0, 28)
         Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
         Opt.Text = item
+        Opt.ZIndex = 40
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -791,6 +705,7 @@ function tab:AddDropdown(side, text, list, callback)
     local SearchBox = Instance.new("TextBox", DropdownFrame)
     SearchBox.Size = UDim2.new(1, -8, 0, 28)
     SearchBox.Position = UDim2.new(0, 4, 0, 4)
+    SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
     SearchBox.BackgroundColor3 = Color3.fromRGB(60,60,60)
     SearchBox.TextColor3 = Color3.fromRGB(255,255,255)
@@ -842,6 +757,7 @@ function tab:AddDropdown(side, text, list, callback)
         Opt.Size = UDim2.new(1,0,0,28)
         Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
         Opt.Text = item
+        Opt.ZIndex = 40
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
