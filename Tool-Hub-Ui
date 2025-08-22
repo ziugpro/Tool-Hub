@@ -239,7 +239,7 @@ function tab:AddToggle(side, text, default, callback)
     local icon = Instance.new("Frame", Toggle)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -20, 0.5, 0)
-    icon.Size = UDim2.new(0, 20, 0, 20)
+    icon.Size = UDim2.new(0, 27, 0, 27)
     icon.BackgroundColor3 = default and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
     icon.BorderSizePixel = 0
     icon.ZIndex = 2
@@ -594,8 +594,20 @@ function tab:AddMultiDropdown(side, text, list, callback)
     DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
     DropdownFrame.ClipsDescendants = true
 
+    local SearchBox = Instance.new("TextBox", DropdownFrame)
+    SearchBox.Size = UDim2.new(1, -10, 0, 28)
+    SearchBox.Position = UDim2.new(0, 5, 0, 5)
+    SearchBox.PlaceholderText = "Search..."
+    SearchBox.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    SearchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SearchBox.Font = Enum.Font.Gotham
+    SearchBox.TextSize = 13
+    local UICornerSearch = Instance.new("UICorner", SearchBox)
+    UICornerSearch.CornerRadius = UDim.new(0, 6)
+
     local Scroll = Instance.new("ScrollingFrame", DropdownFrame)
     Scroll.Size = UDim2.new(1, 0, 0, 150)
+    Scroll.Position = UDim2.new(0, 0, 0, 38)
     Scroll.BackgroundTransparency = 1
     Scroll.ScrollBarThickness = 6
     Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -621,6 +633,31 @@ function tab:AddMultiDropdown(side, text, list, callback)
     SelectedLayout.Padding = UDim.new(0, 4)
 
     local selectedItems = {}
+    local optionButtons = {}
+
+    local function updateSelectedBox()
+        for _, child in pairs(SelectedBox:GetChildren()) do
+            if child:IsA("TextLabel") then
+                child:Destroy()
+            end
+        end
+        local names = {}
+        for name, _ in pairs(selectedItems) do
+            table.insert(names, name)
+        end
+        for _, name in ipairs(names) do
+            local lbl = Instance.new("TextLabel", SelectedBox)
+            lbl.Text = name
+            lbl.Size = UDim2.new(0, 0, 1, 0)
+            lbl.AutomaticSize = Enum.AutomaticSize.X
+            lbl.BackgroundTransparency = 1
+            lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+            lbl.Font = Enum.Font.Gotham
+            lbl.TextSize = 13
+        end
+        SelectedBox.CanvasPosition = Vector2.new(0, 0)
+        callback(names)
+    end
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
@@ -631,46 +668,37 @@ function tab:AddMultiDropdown(side, text, list, callback)
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
         Opt.TextXAlignment = Enum.TextXAlignment.Left
-
         local UIPadding = Instance.new("UIPadding", Opt)
         UIPadding.PaddingLeft = UDim.new(0, 8)
-
         local UICornerOpt = Instance.new("UICorner", Opt)
         UICornerOpt.CornerRadius = UDim.new(0, 6)
 
         Opt.MouseButton1Click:Connect(function()
             if selectedItems[item] then
                 selectedItems[item] = nil
+                Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
             else
                 selectedItems[item] = true
+                Opt.BackgroundColor3 = Color3.fromRGB(85, 125, 185)
             end
-
-            for _, child in pairs(SelectedBox:GetChildren()) do
-                if child:IsA("TextLabel") then
-                    child:Destroy()
-                end
-            end
-
-            local names = {}
-            for name, _ in pairs(selectedItems) do
-                table.insert(names, name)
-            end
-
-            for _, name in ipairs(names) do
-                local lbl = Instance.new("TextLabel", SelectedBox)
-                lbl.Text = name
-                lbl.Size = UDim2.new(0, 0, 1, 0)
-                lbl.AutomaticSize = Enum.AutomaticSize.X
-                lbl.BackgroundTransparency = 1
-                lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-                lbl.Font = Enum.Font.Gotham
-                lbl.TextSize = 13
-            end
-
-            SelectedBox.CanvasPosition = Vector2.new(0, 0)
-            callback(names)
+            updateSelectedBox()
         end)
+        table.insert(optionButtons, Opt)
     end
+
+    SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        local query = SearchBox.Text:lower()
+        local count = 0
+        for _, btn in ipairs(optionButtons) do
+            if btn.Text:lower():find(query) then
+                btn.Visible = true
+                count = count + 1
+            else
+                btn.Visible = false
+            end
+        end
+        Scroll.Size = UDim2.new(1, 0, 0, math.min(count * 30, 150))
+    end)
 
     local open = false
     Button.MouseButton1Click:Connect(function()
