@@ -250,7 +250,7 @@ function tab:AddToggle(side, text, default, callback)
     tick.BackgroundTransparency = 1
     tick.Text = "✔️"
     tick.Font = Enum.Font.GothamBold
-    tick.TextSize = 19
+    tick.TextSize = 15
     tick.TextColor3 = Color3.fromRGB(255, 255, 255)
     tick.TextTransparency = default and 0 or 1
     tick.ZIndex = 3
@@ -259,7 +259,7 @@ function tab:AddToggle(side, text, default, callback)
 
     Toggle.MouseButton1Click:Connect(function()
         state = not state
-        icon.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(80, 80, 80)
+        icon.BackgroundColor3 = state and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
         tick.TextTransparency = state and 0 or 1
         callback(state)
     end)
