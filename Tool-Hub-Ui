@@ -239,7 +239,7 @@ function tab:AddToggle(side, text, default, callback)
     local icon = Instance.new("Frame", Toggle)
     icon.AnchorPoint = Vector2.new(1, 0.5)
     icon.Position = UDim2.new(1, -20, 0.5, 0)
-    icon.Size = UDim2.new(0, 25, 0, 25)
+    icon.Size = UDim2.new(0, 22, 0, 22)
     icon.BackgroundColor3 = default and Color3.fromRGB(173, 216, 230) or Color3.fromRGB(80, 80, 80)
     icon.BorderSizePixel = 0
     icon.ZIndex = 2
@@ -250,7 +250,7 @@ function tab:AddToggle(side, text, default, callback)
     tick.BackgroundTransparency = 1
     tick.Text = "✔️"
     tick.Font = Enum.Font.GothamBold
-    tick.TextSize = 15
+    tick.TextSize = 14
     tick.TextColor3 = Color3.fromRGB(255, 255, 255)
     tick.TextTransparency = default and 0 or 1
     tick.ZIndex = 3
@@ -707,7 +707,7 @@ function tab:AddDropdown(side, text, list, callback)
     SearchBox.Position = UDim2.new(0, 4, 0, 4)
     SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
-    SearchBox.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    SearchBox.BackgroundColor3 = Color3.fromRGB(25,25,25)
     SearchBox.TextColor3 = Color3.fromRGB(255,255,255)
     SearchBox.Font = Enum.Font.Gotham
     SearchBox.TextSize = 13
