@@ -59,14 +59,14 @@ function ForceTeleport(cf, holdTime)
 end
 Tab:AddTextLabel("Left", "Cướp")
 local BasePositions = {
-    [1] = CFrame.new(-468.55694580078125, -6.4510698318481445 + 5, 221.66702270507812),
-    [2] = CFrame.new(-347.1725769042969, -6.385410308837891 + 5, 220.53970336914062),
-    [3] = CFrame.new(-348.4943542480469, -6.385272026062012 + 5, 114.98929595947266),
-    [4] = CFrame.new(-475.98779296875, -6.251070022583008 + 5, 114.30809783935547),
-    [5] = CFrame.new(-468.3541259765625, -6.385272979736328 + 5, 6.3755269050598145),
-    [6] = CFrame.new(-345.66741943359375, -6.451068878173828 + 5, 9.005419731140137),
-    [7] = CFrame.new(-348.2673034667969, -6.451068878173828 + 5, -101.79560089111328),
-    [8] = CFrame.new(-473.3204345703125, -6.4510698318481445 + 5, -100.97259521484375),
+    [1] = Vector3.new(-468.5569, -6.45107, 221.6670),
+    [2] = Vector3.new(-347.1726, -6.38541, 220.5397),
+    [3] = Vector3.new(-348.4944, -6.38527, 114.9893),
+    [4] = Vector3.new(-475.9878, -6.25107, 114.3081),
+    [5] = Vector3.new(-468.3541, -6.38527, 6.3755),
+    [6] = Vector3.new(-345.6674, -6.45107, 9.0054),
+    [7] = Vector3.new(-348.2673, -6.45107, -101.7956),
+    [8] = Vector3.new(-473.3204, -6.45107, -100.9726),
 }
 
 local selectedBase = 1
@@ -85,15 +85,18 @@ Tab:AddToggle("Left", "Bay Tới Base", false, function(v)
         local player = game.Players.LocalPlayer
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if hrp then
-            local targetCFrame = BasePositions[selectedBase]
-            if targetCFrame then
-                local tweenService = game:GetService("TweenService")
-                local tweenInfo = TweenInfo.new((hrp.Position - targetCFrame.Position).Magnitude / speed, Enum.EasingStyle.Linear)
-                local tween = tweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
-                tween:Play()
-                tween.Completed:Wait()
-                hrp.CFrame = targetCFrame
-            end
+            local startPos = hrp.Position
+            local endPos = BasePositions[selectedBase]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tweenInfo1 = TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+            local tween1 = tweenService:Create(hrp, tweenInfo1, {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tweenInfo2 = TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+            local tween2 = tweenService:Create(hrp, tweenInfo2, {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
         end
     end
 end)
@@ -308,9 +311,15 @@ end)
 Tab:AddToggle("Right", "Nhảy Siêu Cao", false, function(v)
     _G.SuperJump = v
 
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    if not character then return end
+    local human = character:FindFirstChildOfClass("Humanoid")
+    if not human then return end
+
     if _G.SuperJump and not _G._SuperJumpConnection then
+        human.JumpPower = 150
         _G._SuperJumpConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
             if human and _G.SuperJump then
                 human.JumpPower = 150
             end
@@ -318,8 +327,6 @@ Tab:AddToggle("Right", "Nhảy Siêu Cao", false, function(v)
     elseif not _G.SuperJump and _G._SuperJumpConnection then
         _G._SuperJumpConnection:Disconnect()
         _G._SuperJumpConnection = nil
-
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
         if human then
             human.JumpPower = 50
         end
