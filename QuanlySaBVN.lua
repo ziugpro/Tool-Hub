@@ -38,11 +38,11 @@ local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/
 
 local UI = SkUI:CreateWindow("Aura - Hub")
 
-local Tab = UI:Create("Tổng Quan")
-local Teleport = UI:Create("Dịch Chuyển")
-local Esp = UI:Create("Định Vị")
-local Misc = UI:Create("Khác")
-local Web = UI:Create("Webhook")
+local Tab = UI:Create(110,"Tổng Quan")
+local Teleport = UI:Create(120,"Dịch Chuyển")
+local Esp = UI:Create(110,"Định Vị")
+local Misc = UI:Create(105,"Khác")
+local Web = UI:Create(120,"Webhook")
 
 function ForceTeleport(cf, holdTime)
     local player = game.Players.LocalPlayer
