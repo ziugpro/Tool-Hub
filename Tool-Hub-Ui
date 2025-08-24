@@ -523,7 +523,7 @@ function tab:AddDropdown(side, text, list, callback)
 
     local Button = Instance.new("TextButton", Container)
     Button.Size = UDim2.new(1,0,0,35)
-    Button.BackgroundColor3 = Color3.fromRGB(55,55,55)
+    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
@@ -542,8 +542,8 @@ function tab:AddDropdown(side, text, list, callback)
     DropdownFrame.ZIndex = 10
 
     local SearchBox = Instance.new("TextBox", DropdownFrame)
-    SearchBox.Size = UDim2.new(1,-8,0,28)
-    SearchBox.Position = UDim2.new(0,4,0,4)
+    SearchBox.Size = UDim2.new(1, -8, 0, 28)
+    SearchBox.Position = UDim2.new(0, 4, 0, 4)
     SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
     SearchBox.BackgroundColor3 = Color3.fromRGB(25,25,25)
@@ -551,6 +551,7 @@ function tab:AddDropdown(side, text, list, callback)
     SearchBox.Font = Enum.Font.Gotham
     SearchBox.TextSize = 13
     SearchBox.ClearTextOnFocus = false
+    SearchBox.AutomaticSize = Enum.AutomaticSize.None
     SearchBox.BorderSizePixel = 0
     local SearchUICorner = Instance.new("UICorner", SearchBox)
     SearchUICorner.CornerRadius = UDim.new(0,6)
@@ -562,12 +563,14 @@ function tab:AddDropdown(side, text, list, callback)
     Scroll.BackgroundTransparency = 1
     Scroll.ScrollBarImageTransparency = 1
     Scroll.CanvasSize = UDim2.new(0,0,0,0)
+    Scroll.HorizontalScrollBarInset = Enum.ScrollBarInset.None -- chỉ dọc
 
     local UIList = Instance.new("UIListLayout", Scroll)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
     UIList.Padding = UDim.new(0,2)
 
-    local selectedItem = nil
+    local selectedItem = nil -- giữ 1 item
+
     local open = false
     Button.MouseButton1Click:Connect(function()
         open = not open
@@ -578,7 +581,7 @@ function tab:AddDropdown(side, text, list, callback)
     local function updateScroll()
         local total = 0
         for _, child in pairs(Scroll:GetChildren()) do
-            if child:IsA("TextButton") and child.Visible then
+            if child:IsA("TextButton") then
                 total = total + child.Size.Y.Offset + UIList.Padding.Offset
             end
         end
@@ -587,9 +590,10 @@ function tab:AddDropdown(side, text, list, callback)
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
-        Opt.Size = UDim2.new(0.9,0,0,28)
+        Opt.Size = UDim2.new(1,0,0,28)
         Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
         Opt.Text = item
+        Opt.ZIndex = 40
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
@@ -623,12 +627,11 @@ function tab:AddDropdown(side, text, list, callback)
         updateScroll()
     end)
 end
-
 function tab:AddMultiDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1,0,0,0)
+    Container.Size = UDim2.new(1, 0, 0, 0)
     Container.BackgroundTransparency = 1
     Container.AutomaticSize = Enum.AutomaticSize.Y
     Container.Parent = parent
@@ -637,12 +640,12 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Layout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local Button = Instance.new("TextButton", Container)
-    Button.Size = UDim2.new(1,0,0,35)
-    Button.BackgroundColor3 = Color3.fromRGB(55,55,55)
+    Button.Size = UDim2.new(1, 0, 0, 35)
+    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
-    Button.TextColor3 = Color3.fromRGB(255,255,255)
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Text = text .. " ▼"
     Button.TextXAlignment = Enum.TextXAlignment.Center
 
@@ -650,94 +653,92 @@ function tab:AddMultiDropdown(side, text, list, callback)
     UICorner.CornerRadius = UDim.new(0, 8)
 
     local DropdownFrame = Instance.new("Frame", Container)
-    DropdownFrame.Size = UDim2.new(1,0,0,0)
-    DropdownFrame.BackgroundColor3 = Color3.fromRGB(45,45,45)
+    DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
+    DropdownFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     DropdownFrame.Visible = false
     DropdownFrame.AutomaticSize = Enum.AutomaticSize.Y
-    DropdownFrame.ZIndex = 10
+    DropdownFrame.ClipsDescendants = true
 
     local SearchBox = Instance.new("TextBox", DropdownFrame)
-    SearchBox.Size = UDim2.new(1,-8,0,28)
-    SearchBox.Position = UDim2.new(0,4,0,4)
+    SearchBox.Size = UDim2.new(1, -10, 0, 28)
+    SearchBox.Position = UDim2.new(0, 5, 0, 5)
     SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
-    SearchBox.BackgroundColor3 = Color3.fromRGB(25,25,25)
-    SearchBox.TextColor3 = Color3.fromRGB(255,255,255)
+    SearchBox.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    SearchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     SearchBox.Font = Enum.Font.Gotham
     SearchBox.TextSize = 13
-    SearchBox.ClearTextOnFocus = false
-    SearchBox.BorderSizePixel = 0
-    local SearchUICorner = Instance.new("UICorner", SearchBox)
-    SearchUICorner.CornerRadius = UDim.new(0,6)
+    local UICornerSearch = Instance.new("UICorner", SearchBox)
+    UICornerSearch.CornerRadius = UDim.new(0, 6)
 
     local Scroll = Instance.new("ScrollingFrame", DropdownFrame)
-    Scroll.Position = UDim2.new(0,0,0,36)
-    Scroll.Size = UDim2.new(1,0,0,0)
-    Scroll.AutomaticSize = Enum.AutomaticSize.Y
+    Scroll.Size = UDim2.new(1, 0, 0, 150)
+    Scroll.Position = UDim2.new(0, 0, 0, 38)
     Scroll.BackgroundTransparency = 1
+    Scroll.ScrollBarThickness = 6
+    Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Scroll.ClipsDescendants = true
+    Scroll.HorizontalScrollBarInset = Enum.ScrollBarInset.None
     Scroll.ScrollBarImageTransparency = 1
-    Scroll.CanvasSize = UDim2.new(0,0,0,0)
 
     local UIList = Instance.new("UIListLayout", Scroll)
+    UIList.Padding = UDim.new(0, 2)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
-    UIList.Padding = UDim.new(0,2)
 
     local selectedItems = {}
+    local optionButtons = {}
+
+    for _, item in ipairs(list) do
+        local Opt = Instance.new("TextButton", Scroll)
+        Opt.Size = UDim2.new(1, 0, 0, 28)
+        Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+        Opt.Text = item
+        Opt.Font = Enum.Font.Gotham
+        Opt.TextSize = 13
+        Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Opt.TextXAlignment = Enum.TextXAlignment.Left
+        local UIPadding = Instance.new("UIPadding", Opt)
+        UIPadding.PaddingLeft = UDim.new(0, 8)
+        local UICornerOpt = Instance.new("UICorner", Opt)
+        UICornerOpt.CornerRadius = UDim.new(0, 6)
+
+        Opt.MouseButton1Click:Connect(function()
+            if selectedItems[item] then
+                selectedItems[item] = nil
+                Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+            else
+                selectedItems[item] = true
+                Opt.BackgroundColor3 = Color3.fromRGB(85, 125, 185)
+            end
+            local names = {}
+            for name, _ in pairs(selectedItems) do
+                table.insert(names, name)
+            end
+            callback(names)
+        end)
+
+        table.insert(optionButtons, Opt)
+    end
+
+    SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        local query = SearchBox.Text:lower()
+        local count = 0
+        for _, btn in ipairs(optionButtons) do
+            if btn.Text:lower():find(query) then
+                btn.Visible = true
+                count = count + 1
+            else
+                btn.Visible = false
+            end
+        end
+        Scroll.Size = UDim2.new(1, 0, 0, math.min(count * 30, 150))
+    end)
+
     local open = false
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
         Button.Text = text .. (open and " ▲" or " ▼")
-    end)
-
-    local function updateScroll()
-        local total = 0
-        for _, child in pairs(Scroll:GetChildren()) do
-            if child:IsA("TextButton") and child.Visible then
-                total = total + child.Size.Y.Offset + UIList.Padding.Offset
-            end
-        end
-        Scroll.CanvasSize = UDim2.new(0,0,0,total)
-    end
-
-    for _, item in ipairs(list) do
-        local Opt = Instance.new("TextButton", Scroll)
-        Opt.Size = UDim2.new(0.9,0,0,28)
-        Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
-        Opt.Text = item
-        Opt.Font = Enum.Font.Gotham
-        Opt.TextSize = 13
-        Opt.TextColor3 = Color3.fromRGB(255,255,255)
-        Opt.TextXAlignment = Enum.TextXAlignment.Left
-        local UIPadding = Instance.new("UIPadding", Opt)
-        UIPadding.PaddingLeft = UDim.new(0,8)
-        local UICornerOpt = Instance.new("UICorner", Opt)
-        UICornerOpt.CornerRadius = UDim.new(0,6)
-
-        Opt.MouseButton1Click:Connect(function()
-            if selectedItems[item] then
-                selectedItems[item] = nil
-                Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
-            else
-                selectedItems[item] = true
-                Opt.BackgroundColor3 = Color3.fromRGB(85,125,185)
-            end
-            local result = {}
-            for k in pairs(selectedItems) do
-                table.insert(result,k)
-            end
-            callback(result)
-        end)
-    end
-
-    SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-        local query = SearchBox.Text:lower()
-        for _, Opt in ipairs(Scroll:GetChildren()) do
-            if Opt:IsA("TextButton") then
-                Opt.Visible = Opt.Text:lower():find(query) and true or false
-            end
-        end
-        updateScroll()
     end)
 end
 
