@@ -142,7 +142,7 @@ function ui:Create(buttonWidth, tabname)
         Size = UDim2.new(0, buttonWidth, 1, 0),
         BackgroundColor3 = Color3.fromRGB(70, 70, 70),
         Text = tabname,
-        Font = Enum.Font.GothamBold,
+        Font = Enum.Font.Gotham,
         TextSize = 14,
         TextColor3 = Color3.fromRGB(255, 255, 255),
         LayoutOrder = #TabsScroll:GetChildren() + 1,
