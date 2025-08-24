@@ -809,10 +809,15 @@ function tab:AddParagraph(side, title, desc)
     local parent = (side == "Left") and LeftScroll or RightScroll
     
     local Frame = Instance.new("Frame")
-    Frame.BackgroundTransparency = 1
+    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Frame.BorderSizePixel = 0
     Frame.Size = UDim2.new(1, 0, 0, 0)
     Frame.AutomaticSize = Enum.AutomaticSize.Y
     Frame.Parent = parent
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 6)
+    UICorner.Parent = Frame
     
     local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.Parent = Frame
@@ -823,7 +828,7 @@ function tab:AddParagraph(side, title, desc)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = title
     TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.TextSize = 16
+    TitleLabel.TextSize = 14
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.TextWrapped = true
     TitleLabel.Size = UDim2.new(1, 0, 0, 0)
@@ -834,7 +839,7 @@ function tab:AddParagraph(side, title, desc)
     DescLabel.BackgroundTransparency = 1
     DescLabel.Text = desc
     DescLabel.Font = Enum.Font.Gotham
-    DescLabel.TextSize = 15
+    DescLabel.TextSize = 12
     DescLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     DescLabel.TextWrapped = true
     DescLabel.Size = UDim2.new(1, 0, 0, 0)
