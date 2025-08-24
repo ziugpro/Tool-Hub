@@ -805,7 +805,7 @@ function tab:AddDropdown(side, text, list, callback)
         updateScroll()
     end)
 end
-function tab:AddVIPTextLabel(side, title, desc)
+function tab:AddParagraph(side, title, desc)
     local parent = (side == "Left") and LeftScroll or RightScroll
     
     local Frame = Instance.new("Frame")
