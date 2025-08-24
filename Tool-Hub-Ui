@@ -508,7 +508,8 @@ function tab:AddText(side, text)
     Label.TextWrapped = true
     Label.Parent = parent
 end
- function tab:AddDropdown(side, text, list, callback)
+
+function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
     local Container = Instance.new("Frame")
@@ -522,7 +523,7 @@ end
 
     local Button = Instance.new("TextButton", Container)
     Button.Size = UDim2.new(1,0,0,35)
-    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    Button.BackgroundColor3 = Color3.fromRGB(55,55,55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
@@ -541,8 +542,8 @@ end
     DropdownFrame.ZIndex = 10
 
     local SearchBox = Instance.new("TextBox", DropdownFrame)
-    SearchBox.Size = UDim2.new(1, -8, 0, 28)
-    SearchBox.Position = UDim2.new(0, 4, 0, 4)
+    SearchBox.Size = UDim2.new(1,-8,0,28)
+    SearchBox.Position = UDim2.new(0,4,0,4)
     SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
     SearchBox.BackgroundColor3 = Color3.fromRGB(25,25,25)
@@ -550,7 +551,6 @@ end
     SearchBox.Font = Enum.Font.Gotham
     SearchBox.TextSize = 13
     SearchBox.ClearTextOnFocus = false
-    SearchBox.AutomaticSize = Enum.AutomaticSize.None
     SearchBox.BorderSizePixel = 0
     local SearchUICorner = Instance.new("UICorner", SearchBox)
     SearchUICorner.CornerRadius = UDim.new(0,6)
@@ -569,19 +569,27 @@ end
 
     local selectedItem = nil
     local open = false
-
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
 
+    local function updateScroll()
+        local total = 0
+        for _, child in pairs(Scroll:GetChildren()) do
+            if child:IsA("TextButton") and child.Visible then
+                total = total + child.Size.Y.Offset + UIList.Padding.Offset
+            end
+        end
+        Scroll.CanvasSize = UDim2.new(0,0,0,total)
+    end
+
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
         Opt.Size = UDim2.new(0.9,0,0,28)
         Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
         Opt.Text = item
-        Opt.ZIndex = 1000
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
@@ -612,6 +620,7 @@ end
                 Opt.Visible = Opt.Text:lower():find(query) and true or false
             end
         end
+        updateScroll()
     end)
 end
 
@@ -629,7 +638,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     local Button = Instance.new("TextButton", Container)
     Button.Size = UDim2.new(1,0,0,35)
-    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    Button.BackgroundColor3 = Color3.fromRGB(55,55,55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
@@ -648,8 +657,8 @@ function tab:AddMultiDropdown(side, text, list, callback)
     DropdownFrame.ZIndex = 10
 
     local SearchBox = Instance.new("TextBox", DropdownFrame)
-    SearchBox.Size = UDim2.new(1, -8, 0, 28)
-    SearchBox.Position = UDim2.new(0, 4, 0, 4)
+    SearchBox.Size = UDim2.new(1,-8,0,28)
+    SearchBox.Position = UDim2.new(0,4,0,4)
     SearchBox.Text = "Search..."
     SearchBox.PlaceholderText = "Search..."
     SearchBox.BackgroundColor3 = Color3.fromRGB(25,25,25)
@@ -657,7 +666,6 @@ function tab:AddMultiDropdown(side, text, list, callback)
     SearchBox.Font = Enum.Font.Gotham
     SearchBox.TextSize = 13
     SearchBox.ClearTextOnFocus = false
-    SearchBox.AutomaticSize = Enum.AutomaticSize.None
     SearchBox.BorderSizePixel = 0
     local SearchUICorner = Instance.new("UICorner", SearchBox)
     SearchUICorner.CornerRadius = UDim.new(0,6)
@@ -676,19 +684,27 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     local selectedItems = {}
     local open = false
-
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
         Button.Text = text .. (open and " ▲" or " ▼")
     end)
 
+    local function updateScroll()
+        local total = 0
+        for _, child in pairs(Scroll:GetChildren()) do
+            if child:IsA("TextButton") and child.Visible then
+                total = total + child.Size.Y.Offset + UIList.Padding.Offset
+            end
+        end
+        Scroll.CanvasSize = UDim2.new(0,0,0,total)
+    end
+
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
         Opt.Size = UDim2.new(0.9,0,0,28)
         Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
         Opt.Text = item
-        Opt.ZIndex = 1000
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
@@ -708,7 +724,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
             end
             local result = {}
             for k in pairs(selectedItems) do
-                table.insert(result, k)
+                table.insert(result,k)
             end
             callback(result)
         end)
@@ -721,8 +737,10 @@ function tab:AddMultiDropdown(side, text, list, callback)
                 Opt.Visible = Opt.Text:lower():find(query) and true or false
             end
         end
+        updateScroll()
     end)
-end   
+end
+
 function tab:AddHideLine(side)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
