@@ -77,7 +77,7 @@ Tab:AddSlider("Left", "Tốc Độ", 1, 100, 50, function(val)
 end)
 
 Tab:AddMultiDropdown("Left", "Chọn Base", {1,2,3,4,5,6,7,8}, 1, function(choice)
-    selectedBase = choice
+    selectedBase = tonumber(choice)
 end)
 
 Tab:AddToggle("Left", "Bay Tới Base", false, function(v)
