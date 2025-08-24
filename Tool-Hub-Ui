@@ -474,6 +474,40 @@ function tab:AddSlider(side, text, min, max, default, callback)
         end)
     end)
 end
+
+function tab:RealLine(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, 0, 0, 9)
+    Line.AnchorPoint = Vector2.new(0.5, 0)
+    Line.Position = UDim2.new(0.5, 0, 0, 0)
+    Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Line.BackgroundTransparency = 0
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 3)
+    Corner.Parent = Line
+end
+
+function tab:AddText(side, text)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(1, 0, 0, 30)
+    Label.AnchorPoint = Vector2.new(0.5, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.Position = UDim2.new(0.5, 0, 0, 0)
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 12
+    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Label.TextXAlignment = Enum.TextXAlignment.Center
+    Label.TextYAlignment = Enum.TextYAlignment.Center
+    Label.TextWrapped = true
+    Label.Parent = parent
+end
 function tab:AddMultiDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
 
@@ -493,8 +527,18 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Text = text .. " ▼"
+    Button.Text = text
     Button.TextXAlignment = Enum.TextXAlignment.Center
+
+    local Arrow = Instance.new("TextLabel", Button)
+    Arrow.Size = UDim2.new(0, 20, 1, 0)
+    Arrow.Position = UDim2.new(1, -22, 0, 0)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Text = "▼"
+    Arrow.Font = Enum.Font.Gotham
+    Arrow.TextSize = 12
+    Arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Arrow.TextXAlignment = Enum.TextXAlignment.Center
 
     local UICorner = Instance.new("UICorner", Button)
     UICorner.CornerRadius = UDim.new(0, 8)
@@ -522,53 +566,23 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Scroll.Size = UDim2.new(1, 0, 0, 150)
     Scroll.Position = UDim2.new(0, 0, 0, 38)
     Scroll.BackgroundTransparency = 1
-    Scroll.ScrollBarThickness = 6
-    Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Scroll.AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y
     Scroll.ClipsDescendants = true
-    Scroll.ScrollBarImageTransparency = 1
+    Scroll.ScrollingDirection = Enum.ScrollingDirection.Y
+    Scroll.ScrollBarThickness = 0
 
     local UIList = Instance.new("UIListLayout", Scroll)
     UIList.Padding = UDim.new(0, 2)
     UIList.SortOrder = Enum.SortOrder.LayoutOrder
 
-    local SelectedBox = Instance.new("ScrollingFrame", Container)
-    SelectedBox.Size = UDim2.new(1, 0, 0, 28)
-    SelectedBox.CanvasSize = UDim2.new(0, 0, 0, 0)
-    SelectedBox.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-    SelectedBox.HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar
-    SelectedBox.ClipsDescendants = true
-    SelectedBox.AutomaticCanvasSize = Enum.AutomaticSize.X
-    SelectedBox.ScrollBarImageTransparency = 1
-
-    local SelectedLayout = Instance.new("UIListLayout", SelectedBox)
-    SelectedLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    SelectedLayout.FillDirection = Enum.FillDirection.Horizontal
-    SelectedLayout.Padding = UDim.new(0, 4)
-
     local selectedItems = {}
     local optionButtons = {}
 
     local function updateSelectedBox()
-        for _, child in pairs(SelectedBox:GetChildren()) do
-            if child:IsA("TextLabel") then
-                child:Destroy()
-            end
-        end
         local names = {}
         for name, _ in pairs(selectedItems) do
             table.insert(names, name)
         end
-        for _, name in ipairs(names) do
-            local lbl = Instance.new("TextLabel", SelectedBox)
-            lbl.Text = name
-            lbl.Size = UDim2.new(0, 0, 1, 0)
-            lbl.AutomaticSize = Enum.AutomaticSize.X
-            lbl.BackgroundTransparency = 1
-            lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-            lbl.Font = Enum.Font.Gotham
-            lbl.TextSize = 13
-        end
-        SelectedBox.CanvasPosition = Vector2.new(0, 0)
         callback(names)
     end
 
@@ -618,57 +632,8 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
-        Button.Text = text .. (open and " ▲" or " ▼")
+        Arrow.Text = open and "▲" or "▼"
     end)
-end
-function tab:RealLine(side)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-
-    local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(1, 0, 0, 9)
-    Line.AnchorPoint = Vector2.new(0.5, 0)
-    Line.Position = UDim2.new(0.5, 0, 0, 0)
-    Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Line.BackgroundTransparency = 0
-    Line.BorderSizePixel = 0
-    Line.Parent = parent
-
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 3)
-    Corner.Parent = Line
-end
-
-function tab:AddText(side, text)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-    local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, 0, 0, 30)
-    Label.AnchorPoint = Vector2.new(0.5, 0)
-    Label.BackgroundTransparency = 1
-    Label.Text = text
-    Label.Position = UDim2.new(0.5, 0, 0, 0)
-    Label.Font = Enum.Font.Gotham
-    Label.TextSize = 12
-    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Label.TextXAlignment = Enum.TextXAlignment.Center
-    Label.TextYAlignment = Enum.TextYAlignment.Center
-    Label.TextWrapped = true
-    Label.Parent = parent
-end
-function tab:AddHideLine(side)
-    local parent = (side == "Left") and LeftScroll or RightScroll
-
-    local Line = Instance.new("Frame")
-    Line.Size = UDim2.new(1, 0, 0, 9)
-    Line.AnchorPoint = Vector2.new(0.5, 0)
-    Line.Position = UDim2.new(0.5, 0, 0, 0)
-    Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Line.BackgroundTransparency = 1
-    Line.BorderSizePixel = 0
-    Line.Parent = parent
-
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 3)
-    Corner.Parent = Line
 end
 function tab:AddDropdown(side, text, list, callback)
     local parent = (side == "Left") and LeftScroll or RightScroll
@@ -684,16 +649,27 @@ function tab:AddDropdown(side, text, list, callback)
 
     local Button = Instance.new("TextButton", Container)
     Button.Size = UDim2.new(1,0,0,35)
-    Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    Button.BackgroundColor3 = Color3.fromRGB(55,55,55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
     Button.TextSize = 12
     Button.TextColor3 = Color3.fromRGB(255,255,255)
-    Button.Text = text .. " ▼"
+    Button.Text = text
     Button.TextXAlignment = Enum.TextXAlignment.Center
 
     local UICorner = Instance.new("UICorner", Button)
-    UICorner.CornerRadius = UDim.new(0, 8)
+    UICorner.CornerRadius = UDim.new(0,8)
+
+    -- arrow riêng
+    local Arrow = Instance.new("TextLabel", Button)
+    Arrow.Size = UDim2.new(0,20,1,0)
+    Arrow.Position = UDim2.new(1,-22,0,0)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Text = "▼"
+    Arrow.Font = Enum.Font.Gotham
+    Arrow.TextSize = 12
+    Arrow.TextColor3 = Color3.fromRGB(255,255,255)
+    Arrow.TextXAlignment = Enum.TextXAlignment.Center
 
     local DropdownFrame = Instance.new("Frame", Container)
     DropdownFrame.Size = UDim2.new(1,0,0,0)
@@ -730,16 +706,12 @@ function tab:AddDropdown(side, text, list, callback)
     UIList.Padding = UDim.new(0,2)
 
     local selectedItem = nil
-    local SelectedBox = Instance.new("Frame", Button)
-    SelectedBox.Size = UDim2.new(1,0,1,0)
-    SelectedBox.BackgroundTransparency = 1
-    SelectedBox.ClipsDescendants = true
-
     local open = false
+
     Button.MouseButton1Click:Connect(function()
         open = not open
         DropdownFrame.Visible = open
-        Button.Text = text .. (open and " ▲" or " ▼")
+        Arrow.Text = open and "▲" or "▼"
     end)
 
     local function updateScroll()
@@ -762,8 +734,10 @@ function tab:AddDropdown(side, text, list, callback)
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
         Opt.TextXAlignment = Enum.TextXAlignment.Left
+
         local UIPadding = Instance.new("UIPadding", Opt)
         UIPadding.PaddingLeft = UDim.new(0,8)
+
         local UICornerOpt = Instance.new("UICorner", Opt)
         UICornerOpt.CornerRadius = UDim.new(0,6)
 
@@ -775,23 +749,10 @@ function tab:AddDropdown(side, text, list, callback)
                 end
             end
 
-            for _, child in pairs(SelectedBox:GetChildren()) do
-                if child:IsA("TextLabel") then child:Destroy() end
-            end
-            local lbl = Instance.new("TextLabel", SelectedBox)
-            lbl.Text = item
-            lbl.Size = UDim2.new(0,0,1,0)
-            lbl.AutomaticSize = Enum.AutomaticSize.X
-            lbl.BackgroundTransparency = 1
-            lbl.TextColor3 = Color3.fromRGB(255,255,255)
-            lbl.Font = Enum.Font.Gotham
-            lbl.TextSize = 13
-
-            SelectedBox.CanvasPosition = Vector2.new(0,0)
             callback(item)
             open = false
             DropdownFrame.Visible = open
-            Button.Text = text .. " ▼"
+            Arrow.Text = "▼"
         end)
     end
 
@@ -805,6 +766,23 @@ function tab:AddDropdown(side, text, list, callback)
         updateScroll()
     end)
 end
+function tab:AddHideLine(side)
+    local parent = (side == "Left") and LeftScroll or RightScroll
+
+    local Line = Instance.new("Frame")
+    Line.Size = UDim2.new(1, 0, 0, 9)
+    Line.AnchorPoint = Vector2.new(0.5, 0)
+    Line.Position = UDim2.new(0.5, 0, 0, 0)
+    Line.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Line.BackgroundTransparency = 1
+    Line.BorderSizePixel = 0
+    Line.Parent = parent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 3)
+    Corner.Parent = Line
+end
+
 function tab:AddParagraph(side, title, desc)
     local parent = (side == "Left") and LeftScroll or RightScroll
     
