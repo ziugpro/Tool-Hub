@@ -57,6 +57,46 @@ function ForceTeleport(cf, holdTime)
         task.wait()
     end
 end
+Tab:AddTextLabel("Left", "Cướp")
+local BasePositions = {
+    [1] = CFrame.new(-468.55694580078125, -6.4510698318481445 + 5, 221.66702270507812),
+    [2] = CFrame.new(-347.1725769042969, -6.385410308837891 + 5, 220.53970336914062),
+    [3] = CFrame.new(-348.4943542480469, -6.385272026062012 + 5, 114.98929595947266),
+    [4] = CFrame.new(-475.98779296875, -6.251070022583008 + 5, 114.30809783935547),
+    [5] = CFrame.new(-468.3541259765625, -6.385272979736328 + 5, 6.3755269050598145),
+    [6] = CFrame.new(-345.66741943359375, -6.451068878173828 + 5, 9.005419731140137),
+    [7] = CFrame.new(-348.2673034667969, -6.451068878173828 + 5, -101.79560089111328),
+    [8] = CFrame.new(-473.3204345703125, -6.4510698318481445 + 5, -100.97259521484375),
+}
+
+local selectedBase = 1
+local speed = 50
+
+Tab:AddSlider("Left", "Tốc Độ", 1, 100, 50, function(val)
+    speed = val
+end)
+
+Tab:AddMultiDropdown("Left", "Chọn Base", {1,2,3,4,5,6,7,8}, 1, function(choice)
+    selectedBase = choice
+end)
+
+Tab:AddToggle("Left", "Bay Tới Base", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local targetCFrame = BasePositions[selectedBase]
+            if targetCFrame then
+                local tweenService = game:GetService("TweenService")
+                local tweenInfo = TweenInfo.new((hrp.Position - targetCFrame.Position).Magnitude / speed, Enum.EasingStyle.Linear)
+                local tween = tweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+                tween:Play()
+                tween.Completed:Wait()
+                hrp.CFrame = targetCFrame
+            end
+        end
+    end
+end)
 Tab:AddTextLabel("Left", "Chính")
 Tab:AddToggle("Left", "Mua Brainrot", false, function(v)
     _G.AutoWalkToTargetActive = v
