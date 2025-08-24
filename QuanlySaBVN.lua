@@ -69,32 +69,158 @@ local BasePositions = {
     [8] = Vector3.new(-473.3204, -6.45107, -100.9726),
 }
 
-local selectedBase = 1
 local speed = 50
 
 Tab:AddSlider("Left", "Tốc Độ", 1, 100, 50, function(val)
     speed = val
 end)
 
-Tab:AddMultiDropdown("Left", "Chọn Base", {1,2,3,4,5,6,7,8}, 1, function(choice)
-    selectedBase = tonumber(choice)
-end)
-
-Tab:AddToggle("Left", "Bay Tới Base", false, function(v)
+Tab:AddToggle("Left", "Bay Base 1", false, function(v)
     if v then
         local player = game.Players.LocalPlayer
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if hrp then
             local startPos = hrp.Position
-            local endPos = BasePositions[selectedBase]
+            local endPos = BasePositions[1]
             local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
             local tweenService = game:GetService("TweenService")
-            local tweenInfo1 = TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-            local tween1 = tweenService:Create(hrp, tweenInfo1, {CFrame = CFrame.new(midPos)})
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
             tween1:Play()
             tween1.Completed:Wait()
-            local tweenInfo2 = TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-            local tween2 = tweenService:Create(hrp, tweenInfo2, {CFrame = CFrame.new(endPos)})
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 2", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[2]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 3", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[3]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 4", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[4]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 5", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[5]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 6", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[6]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 7", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[7]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
+            tween2:Play()
+            tween2.Completed:Wait()
+        end
+    end
+end)
+
+Tab:AddToggle("Left", "Bay Base 8", false, function(v)
+    if v then
+        local player = game.Players.LocalPlayer
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local startPos = hrp.Position
+            local endPos = BasePositions[8]
+            local midPos = (startPos + endPos)/2 + Vector3.new(0,5,0)
+            local tweenService = game:GetService("TweenService")
+            local tween1 = tweenService:Create(hrp, TweenInfo.new((midPos - startPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.new(midPos)})
+            tween1:Play()
+            tween1.Completed:Wait()
+            local tween2 = tweenService:Create(hrp, TweenInfo.new((endPos - midPos).Magnitude / speed, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {CFrame = CFrame.new(endPos)})
             tween2:Play()
             tween2.Completed:Wait()
         end
