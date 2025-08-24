@@ -218,7 +218,7 @@ function tab:AddToggle(side, text, default, callback)
         BackgroundColor3 = Color3.fromRGB(45, 45, 45),
         Text = "",
         Font = Enum.Font.Gotham,
-        TextSize = 14,
+        TextSize = 13,
         AnchorPoint = Vector2.new(0.5, 0),
         Position = UDim2.new(0.5, 0, 0, 0),
         TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -232,7 +232,7 @@ function tab:AddToggle(side, text, default, callback)
     label.Size = UDim2.new(1, -40, 1, 0)
     label.Font = Enum.Font.Gotham
     label.Text = text
-    label.TextSize = 14
+    label.TextSize = 12
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -272,8 +272,8 @@ function tab:AddTextLabel(side, text)
     Label.Size = UDim2.new(1, 0, 0, 30)
     Label.BackgroundTransparency = 1
     Label.Text = text
-    Label.Font = Enum.Font.GothamBold
-    Label.TextSize = 16
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 15
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
@@ -288,7 +288,7 @@ function tab:AddNiceTextLabel(side, text)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.Gotham
-    Label.TextSize = 16
+    Label.TextSize = 13
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.TextYAlignment = Enum.TextYAlignment.Center
@@ -303,7 +303,7 @@ function tab:AddLeftTextLabel(side, text)
     Label.BackgroundTransparency = 1
     Label.Text = text
     Label.Font = Enum.Font.Gotham
-    Label.TextSize = 16
+    Label.TextSize = 13
     Label.TextColor3 = Color3.fromRGB(200, 200, 200)
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.TextYAlignment = Enum.TextYAlignment.Center
@@ -338,7 +338,7 @@ function tab:AddLabel(side, text)
     Label.Position = UDim2.new(0.5, 0, 0, 0)
     Label.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Label.Font = Enum.Font.Gotham
-    Label.TextSize = 14
+    Label.TextSize = 13
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.Text = text
     Label.ClipsDescendants = true
@@ -491,7 +491,7 @@ function tab:AddMultiDropdown(side, text, list, callback)
     Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
+    Button.TextSize = 12
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Text = text .. " ▼"
     Button.TextXAlignment = Enum.TextXAlignment.Center
@@ -687,7 +687,7 @@ function tab:AddDropdown(side, text, list, callback)
     Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     Button.AutoButtonColor = false
     Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
+    Button.TextSize = 12
     Button.TextColor3 = Color3.fromRGB(255,255,255)
     Button.Text = text .. " ▼"
     Button.TextXAlignment = Enum.TextXAlignment.Center
