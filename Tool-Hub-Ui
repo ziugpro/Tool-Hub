@@ -574,10 +574,10 @@ function tab:AddMultiDropdown(side, text, list, callback)
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
-        Opt.Size = UDim2.new(1, 0, 0, 28)
+        Opt.Size = UDim2.new(0.9, 0, 0, 28)
         Opt.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
         Opt.Text = item
-        Opt.ZIndex = 40
+        Opt.ZIndex = 1000
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -754,10 +754,10 @@ function tab:AddDropdown(side, text, list, callback)
 
     for _, item in ipairs(list) do
         local Opt = Instance.new("TextButton", Scroll)
-        Opt.Size = UDim2.new(1,0,0,28)
+        Opt.Size = UDim2.new(0.9,0,0,28)
         Opt.BackgroundColor3 = Color3.fromRGB(65,65,65)
         Opt.Text = item
-        Opt.ZIndex = 40
+        Opt.ZIndex = 1000
         Opt.Font = Enum.Font.Gotham
         Opt.TextSize = 13
         Opt.TextColor3 = Color3.fromRGB(255,255,255)
