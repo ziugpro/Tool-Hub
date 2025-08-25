@@ -113,7 +113,7 @@ function SkUI:CreateWindow(title)
     local TabsScroll = Create("ScrollingFrame", {
         Size = UDim2.new(1, 0, 0, 35),
         Position = UDim2.new(0, 0, 0, 0),
-        BackgroundTransparency = 1,
+        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
         ScrollBarThickness = 0,
         CanvasSize = UDim2.new(0, 0, 0, 0),
