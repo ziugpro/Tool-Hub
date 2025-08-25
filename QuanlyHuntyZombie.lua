@@ -1,50 +1,40 @@
-local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
+local DarkraiX = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Ui/refs/heads/main/UiLib", true))()
 
-local UI = SkUI:CreateWindow("SkUI V1.73 - By Ziugpro")
+local Library = DarkraiX:Window("Aura Hub","131484641795167","",Enum.KeyCode.RightControl);
 
-local Tab = UI:Create(105, "General")
-local Visual = UI:Create(105, "Visuals")
+Tab1 = Library:Tab("Main")
 
 
-Tab:AddTextLabel("Left", "Main")
+Tab1:Seperator("Main")
+getgenv().AutoClearWave = false
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local tweenService = game:GetService("TweenService")
-local repStorage = game:GetService("ReplicatedStorage")
-local ws = workspace
-
-Tab:AddToggle("Left", "Auto Clear Wave", false, function(state)
-    getgenv().AutoClearWave = state
-    if state then
+Tab1:Toggle("Auto Clear Wave", false, function(value)
+    getgenv().AutoClearWave = value
+    if value then
         spawn(function()
             while getgenv().AutoClearWave do
-                local questNPC = ws:FindFirstChild("QuestNPC")
-                if questNPC and questNPC:FindFirstChild("HumanoidRootPart") then
-                    character.HumanoidRootPart.CFrame = questNPC.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
-                    repStorage.Remotes.Quest:FireServer("Accept")
-                    wait(0.5)
-                end
-                local mobs = ws:FindFirstChild("Mobs")
+                local mobs = workspace:FindFirstChild("Mobs")
                 if mobs then
                     for i, mob in pairs(mobs:GetChildren()) do
-                        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-                            character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+                        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
                             repeat
-                                repStorage.Remotes.Combat:FireServer("Attack")
+                                game:GetService("ReplicatedStorage").Remotes.Combat:FireServer("Attack")
                                 wait(0.1)
                             until mob.Humanoid.Health <= 0 or not getgenv().AutoClearWave
                         end
                     end
                 end
-                wait(0.2)
+                wait(0.5)
             end
         end)
     end
 end)
-Tab:AddToggle("Left", "Auto Clear Objectives", false, function(state)
-    getgenv().AutoClearObjectives = state
-    if state then
+getgenv().AutoClearObjectives = false
+
+Tab1:Toggle("Auto Clear Objectives", false, function(value)
+    getgenv().AutoClearObjectives = value
+    if value then
         spawn(function()
             while getgenv().AutoClearObjectives do
                 local objectives = workspace:FindFirstChild("Objectives")
@@ -64,9 +54,11 @@ Tab:AddToggle("Left", "Auto Clear Objectives", false, function(state)
         end)
     end
 end)
-Tab:AddToggle("Left", "Auto Collect Drops", false, function(state)
-    getgenv().AutoCollectDrops = state
-    if state then
+getgenv().AutoCollectDrops = false
+
+Tab1:Toggle("Auto Collect Drops", false, function(value)
+    getgenv().AutoCollectDrops = value
+    if value then
         spawn(function()
             while getgenv().AutoCollectDrops do
                 for i, drop in pairs(workspace.Drops:GetChildren()) do
@@ -80,32 +72,8 @@ Tab:AddToggle("Left", "Auto Collect Drops", false, function(state)
         end)
     end
 end)
-Tab:AddTextLabel("Left", "Modification")
-getgenv().DashRange = 10
-
-Tab:AddTextbox("Left", "Enter Dash Range", "10", function(text)
-    local num = tonumber(text)
-    if num then
-        getgenv().DashRange = num
-        for i, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if tool:IsA("Tool") and tool:FindFirstChild("Handle") then
-                tool.DashDistance.Value = num
-            end
-        end
-        local char = game.Players.LocalPlayer.Character
-        if char then
-            for i, tool in pairs(char:GetChildren()) do
-                if tool:IsA("Tool") and tool:FindFirstChild("Handle") then
-                    tool.DashDistance.Value = num
-                end
-            end
-        end
-    end
-end)
-
-Tab:RealLine("Left")
-Tab:AddTextLabel("Right", "Code")
-Tab:AddButton("Right", "Redeem All Codes", function()
+Tab1:Seperator("Code")
+Tab1:Button("Redeem All Code", function()
     local repStorage = game:GetService("ReplicatedStorage")
     local codesFolder = repStorage:FindFirstChild("Codes")
     if codesFolder then
@@ -119,45 +87,10 @@ Tab:AddButton("Right", "Redeem All Codes", function()
         end
     end
 end)
-Tab:AddTextLabel("Right", "Shop")
-getgenv().AutoRollWeapon = false
-getgenv().AutoRollPerk = false
-getgenv().RollDelay = 1
-
-Tab:AddToggle("Right", "Auto Roll Weapon", false, function(state)
-    getgenv().AutoRollWeapon = state
-    if state then
-        spawn(function()
-            while getgenv().AutoRollWeapon do
-                game:GetService("ReplicatedStorage").Remotes.RollWeapon:FireServer()
-                wait(getgenv().RollDelay)
-            end
-        end)
-    end
-end)
-
-Tab:AddToggle("Right", "Auto Roll Perk", false, function(state)
-    getgenv().AutoRollPerk = state
-    if state then
-        spawn(function()
-            while getgenv().AutoRollPerk do
-                game:GetService("ReplicatedStorage").Remotes.RollPerk:FireServer()
-                wait(getgenv().RollDelay)
-            end
-        end)
-    end
-end)
-
-Tab:AddSlider("Right", "Delay", 1, 5, 1, function(val)
-    getgenv().RollDelay = val
-end)
-Tab:RealLine("Right")
-
-Visual:AddTextLabel("Left", "Esp")
-
+Tab1:Seperator("Esp")
 getgenv().ESPEnabled = false
 
-Visual:AddToggle("Left", "Player ESP", false, function(state)
+Tab1:Toggle("Player ESP", false, function(state)
     getgenv().ESPEnabled = state
     for i, plr in pairs(game.Players:GetPlayers()) do
         if plr ~= game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
@@ -192,7 +125,7 @@ Visual:AddToggle("Left", "Player ESP", false, function(state)
 end)
 getgenv().MobESPEnabled = false
 
-Visual:AddToggle("Left", "Mob ESP", false, function(state)
+Tab1:Toggle("Mob ESP", false, function(state)
     getgenv().MobESPEnabled = state
     for i, mob in pairs(workspace.Mobs:GetChildren()) do
         if mob:FindFirstChild("HumanoidRootPart") then
@@ -225,102 +158,21 @@ Visual:AddToggle("Left", "Mob ESP", false, function(state)
         end
     end
 end)
-getgenv().NPCESPEnabled = false
-
-Visual:AddToggle("Left", "NPC ESP", false, function(state)
-    getgenv().NPCESPEnabled = state
-    for i, npc in pairs(workspace.NPCs:GetChildren()) do
-        if npc:FindFirstChild("HumanoidRootPart") then
-            local esp = npc:FindFirstChild("ESPName")
-            if state then
-                if not esp then
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = "ESPName"
-                    billboard.Adornee = npc.HumanoidRootPart
-                    billboard.Size = UDim2.new(0, 100, 0, 25)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-
-                    local text = Instance.new("TextLabel")
-                    text.Size = UDim2.new(1,0,1,0)
-                    text.BackgroundTransparency = 1
-                    text.TextColor3 = Color3.fromRGB(0,0,255)
-                    text.TextStrokeTransparency = 0
-                    text.TextScaled = true
-                    text.Text = npc.Name
-                    text.Parent = billboard
-
-                    billboard.Parent = npc
-                end
-            else
-                if esp then
-                    esp:Destroy()
-                end
-            end
-        end
-    end
-end)
-getgenv().ItemESPEnabled = false
-
-Visual:AddToggle("Left", "Item ESP", false, function(state)
-    getgenv().ItemESPEnabled = state
-    for i, item in pairs(workspace.Items:GetChildren()) do
-        if item:FindFirstChild("Handle") then
-            local esp = item:FindFirstChild("ESPName")
-            if state then
-                if not esp then
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Name = "ESPName"
-                    billboard.Adornee = item.Handle
-                    billboard.Size = UDim2.new(0, 100, 0, 25)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-
-                    local text = Instance.new("TextLabel")
-                    text.Size = UDim2.new(1,0,1,0)
-                    text.BackgroundTransparency = 1
-                    text.TextColor3 = Color3.fromRGB(255,255,0)
-                    text.TextStrokeTransparency = 0
-                    text.TextScaled = true
-                    text.Text = item.Name
-                    text.Parent = billboard
-
-                    billboard.Parent = item
-                end
-            else
-                if esp then
-                    esp:Destroy()
-                end
-            end
-        end
-    end
-end)
-Visual:RealLine("Left")
-Visual:AddTextLabel("Right", "Server")
-
+Tab1:Seperator("Server")
 getgenv().JobID = ""
 getgenv().SpamJoinJob = false
 
-Visual:AddTextbox("Right", "Enter Job ID", "Job ID", function(text)
-    getgenv().JobID = text
+Tab1:Textbox("Job ID", "", true, function(value)
+    getgenv().JobID = value
 end)
-
-Visual:AddButton("Right", "Join Server", function()
+Tab1:Button("Join Server", function()
     if getgenv().JobID ~= "" then
         pcall(function()
             game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getgenv().JobID, game.Players.LocalPlayer)
         end)
     end
 end)
-
-Visual:AddButton("Right", "Copy Current Job ID", function()
-    local jobId = tostring(game.JobId)
-    pcall(function()
-        setclipboard(jobId)
-    end)
-end)
-
-Visual:AddToggle("Right", "Spam Join Server", false, function(state)
+Tab1:Toggle("Spam Join Server", false, function(state)
     getgenv().SpamJoinJob = state
     if state then
         spawn(function()
@@ -336,4 +188,4 @@ Visual:AddToggle("Right", "Spam Join Server", false, function(state)
     end
 end)
 
-Visual:RealLine("Right")
+Tab1:Line()
