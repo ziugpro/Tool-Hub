@@ -132,7 +132,6 @@ function SkUI:CreateWindow(title)
 
     local Pages = {}
     local TabButtons = {}
-
 function ui:Create(buttonWidth, tabname)
     local tab = {}
 
@@ -149,6 +148,15 @@ function ui:Create(buttonWidth, tabname)
         Parent = TabsScroll
     })
     Roundify(Button, 6)
+
+    Button.MouseButton1Click:Connect(function()
+        for _, child in ipairs(TabsScroll:GetChildren()) do
+            if child:IsA("TextButton") then
+                child.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+            end
+        end
+        Button.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    end)
 
     if not TabsScroll:FindFirstChild("UIListLayout") then
         local layout = Instance.new("UIListLayout")
