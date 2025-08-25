@@ -1,19 +1,18 @@
 local PremiumKeys = {  
     "JRTtibghwXeykmqzh4r3oCvzf35xtb",  
-    "ERETOI3yH7FuimXMDxZyLkibiQB6d7zg",
-    "xdR3YKgBZ8RqeYtKUS8tB8tBklggsfcC",
-    "U02WZNd3rGQyRaj7tDwtICXGEgvtkfRT",
-    "WGZTff6yt66ljbJucCbPfZZMyiHKjaDn",
-    "2CgBaWfrkjGSBD1rWL6USVYwsznDGFQk",
-    "j9rLTuR9nWxKUvfKSrSLTQT2pSttC89D",
-    "GZD3BU59xagElF6ZmKBxcF8isTre3r05",
-    "9trWCqgCa3GY5uUZCpWqTFIkZsmlbS7J",
-    "OVnXGz3r50s9Sorjphv5bNu6aAkh9jNT",
-    "gdG7BgzbuCAbBbFmAIKor2uLkDaJbhPx",
 }  
   
 local BlacklistKeys = {  
-    ["abc123"] = "Hành vi gian lận bị phát hiện",  
+    ["ERETOI3yH7FuimXMDxZyLkibiQB6d7zg"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["xdR3YKgBZ8RqeYtKUS8tB8tBklggsfcC"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN", 
+    ["U02WZNd3rGQyRaj7tDwtICXGEgvtkfRT"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["WGZTff6yt66ljbJucCbPfZZMyiHKjaDn"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["2CgBaWfrkjGSBD1rWL6USVYwsznDGFQk"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["j9rLTuR9nWxKUvfKSrSLTQT2pSttC89D"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["GZD3BU59xagElF6ZmKBxcF8isTre3r05"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["9trWCqgCa3GY5uUZCpWqTFIkZsmlbS7J"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["OVnXGz3r50s9Sorjphv5bNu6aAkh9jNT"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["gdG7BgzbuCAbBbFmAIKor2uLkDaJbhPx"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
     ["badkey456"] = "Vi phạm điều khoản sử dụng",  
     ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
 }  
