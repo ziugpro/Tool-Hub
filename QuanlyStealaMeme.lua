@@ -1,3 +1,4 @@
+game.Players.LocalPlayer:Kick("🖕🏻YOU MOM GAY🖕🏻 SCRIPT OUT DATA")
 local HttpService = game:GetService("HttpService")
 local SaveFileName = "AuraUISettings.json"
 local function FileExists(path)
