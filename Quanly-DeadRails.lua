@@ -1,4 +1,3 @@
-game.Players.LocalPlayer:Kick("🖕🏻YOU MOM GAY🖕🏻 SCRIPT IS OUT DATA")
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("Dead Rails")
