@@ -125,6 +125,7 @@ else
            [7326934954] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly99Night.lua",
            [7709344486] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlySaB.lua",
            [7851663243] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyStealaMeme.lua",
+           [7750955984] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyHuntyZombie.lua",
            [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRails.lua",
         }
         local url = ScriptsPremium[game.PlaceId] or ScriptsPremium[game.GameId]
