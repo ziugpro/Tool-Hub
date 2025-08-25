@@ -1,24 +1,4 @@
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not humanoid then return end
-
-local function heavyLoadStep()
-    local sum = 0
-    for i = 1, 1e6 do
-        for j = 1, 2 do
-            sum = sum + math.sin(i * j)
-        end
-    end
-    return sum
-end
-
-for step = 1, 3 do
-    task.spawn(function()
-        heavyLoadStep()
-    end)
-    task.wait(2)
-end
+game.Players.LocalPlayer:Kick("🖕🏻YOU MOM GAY🖕🏻 SCRIPT IS OUT DATA")
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
 local UI = SkUI:CreateWindow("Dead Rails")
