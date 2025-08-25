@@ -1,24 +1,3 @@
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not humanoid then return end
-
-local function heavyLoadStep()
-    local sum = 0
-    for i = 1, 1e6 do
-        for j = 1, 10 do
-            sum = sum + math.sin(i * j)
-        end
-    end
-    return sum
-end
-
-for step = 1, 5 do
-    task.spawn(function()
-        heavyLoadStep()
-    end)
-    task.wait(1)
-end
 local HttpService = game:GetService("HttpService")
 local SaveFileName = "AuraUISettings.json"
 local function FileExists(path)
