@@ -1,10 +1,5 @@
 local PremiumKeys = {  
     "jhy4chtoc8po4v8ei71m1law2unf9l2t", 
-    "HFmFnVAv3n0Lu8sOynboDODYLVN0kCXy",
-    "f5flrAeJ5Lpp7IdcXcDb4vNBdDXq1oLa",
-    "CGFXmMNWQBMLkIIacfmAEg5IFFoZAtvt",
-    "NOuYvf9BnR4Mnwm6XFBqK8AKVMx7X4NF",
-    "y8W9q6WoCIGsacMdsAondrHs1e370Nom",
     "7mnnbJy45eGIQqPWohTzGD6oWASnhHGX",
     "YEFTan5Tls0bUUJWmYGBum09DpjxgJbw",
     "MxcPt7VSVv6Nt8DbRu1HRMNTcnCKNx1Y",
@@ -60,7 +55,11 @@ local PremiumKeys = {
 }
 
 local BlacklistKeys = {  
-    ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
+    ["HFmFnVAv3n0Lu8sOynboDODYLVN0kCXy"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["f5flrAeJ5Lpp7IdcXcDb4vNBdDXq1oLa"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["CGFXmMNWQBMLkIIacfmAEg5IFFoZAtvt"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["NOuYvf9BnR4Mnwm6XFBqK8AKVMx7X4NF"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+    ["y8W9q6WoCIGsacMdsAondrHs1e370Nom"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
 }  
 
 local function isPremiumKey(key)  
