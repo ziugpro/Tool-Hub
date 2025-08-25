@@ -1,17 +1,14 @@
 local PremiumKeys = {  
     "ziugpro-depzai0123",  
-    "jFzImUHQzXBvYqVOUTvEfdWEzYtdHMCv",
-    "fx9YJP1DFw9gkoUCqYQAmv2cfJyrWzaK",
-    "kDQuKfA3c8bN69KFlT7zMrWkf1XqLpLq",
-    "UksBaciJaaPaH04nqX5AT6h1Zw4ht6V4",
-    "cSgc4EgTbJhxfAyIUpQQa6wkxYT1Nc3q",
     
 }  
   
-local BlacklistKeys = {  
-    ["abc123"] = "Hành vi gian lận bị phát hiện",  
-    ["badkey456"] = "Vi phạm điều khoản sử dụng",  
-    ["xyz789"] = "Key đã bị thu hồi do lạm dụng"  
+local BlacklistKeys = { 
+        ["jFzImUHQzXBvYqVOUTvEfdWEzYtdHMCv"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+        ["fx9YJP1DFw9gkoUCqYQAmv2cfJyrWzaK"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+        ["kDQuKfA3c8bN69KFlT7zMrWkf1XqLpLq"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+        ["UksBaciJaaPaH04nqX5AT6h1Zw4ht6V4"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
+        ["cSgc4EgTbJhxfAyIUpQQa6wkxYT1Nc3q"] = "KEY IS BLACKLIST - KEY ĐÃ BỊ THÊM VÀO DANH SÁCH ĐEN",
 }  
   
 local function isPremiumKey(key)  
