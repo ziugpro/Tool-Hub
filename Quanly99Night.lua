@@ -16,7 +16,7 @@ game.StarterGui:SetCore("SendNotification", {
 })
 repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
 getgenv().Image = "rbxthumb://type=Asset&id=106019376492019&w=420&h=420"
-getgenv().ToggleUI = "RightShift"
+getgenv().ToggleUI = "LeftControl"
 
 task.spawn(function()
     if not getgenv().LoadedMobileUI then
