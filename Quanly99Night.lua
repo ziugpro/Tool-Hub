@@ -57,6 +57,10 @@ local Window = Library:CreateWindow{
 }
 
 local Tabs = {
+    Esp = Window:CreateTab{
+        Title = "Esp",
+        Icon = "map-pin"
+    },
     Main = Window:CreateTab{
         Title = "Main",
         Icon = "phosphor-users-bold"
@@ -468,6 +472,208 @@ SpeedBoostToggle:OnChanged(function(Value)
 end)
 
 Options.SpeedBoost:SetValue(false)
+
+local ESP_Toggle = Tabs.Esp:CreateToggle("ESP_Toggle", {Title = "ESP Player", Default = false})
+
+ESP_Toggle:OnChanged(function()
+    if ESP_Toggle.Value then
+        for i, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character then
+                local head = player.Character:FindFirstChild("Head")
+                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+                if head and humanoid then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Adornee = head
+                    billboard.AlwaysOnTop = true
+                    billboard.Size = UDim2.new(0,120,0,50)
+                    billboard.MaxDistance = math.huge
+                    billboard.StudsOffset = Vector3.new(0,2,0)
+                    billboard.Parent = game.CoreGui
+
+                    local frame = Instance.new("Frame")
+                    frame.Size = UDim2.new(1,0,0,5)
+                    frame.Position = UDim2.new(0,0,1,0)
+                    frame.BackgroundColor3 = Color3.new(0,1,0)
+                    frame.BorderSizePixel = 0
+                    frame.Parent = billboard
+
+                    local textLabel = Instance.new("TextLabel")
+                    textLabel.Text = player.Name
+                    textLabel.Size = UDim2.new(1,0,1,0)
+                    textLabel.BackgroundTransparency = 1
+                    textLabel.TextColor3 = Color3.new(1,0,0)
+                    textLabel.TextScaled = true
+                    textLabel.Parent = billboard
+
+                    game:GetService("RunService").RenderStepped:Connect(function()
+                        if humanoid.Health > 0 then
+                            frame.Size = UDim2.new(humanoid.Health/humanoid.MaxHealth,0,0,5)
+                        else
+                            billboard:Destroy()
+                        end
+                    end)
+                end
+            end
+        end
+    else
+        for _, gui in pairs(game.CoreGui:GetChildren()) do
+            if gui:IsA("BillboardGui") then
+                gui:Destroy()
+            end
+        end
+    end
+end)
+Options.ESP_Toggle:SetValue(false)
+local MobESP = Tabs.Esp:CreateToggle("MobESP", {Title = "ESP Mob", Default = false})
+
+MobESP:OnChanged(function()
+    if MobESP.Value then
+        for i, mob in pairs(workspace:GetDescendants()) do
+            if mob:IsA("Model") and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+                local hrp = mob.HumanoidRootPart
+                local humanoid = mob.Humanoid
+
+                local billboard = Instance.new("BillboardGui")
+                billboard.Adornee = hrp
+                billboard.AlwaysOnTop = true
+                billboard.Size = UDim2.new(0,120,0,50)
+                billboard.MaxDistance = math.huge
+                billboard.StudsOffset = Vector3.new(0,2,0)
+                billboard.Parent = game.CoreGui
+
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1,0,0,5)
+                frame.Position = UDim2.new(0,0,1,0)
+                frame.BackgroundColor3 = Color3.new(0,1,0)
+                frame.BorderSizePixel = 0
+                frame.Parent = billboard
+
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Text = mob.Name
+                textLabel.Size = UDim2.new(1,0,1,0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.TextColor3 = Color3.new(1,0,0)
+                textLabel.TextScaled = true
+                textLabel.Parent = billboard
+
+                game:GetService("RunService").RenderStepped:Connect(function()
+                    if humanoid.Health > 0 then
+                        frame.Size = UDim2.new(humanoid.Health/humanoid.MaxHealth,0,0,5)
+                    else
+                        billboard:Destroy()
+                    end
+                end)
+            end
+        end
+    else
+        for _, gui in pairs(game.CoreGui:GetChildren()) do
+            if gui:IsA("BillboardGui") then
+                gui:Destroy()
+            end
+        end
+    end
+end)
+Options.MobESP:SetValue(false)
+local LogESP = Tabs.Esp:CreateToggle("LogESP", {Title = "ESP Log", Default = false})
+LogESP:OnChanged(function()
+    if LogESP.Value then
+        for i, model in pairs(workspace:GetDescendants()) do
+            if model:IsA("Model") and model.Name == "Log" and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+                local hrp = model.HumanoidRootPart
+                local humanoid = model.Humanoid
+
+                local billboard = Instance.new("BillboardGui")
+                billboard.Adornee = hrp
+                billboard.AlwaysOnTop = true
+                billboard.Size = UDim2.new(0,120,0,50)
+                billboard.MaxDistance = math.huge
+                billboard.StudsOffset = Vector3.new(0,2,0)
+                billboard.Parent = game.CoreGui
+
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1,0,0,5)
+                frame.Position = UDim2.new(0,0,1,0)
+                frame.BackgroundColor3 = Color3.new(0,1,0)
+                frame.BorderSizePixel = 0
+                frame.Parent = billboard
+
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Text = model.Name
+                textLabel.Size = UDim2.new(1,0,1,0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.TextColor3 = Color3.new(1,0,0)
+                textLabel.TextScaled = true
+                textLabel.Parent = billboard
+
+                game:GetService("RunService").RenderStepped:Connect(function()
+                    if humanoid.Health > 0 then
+                        frame.Size = UDim2.new(humanoid.Health/humanoid.MaxHealth,0,0,5)
+                    else
+                        billboard:Destroy()
+                    end
+                end)
+            end
+        end
+    else
+        for _, gui in pairs(game.CoreGui:GetChildren()) do
+            if gui:IsA("BillboardGui") then
+                gui:Destroy()
+            end
+        end
+    end
+end)
+
+Options.LogESP:SetValue(false)
+local BoltESP = Tabs.Esp:CreateToggle("BoltESP", {Title = "ESP Bolt", Default = false})
+BoltESP:OnChanged(function()
+    if BoltESP.Value then
+        for i, model in pairs(workspace:GetDescendants()) do
+            if model:IsA("Model") and model.Name == "Bolt" and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+                local hrp = model.HumanoidRootPart
+                local humanoid = model.Humanoid
+
+                local billboard = Instance.new("BillboardGui")
+                billboard.Adornee = hrp
+                billboard.AlwaysOnTop = true
+                billboard.Size = UDim2.new(0,120,0,50)
+                billboard.MaxDistance = math.huge
+                billboard.StudsOffset = Vector3.new(0,2,0)
+                billboard.Parent = game.CoreGui
+
+                local frame = Instance.new("Frame")
+                frame.Size = UDim2.new(1,0,0,5)
+                frame.Position = UDim2.new(0,0,1,0)
+                frame.BackgroundColor3 = Color3.new(0,1,0)
+                frame.BorderSizePixel = 0
+                frame.Parent = billboard
+
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Text = model.Name
+                textLabel.Size = UDim2.new(1,0,1,0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.TextColor3 = Color3.new(1,0,0)
+                textLabel.TextScaled = true
+                textLabel.Parent = billboard
+
+                game:GetService("RunService").RenderStepped:Connect(function()
+                    if humanoid.Health > 0 then
+                        frame.Size = UDim2.new(humanoid.Health/humanoid.MaxHealth,0,0,5)
+                    else
+                        billboard:Destroy()
+                    end
+                end)
+            end
+        end
+    else
+        for _, gui in pairs(game.CoreGui:GetChildren()) do
+            if gui:IsA("BillboardGui") then
+                gui:Destroy()
+            end
+        end
+    end
+end)
+
+Options.BoltESP:SetValue(false)
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
