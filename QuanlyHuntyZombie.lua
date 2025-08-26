@@ -1,6 +1,6 @@
 local DarkraiX = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Ui/refs/heads/main/UiLib", true))()
 
-local Library = DarkraiX:Window("Aura Hub","131484641795167","",Enum.KeyCode.RightControl);
+local Library = DarkraiX:Window("Aura Hub","131484641795167","131484641795167",Enum.KeyCode.RightControl);
 
 Tab1 = Library:Tab("Main")
 
