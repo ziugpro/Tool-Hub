@@ -405,6 +405,8 @@ ModelEspToggle:OnChanged(function(enabled)
         end
     end
 end)
+Options.ModelEspToggle:SetValue(false)
+
 local Players = game.Players
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
@@ -451,7 +453,6 @@ end)
 
 Options.HitboxEspToggle:SetValue(false)
 
-Options.ModelEspToggle:SetValue(false)
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
