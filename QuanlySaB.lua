@@ -407,52 +407,6 @@ ModelEspToggle:OnChanged(function(enabled)
 end)
 Options.ModelEspToggle:SetValue(false)
 
-local Players = game.Players
-local LocalPlayer = Players.LocalPlayer
-local RunService = game:GetService("RunService")
-
-local HitboxEspToggle = Tabs.Esp:CreateToggle("HitboxEspToggle", {Title = "Lock Base ESP", Default = false})
-local espActive = false
-
-HitboxEspToggle:OnChanged(function(enabled)
-    espActive = enabled
-    for _, part in pairs(workspace:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name == "Hitbox" then
-            if enabled and not part:FindFirstChild("CounterBillboard") then
-                local billboard = Instance.new("BillboardGui")
-                billboard.Name = "CounterBillboard"
-                billboard.Size = UDim2.new(0, 100, 0, 50)
-                billboard.Adornee = part
-                billboard.AlwaysOnTop = true
-
-                local textLabel = Instance.new("TextLabel")
-                textLabel.Size = UDim2.new(1,0,1,0)
-                textLabel.BackgroundTransparency = 1
-                textLabel.TextColor3 = Color3.new(1,1,1)
-                textLabel.TextScaled = true
-                textLabel.Text = "60"
-                textLabel.Parent = billboard
-
-                billboard.Parent = part
-
-                coroutine.wrap(function()
-                    while espActive and billboard.Parent do
-                        for i = 60,0,-1 do
-                            textLabel.Text = tostring(i)
-                            task.wait(1)
-                        end
-                        task.wait(2)
-                    end
-                end)()
-            elseif not enabled and part:FindFirstChild("CounterBillboard") then
-                part.CounterBillboard:Destroy()
-            end
-        end
-    end
-end)
-
-Options.HitboxEspToggle:SetValue(false)
-
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
