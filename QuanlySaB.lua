@@ -58,7 +58,7 @@ local Window = Library:CreateWindow{
 
 local Tabs = {
     Esp = Window:CreateTab{
-        Title = "Esp"
+        Title = "Esp",
         Icon = "map-pin"
     },
     Shop = Window:CreateTab{
