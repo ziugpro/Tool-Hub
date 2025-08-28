@@ -425,7 +425,7 @@ Options.PlayerESP:SetValue(false)
 local Main = Tabs.Main:AddSection("Teleport")
 local positions = {
     ["Starting"] = CFrame.new(-20.54305648803711, 4.689598560333252, -47.02955627441406),
-    ["Military Base"] = CFrame.new251.45944213867188, 4.509633541107178, 5475.53759765625)
+    ["Military Base"] = CFrame.new(251.45944213867188, 4.509633541107178, 5475.53759765625)
 }
 
 local PostionSelect = Tabs.Main:CreateDropdown("PostionSelect", {
