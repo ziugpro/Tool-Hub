@@ -551,7 +551,27 @@ Tabs.Main:AddButton({
         end
     end
 })
+local Paragraph = Tabs.Main:CreateParagraph("Tween", {
+    Title = "Tween",
+    Content = ""
+})
+local TweenService = game:GetService("TweenService")
 
+Tabs.Main:AddButton({
+    Title = "Tween To Military Base",
+    Callback = function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local hrp = character.HumanoidRootPart
+            local targetCFrame = CFrame.new(251.45944213867188, 4.509633541107178, 5475.53759765625)
+            local distance = (hrp.Position - targetCFrame.Position).Magnitude
+            local time = distance / 500
+            local tweenInfo = TweenInfo.new(time, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+            local tween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+            tween:Play()
+        end
+    end
+})
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
