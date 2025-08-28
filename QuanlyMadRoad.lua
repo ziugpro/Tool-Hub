@@ -124,7 +124,7 @@ KillAura:OnChanged(function(state)
         local Players = game:GetService("Players")
         local LocalPlayer = Players.LocalPlayer
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local DamageEvent = ReplicatedStorage:WaitForChild("damage brick")
+        local DamageEvent = ReplicatedStorage:WaitForChild("damage")
 
         kaConnection = RunService.RenderStepped:Connect(function()
             local char = LocalPlayer.Character
