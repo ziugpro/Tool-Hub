@@ -67,7 +67,19 @@ local Tabs = {
     }
 }
 local Options = Library.Options
+function ForceTeleport(cf, holdTime)
+    local player = game.Players.LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local root = char:WaitForChild("HumanoidRootPart")
 
+    local t0 = tick()
+    while tick() - t0 < (holdTime or 0.75) do
+        root.CFrame = cf
+        root.Velocity = Vector3.zero
+        root.AssemblyLinearVelocity = Vector3.zero
+        task.wait()
+    end
+end
 local Main = Tabs.Main:AddSection("Item")
 Tabs.Main:AddButton({
     Title = "Bring Items",
@@ -330,8 +342,13 @@ end)
 
 Options.PlayerESP:SetValue(false)
 
-
-
+local Main = Tabs.Main:AddSection("Teleport")
+Tabs.Main:AddButton({
+        Title = "Teleport To Win",
+        Callback = function()
+            ForceTeleport(CFrame.new(3.372170925140381, 6.251251220703125, 38088.98046875), 1)
+        end
+    })
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
