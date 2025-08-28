@@ -135,8 +135,8 @@ KillAura:OnChanged(function(state)
                 if obj:IsA("Model") and obj:FindFirstChild("Humanoid") and obj:FindFirstChild("HumanoidRootPart") then
                     if obj ~= char and not Players:GetPlayerFromCharacter(obj) then
                         local dist = (obj.HumanoidRootPart.Position - root.Position).Magnitude
-                        if dist <= 15 then
-                            DamageEvent:FireServer(obj, 5)
+                        if dist <= 150 then
+                            DamageEvent:FireServer(obj, 50)
                         end
                     end
                 end
