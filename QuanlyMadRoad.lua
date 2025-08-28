@@ -179,7 +179,7 @@ Tabs.Main:AddButton({
     end
 })
 local Main = Tabs.Main:AddSection("Player")
-local SuperSpeed = Tabs.Main:CreateToggle("SuperSpeed", {Title = "Super Speed", Default = false})
+local SuperSpeed = Tabs.Main:CreateToggle("SuperSpeed", {Title = "Supper Speed", Default = false})
 SuperSpeed:OnChanged(function(state)
     local lp = game.Players.LocalPlayer
     if lp.Character and lp.Character:FindFirstChild("Humanoid") then
@@ -191,6 +191,18 @@ SuperSpeed:OnChanged(function(state)
     end
 end)
 Options.SuperSpeed:SetValue(false)
+local SpeedFuck = Tabs.Main:CreateToggle("SpeedFuck", {Title = "Speed 10000", Default = false})
+SpeedFuck:OnChanged(function(state)
+    local lp = game.Players.LocalPlayer
+    if lp.Character and lp.Character:FindFirstChild("Humanoid") then
+        if state then
+            lp.Character.Humanoid.WalkSpeed = 10000
+        else
+            lp.Character.Humanoid.WalkSpeed = 16
+        end
+    end
+end)
+Options.SpeedFuck:SetValue(false)
 
 local SuperJump = Tabs.Main:CreateToggle("SuperJump", {Title = "Super Jump", Default = false})
 SuperJump:OnChanged(function(state)
