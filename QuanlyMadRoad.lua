@@ -393,7 +393,7 @@ local char = lp.Character or lp.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
 
 local targetCFrame = CFrame.new(Vector3.new(3.372170925140381, 6.251251220703125, 38088.98046875))
-local speed = 150
+local speed = 500
 
 local distance = (hrp.Position - targetCFrame.Position).Magnitude
 local time = distance / speed
