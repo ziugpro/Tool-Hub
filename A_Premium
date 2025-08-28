@@ -371,6 +371,7 @@ else
            [7851663243] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyStealaMeme.lua",
            [7750955984] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyHuntyZombie.lua",
            [7018190066] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Quanly-DeadRails.lua",
+           [7939389895] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyMadRoad.lua",
         }
         local url = ScriptsPremium[game.PlaceId] or ScriptsPremium[game.GameId]
         if url then
