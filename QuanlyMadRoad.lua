@@ -457,6 +457,71 @@ local Paragraph = Tabs.Main:CreateParagraph("Paragraph", {
     Content = ""
 })
 Tabs.Main:AddButton({
+  Title = "Teleport To Car",
+  Callback = function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local function findBasePartRecursive(model)
+        if model:IsA("BasePart") then
+            return model
+        elseif model:IsA("Model") then
+            if model.PrimaryPart then
+                return model.PrimaryPart
+            end
+            for _, child in pairs(model:GetChildren()) do
+                local part = findBasePartRecursive(child)
+                if part then
+                    return part
+                end
+            end
+        end
+        return nil
+    end
+
+    local function findTrain()
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("Model") and v.Name:lower():find("car_truck") then
+                local basePart = findBasePartRecursive(v)
+                if basePart then
+                    return basePart
+                end
+            end
+        end
+        return nil
+    end
+
+    local function findNearestChair(position)
+        local nearestSeat = nil
+        local nearestDist = math.huge
+        for _, seat in pairs(workspace:GetDescendants()) do
+            if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+                local dist = (seat.Position - position).Magnitude
+                if dist < nearestDist then
+                    nearestDist = dist
+                    nearestSeat = seat
+                end
+            end
+        end
+        return nearestSeat
+    end
+
+    local targetPart = findTrain()
+    if targetPart then
+        character:MoveTo(targetPart.Position + Vector3.new(0, 5, 0))
+        wait(0.5)
+        local chair = findNearestChair(targetPart.Position)
+        if chair then
+            chair:Sit(character:FindFirstChildOfClass("Humanoid"))
+        else
+            warn("Không tìm thấy ghế gần Train.")
+        end
+    else
+        warn("Không tìm thấy BasePart trong model chứa 'Train'.")
+    end            
+  end
+})
+Tabs.Main:AddButton({
     Title = "Teleport To Starting",
     Callback = function()
         local character = game.Players.LocalPlayer.Character
