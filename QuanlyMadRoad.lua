@@ -110,37 +110,55 @@ SuperJump:OnChanged(function(state)
 end)
 Options.SuperJump:SetValue(false)
 local Main = Tabs.Main:AddSection("Kill Aura")
-local KillAura = Tabs.Main:CreateToggle("KillAura", {Title = "Kill Aura", Default = false })
+local KillAura = Tabs.Main:CreateToggle("KillAura", {Title = "Kill Aura", Default = false})
+local kaConnection
 
 KillAura:OnChanged(function(state)
+    if kaConnection then
+        kaConnection:Disconnect()
+        kaConnection = nil
+    end
+
     if state then
-        KillAuraConnection = game:GetService("RunService").RenderStepped:Connect(function()
-            local lp = game.Players.LocalPlayer
-            local char = lp.Character
+        local RunService = game:GetService("RunService")
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local DamageEvent = ReplicatedStorage:WaitForChild("damage brick")
+
+        kaConnection = RunService.RenderStepped:Connect(function()
+            local char = LocalPlayer.Character
             if not char or not char:FindFirstChild("HumanoidRootPart") then return end
             local root = char.HumanoidRootPart
 
             for _, obj in ipairs(workspace:GetDescendants()) do
                 if obj:IsA("Model") and obj:FindFirstChild("Humanoid") and obj:FindFirstChild("HumanoidRootPart") then
-                    if obj ~= char and not game.Players:GetPlayerFromCharacter(obj) then
+                    if obj ~= char and not Players:GetPlayerFromCharacter(obj) then
                         local dist = (obj.HumanoidRootPart.Position - root.Position).Magnitude
-                        if dist <= 150 then
-                            obj.Humanoid:TakeDamage(50)
+                        if dist <= 15 then
+                            DamageEvent:FireServer(obj, 5)
                         end
                     end
                 end
             end
         end)
-    else
-        if KillAuraConnection then
-            KillAuraConnection:Disconnect()
-            KillAuraConnection = nil
-        end
     end
 end)
 
 Options.KillAura:SetValue(false)
-
+Tabs.Main:AddButton({
+    Title = "Clear Mobs",
+    Callback = function()
+        local Players = game:GetService("Players")
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj:FindFirstChild("Humanoid") and obj:FindFirstChild("HumanoidRootPart") then
+                if not Players:GetPlayerFromCharacter(obj) then
+                    obj:Destroy()
+                end
+            end
+        end
+    end
+})
 local Main = Tabs.Main:AddSection("Esp")
 local MobESP = Tabs.Main:CreateToggle("MobESP", {Title = "ESP Mob", Default = false })
 local mobConnections = {}
