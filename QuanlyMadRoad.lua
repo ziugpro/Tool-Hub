@@ -82,18 +82,21 @@ function ForceTeleport(cf, holdTime)
 end
 local Main = Tabs.Main:AddSection("Farm")
 
-local speed = 50
+local speed = 500
 local SpeedInput = Tabs.Main:CreateInput("SpeedInput", {
     Title = "Speed",
-    Default = "550",
+    Default = "500",
     Placeholder = "Enter speed",
     Numeric = true,
     Finished = false,
     Callback = function(Value)
-        speed = tonumber(Value) or 550
+        speed = tonumber(Value) or 500
     end
 })
-
+local Paragraph = Tabs.Main:CreateParagraph("ErrorNotify", {
+    Title = "Please adjust the speed below 510 to avoid error",
+    Content = ""
+})
 local FlyToggleVar = Tabs.Main:CreateToggle("FlyToggle", {Title = "Auto Win", Default = false})
 
 FlyToggleVar:OnChanged(function(state)
@@ -442,13 +445,36 @@ Tabs.Main:AddButton({
     Callback = function()
         local character = game.Players.LocalPlayer.Character
         if character and character:FindFirstChild("HumanoidRootPart") then
-            local target = positions[Dropdown:GetValue()]
+            local target = positions[PostionSelect:GetValue()]
             if target then
                 character.HumanoidRootPart.CFrame = target
             end
         end
     end
 })
+local Paragraph = Tabs.Main:CreateParagraph("Paragraph", {
+    Title = "Use teleport below if above error",
+    Content = ""
+})
+Tabs.Main:AddButton({
+    Title = "Teleport To Starting",
+    Callback = function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = CFrame.new(-20.54305648803711, 4.689598560333252, -47.02955627441406)
+        end
+    end
+})
+Tabs.Main:AddButton({
+    Title = "Teleport To Military Base",
+    Callback = function()
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = CFrame.new(251.45944213867188, 4.509633541107178, 5475.53759765625)
+        end
+    end
+})
+
 --{ Lưu Conifg }--
 SaveManager:SetLibrary(Library)
 InterfaceManager:SetLibrary(Library)
