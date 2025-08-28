@@ -59,7 +59,7 @@ local Window = Library:CreateWindow{
 local Tabs = {
     Main = Window:CreateTab{
         Title = "Main",
-        Icon = "phosphor-users-bold"
+        Icon = "house"
     },
     Settings = Window:CreateTab{
         Title = "Settings",
