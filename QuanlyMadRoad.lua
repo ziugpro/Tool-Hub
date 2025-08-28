@@ -85,12 +85,12 @@ local Main = Tabs.Main:AddSection("Farm")
 local speed = 50
 local SpeedInput = Tabs.Main:CreateInput("SpeedInput", {
     Title = "Speed",
-    Default = "50",
+    Default = "550",
     Placeholder = "Enter speed",
     Numeric = true,
     Finished = false,
     Callback = function(Value)
-        speed = tonumber(Value) or 50
+        speed = tonumber(Value) or 550
     end
 })
 
