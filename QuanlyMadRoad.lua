@@ -363,7 +363,7 @@ FullBlack.Position = UDim2.new(0, 0, -0.03, 0)
 FullBlack.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 FullBlack.BorderSizePixel = 0
 FullBlack.ZIndex = 19999999
-FullBlack.BackgroundTransparency = 0.4
+FullBlack.BackgroundTransparency = 1
 FullBlack.Parent = ScreenGui
 
 local Image = Instance.new("ImageLabel")
@@ -393,7 +393,7 @@ local char = lp.Character or lp.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
 
 local targetCFrame = CFrame.new(Vector3.new(3.372170925140381, 6.251251220703125, 38088.98046875))
-local speed = 500
+local speed = 1500
 
 local distance = (hrp.Position - targetCFrame.Position).Magnitude
 local time = distance / speed
