@@ -142,10 +142,9 @@ task.spawn(function()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local function setupCharacter(character)
+local function equipFirstTool(character)
     local backpack = player:WaitForChild("Backpack")
-    character:WaitForChild("HumanoidRootPart")
-    local function equipFirstTool()
+    local function equip()
         local tool = nil
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
@@ -157,16 +156,16 @@ local function setupCharacter(character)
             tool.Parent = character
         end
     end
-    backpack.ChildAdded:Connect(equipFirstTool)
-    backpack.ChildRemoved:Connect(equipFirstTool)
-    while true do
-        equipFirstTool()
+    backpack.ChildAdded:Connect(equip)
+    backpack.ChildRemoved:Connect(equip)
+    while character.Parent do
+        equip()
         wait(0.1)
     end
 end
 
 if player.Character then
-    setupCharacter(player.Character)
+    equipFirstTool(player.Character)
 end
-player.CharacterAdded:Connect(setupCharacter)
+player.CharacterAdded:Connect(equipFirstTool)
     end)
