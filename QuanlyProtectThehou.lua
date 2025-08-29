@@ -69,7 +69,7 @@ RunService.RenderStepped:Connect(function()
         local coins = getAllGoldcoins()
         for _, coin in ipairs(coins) do
             if coin and coin.Parent then
-                hrp.CFrame = coin.CFrame + Vector3.new(0, 3, 0)
+                hrp.CFrame = coin.CFrame + Vector3.new(0, 0, 0)
             end
         end
     end
