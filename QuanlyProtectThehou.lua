@@ -57,7 +57,7 @@ player.CharacterAdded:Connect(setupCharacter)
 local function getAliveMobs()
     local mobs = {}
     for _, obj in pairs(workspace:GetDescendants()) do
-        if obj:FindFirstChild("Humanoid") and obj.Humanoid.Health > 0 and not Players:GetPlayerFromCharacter(obj) then
+        if obj:FindFirstChild("Humanoid") and obj.Humanoid.Health > 0 and obj.Parent and not Players:GetPlayerFromCharacter(obj) then
             table.insert(mobs, obj)
         end
     end
@@ -68,8 +68,8 @@ RunService.RenderStepped:Connect(function()
     if hrp then
         local mobs = getAliveMobs()
         if #mobs > 0 then
-            local closest = mobs[1]
-            local minDist = (hrp.Position - closest.PrimaryPart.Position).Magnitude
+            local closest = nil
+            local minDist = math.huge
             for _, mob in ipairs(mobs) do
                 if mob.PrimaryPart then
                     local dist = (hrp.Position - mob.PrimaryPart.Position).Magnitude
@@ -79,10 +79,11 @@ RunService.RenderStepped:Connect(function()
                     end
                 end
             end
-            if closest:FindFirstChild("Head") then
-                hrp.CFrame = CFrame.new(closest.Head.Position + Vector3.new(0,4,0))
-            else
-                hrp.CFrame = CFrame.new(closest.PrimaryPart.Position + Vector3.new(0,4,0))
+            if closest and closest:FindFirstChild("Head") then
+                while closest and closest.Humanoid.Health > 0 and closest.Parent do
+                    hrp.CFrame = CFrame.new(closest.Head.Position + Vector3.new(0,4,0))
+                    RunService.RenderStepped:Wait()
+                end
             end
         end
     end
