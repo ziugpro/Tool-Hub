@@ -64,27 +64,33 @@ local function getAliveMobs()
     return mobs
 end
 
+local currentMob = nil
+
 RunService.RenderStepped:Connect(function()
     if hrp then
-        local mobs = getAliveMobs()
-        if #mobs > 0 then
-            local closest = nil
-            local minDist = math.huge
-            for _, mob in ipairs(mobs) do
-                if mob.PrimaryPart then
-                    local dist = (hrp.Position - mob.PrimaryPart.Position).Magnitude
-                    if dist < minDist then
-                        minDist = dist
-                        closest = mob
+        if not currentMob or currentMob.Humanoid.Health <= 0 or not currentMob.Parent then
+            local mobs = getAliveMobs()
+            if #mobs > 0 then
+                -- chọn Mob gần nhất
+                local closest = mobs[1]
+                local minDist = (hrp.Position - closest.PrimaryPart.Position).Magnitude
+                for _, mob in ipairs(mobs) do
+                    if mob.PrimaryPart then
+                        local dist = (hrp.Position - mob.PrimaryPart.Position).Magnitude
+                        if dist < minDist then
+                            minDist = dist
+                            closest = mob
+                        end
                     end
                 end
+                currentMob = closest
+            else
+                currentMob = nil
             end
-            if closest and closest:FindFirstChild("Head") then
-                while closest and closest.Humanoid.Health > 0 and closest.Parent do
-                    hrp.CFrame = CFrame.new(closest.Head.Position + Vector3.new(0,4,0))
-                    RunService.RenderStepped:Wait()
-                end
-            end
+        end
+
+        if currentMob and currentMob:FindFirstChild("Head") and currentMob.Humanoid.Health > 0 then
+            hrp.CFrame = CFrame.new(currentMob.Head.Position + Vector3.new(0,4,0))
         end
     end
 end)
@@ -133,23 +139,34 @@ RunService.RenderStepped:Connect(function()
 end)
     end)
 task.spawn(function()
-        local Players = game:GetService("Players")
+local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local backpack = player:WaitForChild("Backpack")
-local character = player.Character or player.CharacterAdded:Wait()
 
-local function equipFirstTool()
-    local tool = backpack:FindFirstChildWhichIsA("Tool")
-    if tool and character then
-        tool.Parent = character
+local function setupCharacter(character)
+    local backpack = player:WaitForChild("Backpack")
+    character:WaitForChild("HumanoidRootPart")
+    local function equipFirstTool()
+        local tool = nil
+        for _, item in ipairs(backpack:GetChildren()) do
+            if item:IsA("Tool") then
+                tool = item
+                break
+            end
+        end
+        if tool then
+            tool.Parent = character
+        end
+    end
+    backpack.ChildAdded:Connect(equipFirstTool)
+    backpack.ChildRemoved:Connect(equipFirstTool)
+    while true do
+        equipFirstTool()
+        wait(0.1)
     end
 end
 
-backpack.ChildAdded:Connect(equipFirstTool)
-backpack.ChildRemoved:Connect(equipFirstTool)
-
-while true do
-    equipFirstTool()
-    wait(0.1)
-        end
+if player.Character then
+    setupCharacter(player.Character)
+end
+player.CharacterAdded:Connect(setupCharacter)
     end)
