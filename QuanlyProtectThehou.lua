@@ -54,22 +54,35 @@ if player.Character then
 end
 player.CharacterAdded:Connect(setupCharacter)
 
-local function getAllGoldcoins()
-    local coins = {}
+local function getAliveMobs()
+    local mobs = {}
     for _, obj in pairs(workspace:GetDescendants()) do
-        if obj:IsA("BasePart") and string.find(string.lower(obj.Name), "goldcoin") then
-            table.insert(coins, obj)
+        if obj:FindFirstChild("Humanoid") and obj.Humanoid.Health > 0 and not Players:GetPlayerFromCharacter(obj) then
+            table.insert(mobs, obj)
         end
     end
-    return coins
+    return mobs
 end
 
 RunService.RenderStepped:Connect(function()
     if hrp then
-        local coins = getAllGoldcoins()
-        for _, coin in ipairs(coins) do
-            if coin and coin.Parent then
-                hrp.CFrame = coin.CFrame + Vector3.new(0, 0, 0)
+        local mobs = getAliveMobs()
+        if #mobs > 0 then
+            local closest = mobs[1]
+            local minDist = (hrp.Position - closest.PrimaryPart.Position).Magnitude
+            for _, mob in ipairs(mobs) do
+                if mob.PrimaryPart then
+                    local dist = (hrp.Position - mob.PrimaryPart.Position).Magnitude
+                    if dist < minDist then
+                        minDist = dist
+                        closest = mob
+                    end
+                end
+            end
+            if closest:FindFirstChild("Head") then
+                hrp.CFrame = CFrame.new(closest.Head.Position + Vector3.new(0,4,0))
+            else
+                hrp.CFrame = CFrame.new(closest.PrimaryPart.Position + Vector3.new(0,4,0))
             end
         end
     end
@@ -117,4 +130,25 @@ RunService.RenderStepped:Connect(function()
         aimAtHead(closest)
     end
 end)
+    end)
+task.spawn(function()
+        local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local character = player.Character or player.CharacterAdded:Wait()
+
+local function equipFirstTool()
+    local tool = backpack:FindFirstChildWhichIsA("Tool")
+    if tool and character then
+        tool.Parent = character
+    end
+end
+
+backpack.ChildAdded:Connect(equipFirstTool)
+backpack.ChildRemoved:Connect(equipFirstTool)
+
+while true do
+    equipFirstTool()
+    wait(0.1)
+        end
     end)
