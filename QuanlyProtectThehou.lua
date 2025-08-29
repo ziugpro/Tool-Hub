@@ -75,3 +75,46 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 end)
+task.spawn(function()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+local function getAliveMobs()
+    local mobs = {}
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:FindFirstChild("Humanoid") and obj.Humanoid.Health > 0 and not Players:GetPlayerFromCharacter(obj) then
+            table.insert(mobs, obj)
+        end
+    end
+    return mobs
+end
+
+local function aimAtHead(mob)
+    local head = mob:FindFirstChild("Head")
+    if head then
+        local direction = (head.Position - camera.CFrame.Position).Unit
+        camera.CFrame = CFrame.new(camera.CFrame.Position, head.Position)
+    end
+end
+
+RunService.RenderStepped:Connect(function()
+    local mobs = getAliveMobs()
+    if #mobs > 0 then
+        local closest = mobs[1]
+        local minDist = (camera.CFrame.Position - closest.PrimaryPart.Position).Magnitude
+        for _, mob in ipairs(mobs) do
+            if mob.PrimaryPart then
+                local dist = (camera.CFrame.Position - mob.PrimaryPart.Position).Magnitude
+                if dist < minDist then
+                    minDist = dist
+                    closest = mob
+                end
+            end
+        end
+        aimAtHead(closest)
+    end
+end)
+    end)
