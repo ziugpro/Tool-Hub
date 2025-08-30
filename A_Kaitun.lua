@@ -38,7 +38,7 @@ end
   
 if isPremiumKey(getgenv().Key) then  
  local Scripts = {
-   [1234567890] = "link",
+   [8014099969] = "https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/QuanlyProtectThehou.lua",
 }
 local url = Scripts[game.PlaceId] or Scripts[game.GameId]
 if url then
